@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrönaFastigheter", "GrönaFastigheter\GrönaFastigheter.csproj", "{E2BC0791-5825-4821-88BD-E2D5FC0C9900}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{ACDF5176-7011-44C6-AAB5-9A13E928652C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2BC0791-5825-4821-88BD-E2D5FC0C9900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BC0791-5825-4821-88BD-E2D5FC0C9900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BC0791-5825-4821-88BD-E2D5FC0C9900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BC0791-5825-4821-88BD-E2D5FC0C9900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACDF5176-7011-44C6-AAB5-9A13E928652C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACDF5176-7011-44C6-AAB5-9A13E928652C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACDF5176-7011-44C6-AAB5-9A13E928652C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACDF5176-7011-44C6-AAB5-9A13E928652C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F520B50-18F7-4964-8338-9CE6F3C19E14}
+	EndGlobalSection
+EndGlobal

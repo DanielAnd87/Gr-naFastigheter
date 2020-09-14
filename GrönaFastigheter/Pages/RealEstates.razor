@@ -1,0 +1,51 @@
+﻿@page "/realestates"
+@using System.Net.Http.Json;
+@inject IRealEstateHttpsRepository context
+
+@using Entities.Models
+
+<h3>RealEstates</h3>
+
+@if (realEstates == null)
+{
+    <p>Loading.....</p>
+}
+else
+{
+    foreach (var estate in realEstates)
+    {
+        <div class="card">
+            <h3>@estate.Title</h3>
+            @if (estate.CanBeSold)
+            {
+                <p>Selling price: @estate.SellingPrice</p>
+            }
+            else
+            {
+                <p>Renting price : @estate.RentingPrice</p>
+            }
+        </div>
+        <br />
+        <p>Description : @estate.Description</p>
+        <p>Adress : @estate.Address</p>
+        <p>Construction year: @estate.ConstructionYear</p>
+        <p>Realestate type : @estate.RealEstateType</p>
+
+        <img src="@estate.ImageUrl" />
+    }
+}
+
+@code {
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public int NumItems { get; set; }
+    private IEnumerable<RealEstate> realEstates;
+
+    protected override async Task OnInitializedAsync()
+    {
+        realEstates = await context.GetRealEstates();
+    }
+
+
+}

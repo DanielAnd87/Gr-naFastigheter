@@ -1,0 +1,29 @@
+﻿@page "/getuser"
+@page "/getuser/{Username}"
+@inject IRealEstateHttpsRepository context
+@using Entities.Models
+@if (user == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>@user.UserName</p>
+    <br />
+    <p>@user.Rating</p>
+    <p>@user.RealEstates</p>
+    <p>@user.Comments</p>
+    <img src="@user.AvatarImageUrl" class="img-responsive img-rounded" alt="Alternate Text" />
+}
+
+@code {
+    [Parameter]
+    public string Username { get; set; }
+    private User user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await context.GetUserByUserName(@Username);
+
+    }
+}
