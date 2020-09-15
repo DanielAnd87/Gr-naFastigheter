@@ -1,15 +1,10 @@
 ﻿
 using Entities.Models;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter
@@ -173,8 +168,8 @@ namespace GrönaFastigheter
         {
             try
             {
-                var response = await http.PostAsJsonAsync("api/Realestates", realEstate);
-                
+                HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
+
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
