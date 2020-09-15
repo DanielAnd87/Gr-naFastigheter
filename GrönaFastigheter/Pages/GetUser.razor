@@ -23,7 +23,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        user = await context.GetUserByUserName(@Username);
-
+        user = await context.GetUserByUserName(Username);
+        context.TestRepo();
     }
 }

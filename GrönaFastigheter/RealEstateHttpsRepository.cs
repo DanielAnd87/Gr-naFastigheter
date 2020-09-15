@@ -1,11 +1,15 @@
 ﻿
 using Entities.Models;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter
@@ -25,8 +29,11 @@ namespace GrönaFastigheter
             RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
             IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
             User user = await GetUserByUserName("USERNAME"); // FUNKAR
-            IEnumerable<Comment> commentByUser = await GetCommentsByUser("USERNAME"); // FUNKAR
-            IEnumerable<Comment> comentsById = await GetCommentsByRealEstateId(1); // FUNKAR
+            // IEnumerable<Comment> commentByUser = await GetCommentsByUser("USERNAME"); // FUNKAR
+            // IEnumerable<Comment> comentsById = await GetCommentsByRealEstateId(1); // FUNKAR ej
+
+
+            RealEstate estate = await PostNewRealEstate(realEstate);
             string stop = "stop";
 
 
@@ -146,6 +153,36 @@ namespace GrönaFastigheter
                 string userUrl = $"api/RealEstates/{Id}";
                 return await http.GetFromJsonAsync<RealEstate>(userUrl);
 
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            return null;
+        }
+
+        public async Task<RealEstate> PostNewRealEstate(RealEstate realEstate) //Kan behöva optimering men funkar, status code 200
+        {
+            try
+            {
+                var response = await http.PostAsJsonAsync("api/Realestates", realEstate);
+                
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    RealEstate newEstate = JsonSerializer.Deserialize<RealEstate>(responseContent);
+                    return newEstate;
+                }
+                return null;
             }
             catch (HttpRequestException)
             {
