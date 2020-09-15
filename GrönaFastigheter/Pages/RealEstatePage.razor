@@ -40,6 +40,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        realEstate = await context.GetRealEstateById(Id.ToString());
+        realEstate = await context.GetRealEstateById(Id);
     }
 }

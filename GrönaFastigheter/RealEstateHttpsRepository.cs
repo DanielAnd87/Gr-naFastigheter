@@ -22,11 +22,11 @@ namespace GrönaFastigheter
 
         public async void TestRepo()
         {
-            RealEstate realEstate = await GetRealEstateById("1"); // FUNKAR
+            RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
             IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
             User user = await GetUserByUserName("USERNAME"); // FUNKAR
             IEnumerable<Comment> commentByUser = await GetCommentsByUser("USERNAME"); // FUNKAR
-            IEnumerable<Comment> comentsById = await GetCommentsById("ID"); // FUNKAR
+            IEnumerable<Comment> comentsById = await GetCommentsByRealEstateId(1); // FUNKAR
             string stop = "stop";
 
 
@@ -62,50 +62,16 @@ namespace GrönaFastigheter
         }
 
 
-        public async Task<IEnumerable<Comment>> GetCommentsById(string id, int Page = 2, int NumItems = 5)
-        {
-            if (id == null)
-            {
-                id = "USERNAME";
-            }
-            IEnumerable<Comment> task;
-            try
-            {
-                string userUrl = $"api/Comments/{id}?skip={Page.ToString()}&take={NumItems.ToString()}";
-                task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
-                return task;
-
-            }
-            catch (HttpRequestException)
-            {
-                Console.WriteLine("An error Occured");
-            }
-            catch (NotSupportedException)
-            {
-                Console.WriteLine("Content type is not supported");
-            }
-            catch (System.Text.Json.JsonException)
-            {
-                Console.WriteLine("Invalid Json");
-            }
-            return null;
-        }
-
-        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(string Username, int Page = 2, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page = 2, int NumItems = 5)
         {
             throw new NotImplementedException();
 
-
-            if (Username == null)
-            {
-                Username = "USERNAME";
-            }
-            IEnumerable<Comment> task;
+            IEnumerable<Comment> comment;
             try
             {
-                string userUrl = $"api/Comments/ByUser/{Username}?skip={Page}&take={NumItems}";
-                task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
-                return task;
+                string userUrl = $"api/Comments/{id}?skip={Page}&take={NumItems}";
+                comment = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
+                return comment;
 
             }
             catch (HttpRequestException)
@@ -173,7 +139,7 @@ namespace GrönaFastigheter
             }
             return null;
         }
-        public async Task<RealEstate> GetRealEstateById(string Id)
+        public async Task<RealEstate> GetRealEstateById(int Id)
         {
             try
             {
