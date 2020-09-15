@@ -16,11 +16,13 @@ else
     <GetCommentByUser Username="@user.UserName"></GetCommentByUser>    
     }
 
+
+
 @code {
     [Parameter]
     public string Username { get; set; }
     private User user;
-
+    
     protected override async Task OnInitializedAsync()
     {
         user = await context.GetUserByUserName(@Username);
