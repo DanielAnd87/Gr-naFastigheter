@@ -13,7 +13,8 @@ else
     <p>@user.RealEstates</p>
     <p>@user.Comments</p>
     <img src="@user.AvatarImageUrl" class="img-responsive img-rounded" alt="Alternate Text" />
-}
+    <GetCommentByUser Username="@user.UserName"></GetCommentByUser>    
+    }
 
 @code {
     [Parameter]

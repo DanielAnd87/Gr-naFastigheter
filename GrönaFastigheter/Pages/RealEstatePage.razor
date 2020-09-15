@@ -29,13 +29,11 @@ else
         <p>Adress : @realEstate.Address</p>
         <p>Construction year: @realEstate.ConstructionYear</p>
         <p>Realestate type : @realEstate.RealEstateType</p>
-
         <img src="@realEstate.ImageUrl" />
     </div>
 }
 
 @code {
-
     [Parameter]
     public int Id { get; set; }
     public RealEstate realEstate;
