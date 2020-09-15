@@ -11,6 +11,7 @@ namespace GrönaFastigheter
         Task<RealEstate> GetRealEstateById(int Id);
         Task<IEnumerable<RealEstate>> GetRealEstates(int Page = 2, int NumItems = 5);
         Task<User> GetUserByUserName(string Username);
+        Task<RealEstate> PostNewRealEstate(RealEstate newRealEstate);
         void TestRepo();
 
     }
