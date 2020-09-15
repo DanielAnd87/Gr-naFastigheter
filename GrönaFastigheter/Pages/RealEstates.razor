@@ -12,7 +12,7 @@
 }
 else
 {
-    @*foreach (var estate in realEstates)
+    foreach (var estate in realEstates)
     {
         <div class="card">
             <h3>@estate.Title</h3>
@@ -32,38 +32,8 @@ else
         <p>Realestate type : @estate.RealEstateType</p>
 
         <img src="@estate.ImageUrl" />
-    }*@
-
-
-
-    <div class="container">
-        <div class="row">
-            @foreach (var estate in realEstates)
-            {
-                <div class="card text-center m-4">
-                    <div class="card-header">
-                        @if (estate.CanBeSold)
-                        {<p>For Sale</p> }
-                        else
-                        { <p>For rent</p>}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@estate.Title</h5>
-                        @if (estate.CanBeSold)
-                        {
-                            <p class="card-body">Selling price: @estate.SellingPrice</p>
-                        }
-                        else
-                        {
-                            <p class="card-body">Renting price : @estate.RentingPrice per month</p>
-                        }
-                        <NavLink href="@($"realestate/{estate.Id}")" class="btn btn-primary">More Info</NavLink>
-                    </div>
-                </div>
-
-            }
-        </div>
-    </div>
+        <NavLink href="@($"realestate/{estate.Id}")" class="btn btn-primary">More Info</NavLink>
+    }
 }
 
 @code {

@@ -1,4 +1,4 @@
-﻿@page "/realestate/{Id}"
+﻿@page "/realestate/{id:int}"
 @using System.Net.Http.Json;
 @inject IRealEstateHttpsRepository context
 
@@ -35,11 +35,11 @@ else
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
     public RealEstate realEstate;
 
     protected override async Task OnInitializedAsync()
     {
-        realEstate = await context.GetRealEstateById(@Id);
+        realEstate = await context.GetRealEstateById(Id.ToString());
     }
 }
