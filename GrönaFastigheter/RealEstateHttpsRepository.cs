@@ -25,14 +25,16 @@ namespace GrönaFastigheter
 
         public async void TestRepo()
         {
-            RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
-            IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
-            User user = await GetUserByUserName("USERNAME"); // FUNKAR
+            // RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
+            // IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
+            // User user = await GetUserByUserName("USERNAME"); // FUNKAR
             // IEnumerable<Comment> commentByUser = await GetCommentsByUser("USERNAME"); // FUNKAR
             // IEnumerable<Comment> comentsById = await GetCommentsByRealEstateId(1); // FUNKAR ej
 
 
-            RealEstate estate = await PostNewRealEstate(realEstate);
+            // RealEstate estate = await PostNewRealEstate(realEstate);
+            Comment testComment = new Comment(){ Content = "hej", RealEstateId = 3};
+            Comment result = await PostComment(testComment);
             string stop = "stop";
 
 
