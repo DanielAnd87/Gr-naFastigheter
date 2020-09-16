@@ -1,4 +1,5 @@
 ﻿
+using Blazored.LocalStorage;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace GrönaFastigheter
 
         private readonly HttpClient http;
 
-        public RealEstateHttpsRepository(HttpClient http)
+        public ILocalStorageService LocalStorage { get; }
+
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage)
         {
             this.http = http;
+            LocalStorage = localStorage;
         }
 
         public async void TestRepo()

@@ -57,6 +57,9 @@ namespace GrönaFastigheter.HttpRepository
             await _localStorage.SetItemAsync("authToken", result.Token);
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+            
+            //string token = await _localStorage.GetItemAsStringAsync("authToken");
+            //_client.DefaultRequestHeaders.Add("Token", result.Token);
 
             return new AuthResponseDto { IsAuthSuccessful = true };
         }
