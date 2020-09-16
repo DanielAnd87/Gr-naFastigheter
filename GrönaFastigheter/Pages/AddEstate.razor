@@ -1,5 +1,6 @@
 ﻿@page "/realestate/add"
-@inject IRealEstateHttpsRepository context
+@inject IRealEstateHttpsRepository client
+
 
 <h3>AddEstate</h3>
 <div class="container">
@@ -49,7 +50,7 @@
                 <ValidationMessage For="@(() => realEstate.SellingPrice)" />
             </div>
         </div>
-        
+
         <div class="form-group row">
             <label for="rentingPrice" class="col-md-2 col-form-label">Renting Price:</label>
             <div class="col-md-10">
@@ -58,18 +59,18 @@
             </div>
         </div>
 
-    <div class="form-group row">
-        <label for="realEstateType" class="col-md-2 col-form-label">Real Estate Type:</label>
-        <div class="col-md-10">
-            <InputText id="realEstateType" class="form-control" @bind-Value="realEstate.RealEstateType" />
-            <ValidationMessage For="@(() => realEstate.RealEstateType)" />
+        <div class="form-group row">
+            <label for="realEstateType" class="col-md-2 col-form-label">Real Estate Type:</label>
+            <div class="col-md-10">
+                <InputText id="realEstateType" class="form-control" @bind-Value="realEstate.RealEstateType" />
+                <ValidationMessage For="@(() => realEstate.RealEstateType)" />
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button type="submit" class="btn btn-success">Add new</button>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-success">Add new</button>
+            </div>
         </div>
-    </div>
     </EditForm>
 </div>
 
@@ -78,6 +79,7 @@
 
     private void HandleValidSubmit()
     {
-        context.PostNewRealEstate(realEstate);
+        client.PostNewRealEstate(realEstate);
+
     }
 }

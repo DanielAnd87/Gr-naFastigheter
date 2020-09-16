@@ -1,4 +1,5 @@
 ﻿
+using Blazored.LocalStorage;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -15,21 +16,26 @@ namespace GrönaFastigheter
 
         private readonly HttpClient http;
 
-        public RealEstateHttpsRepository(HttpClient http)
+        public ILocalStorageService LocalStorage { get; }
+
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage)
         {
             this.http = http;
+            LocalStorage = localStorage;
         }
 
         public async void TestRepo()
         {
-            RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
-            IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
-            User user = await GetUserByUserName("USERNAME"); // FUNKAR
+            // RealEstate realEstate = await GetRealEstateById(1); // FUNKAR
+            // IEnumerable<RealEstate> realEstates = await GetRealEstates(); // FUNKAR
+            // User user = await GetUserByUserName("USERNAME"); // FUNKAR
             // IEnumerable<Comment> commentByUser = await GetCommentsByUser("USERNAME"); // FUNKAR
             // IEnumerable<Comment> comentsById = await GetCommentsByRealEstateId(1); // FUNKAR ej
 
 
-            RealEstate estate = await PostNewRealEstate(realEstate);
+            // RealEstate estate = await PostNewRealEstate(realEstate);
+            Comment testComment = new Comment(){ Content = "hej", RealEstateId = 3};
+            Comment result = await PostComment(testComment);
             string stop = "stop";
 
 
@@ -182,6 +188,36 @@ namespace GrönaFastigheter
                 return null;
             }
             catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            return null;
+        }
+        public async Task<Comment> PostComment(Comment comment) //MAN MÅSTE HA MED SIG BEARER TOKEN FÖR ATT FÅ LÄGGA TILL COMMENT. FIXA
+        {
+            try
+            {
+                HttpResponseMessage response = await http.PostAsJsonAsync("api/Comments", comment);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Comment newComment = JsonSerializer.Deserialize<Comment>(responseContent);
+                    return newComment;
+                }
+                return null;
+
+            }
+             catch (HttpRequestException)
             {
                 Console.WriteLine("An error Occured");
             }
