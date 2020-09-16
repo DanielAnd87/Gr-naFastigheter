@@ -3,6 +3,7 @@ using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -168,6 +169,7 @@ namespace GrönaFastigheter
         {
             try
             {
+                //http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
                 HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
 
                 string responseContent = await response.Content.ReadAsStringAsync();

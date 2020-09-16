@@ -2,6 +2,8 @@
 using Entities.DTO;
 using GrönaFastigheter.AuthProviders;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -53,6 +55,7 @@ namespace GrönaFastigheter.HttpRepository
             {
                 return result;
             }
+
 
             await _localStorage.SetItemAsync("authToken", result.Token);
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
