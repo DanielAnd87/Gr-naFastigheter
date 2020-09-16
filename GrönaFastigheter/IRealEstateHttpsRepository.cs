@@ -11,7 +11,19 @@ namespace GrönaFastigheter
         Task<RealEstate> GetRealEstateById(int Id);
         Task<IEnumerable<RealEstate>> GetRealEstates(int Page = 2, int NumItems = 5);
         Task<User> GetUserByUserName(string Username);
+        /// <summary>
+        /// Fixa skicka med bearer token och null returns.
+        /// </summary>
+        /// <param name="newRealEstate"></param>
+        /// <returns></returns>
         Task<RealEstate> PostNewRealEstate(RealEstate newRealEstate);
+
+        /// <summary>
+        /// fixa null returns vid felaktigt statuscode. isttälet notfound. Skicka också med bearer token.
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        Task<Comment> PostComment(Comment comment);
         void TestRepo();
 
     }

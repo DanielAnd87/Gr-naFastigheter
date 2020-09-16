@@ -197,6 +197,36 @@ namespace GrönaFastigheter
             }
             return null;
         }
+        public async Task<Comment> PostComment(Comment comment) //MAN MÅSTE HA MED SIG BEARER TOKEN FÖR ATT FÅ LÄGGA TILL COMMENT. FIXA
+        {
+            try
+            {
+                HttpResponseMessage response = await http.PostAsJsonAsync("api/Comments", comment);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Comment newComment = JsonSerializer.Deserialize<Comment>(responseContent);
+                    return newComment;
+                }
+                return null;
+
+            }
+             catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            return null;
+        }
 
 
 
