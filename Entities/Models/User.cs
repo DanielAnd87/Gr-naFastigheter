@@ -7,6 +7,7 @@ namespace Entities.Models
 {
     public class User
     {
+        public int UserId { get; set; }
         public string UserName { get; set; }
         public int RealEstates { get; set; }
         public int Comments { get; set; }

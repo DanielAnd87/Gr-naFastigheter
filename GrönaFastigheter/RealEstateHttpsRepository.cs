@@ -1,6 +1,7 @@
 ﻿
 using Blazored.LocalStorage;
 using Entities.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -229,6 +230,12 @@ namespace GrönaFastigheter
                 Console.WriteLine("Invalid Json");
             }
             return null;
+        }
+        public void PostRating(int rating, int userId) //NYI
+        {
+            rating += 1;
+            var result = http.PostAsJsonAsync("/api/Users/Rate", rating);
+            
         }
 
 
