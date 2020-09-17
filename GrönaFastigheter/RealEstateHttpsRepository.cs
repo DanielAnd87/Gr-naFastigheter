@@ -50,7 +50,7 @@ namespace GrönaFastigheter
             IEnumerable<Comment> task;
             try
             {
-                string userUrl = $"api/Comments/ByUser/{Username}?skip={Page}&take={NumItems}";
+                string userUrl = $"/api/Comments/ByUser/{Username}?skip={Page}&take={NumItems}";
                 task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
                 return task;
 
@@ -78,7 +78,7 @@ namespace GrönaFastigheter
             IEnumerable<Comment> comment;
             try
             {
-                string userUrl = $"api/Comments/{id}?skip={Page}&take={NumItems}";
+                string userUrl = $"/api/Comments/{id}?skip={Page}&take={NumItems}";
                 comment = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
                 return comment;
 
@@ -106,7 +106,7 @@ namespace GrönaFastigheter
             }
             try
             {
-                string userUrl = $"api/Users/{Username}";
+                string userUrl = $"/api/Users/{Username}";
                 User task = await http.GetFromJsonAsync<User>(userUrl);
                 return task;
 
@@ -131,8 +131,7 @@ namespace GrönaFastigheter
             try
             {
                 string userUrl = $"/api/RealEstates?skip={Page}&take={NumItems}";
-                IEnumerable<RealEstate> test = await http.GetFromJsonAsync<IEnumerable<RealEstate>>(userUrl);
-                return test;
+                return await http.GetFromJsonAsync<IEnumerable<RealEstate>>(userUrl);
             }
             catch (HttpRequestException)
             {
@@ -152,7 +151,7 @@ namespace GrönaFastigheter
         {
             try
             {
-                string userUrl = $"api/RealEstates/{Id}";
+                string userUrl = $"/api/RealEstates/{Id}";
                 return await http.GetFromJsonAsync<RealEstate>(userUrl);
 
             }
