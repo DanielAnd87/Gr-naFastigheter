@@ -44,10 +44,10 @@ namespace GrönaFastigheter.HttpRepository
 
         public async Task<AuthResponseDto> Login(UserForAuthenticationDto userForAuthentication)
         {
-            string content = JsonSerializer.Serialize(userForAuthentication);
-            StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            string content = userForAuthentication.ToString();
+            StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            HttpResponseMessage authResult = await _client.PostAsync("/api/accounts/login", bodyContent);
+            HttpResponseMessage authResult = await _client.PostAsync("/token", bodyContent);
             string authContent = await authResult.Content.ReadAsStringAsync();
             AuthResponseDto result = JsonSerializer.Deserialize<AuthResponseDto>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
@@ -57,9 +57,10 @@ namespace GrönaFastigheter.HttpRepository
             }
 
 
-            await _localStorage.SetItemAsync("authToken", result.Token);
-            ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Email);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Token);
+            await _localStorage.SetItemAsync("authToken", result.Access_Token);
+
+            ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Username);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Access_Token);
             
             //string token = await _localStorage.GetItemAsStringAsync("authToken");
             //_client.DefaultRequestHeaders.Add("Token", result.Token);

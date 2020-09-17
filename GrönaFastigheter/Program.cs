@@ -22,7 +22,7 @@ namespace GrönaFastigheter
             builder.RootComponents.Add<App>("app");
             builder.Services.AddScoped(sp =>
             {
-                Uri uri = new Uri("https://499d57b7-43c7-4f0b-8ab4-40d039c2eaab.mock.pstmn.io");
+                Uri uri = new Uri("https://mockapi-gronafastigheter.herokuapp.com");
                 return new HttpClient { BaseAddress = uri };
             });
            

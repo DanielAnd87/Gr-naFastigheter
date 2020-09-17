@@ -130,9 +130,9 @@ namespace GrönaFastigheter
         {
             try
             {
-                string userUrl = $"api/RealEstates?skip={Page}&take={NumItems}";
-                return await http.GetFromJsonAsync<IEnumerable<RealEstate>>(userUrl);
-
+                string userUrl = $"/api/RealEstates?skip={Page}&take={NumItems}";
+                IEnumerable<RealEstate> test = await http.GetFromJsonAsync<IEnumerable<RealEstate>>(userUrl);
+                return test;
             }
             catch (HttpRequestException)
             {

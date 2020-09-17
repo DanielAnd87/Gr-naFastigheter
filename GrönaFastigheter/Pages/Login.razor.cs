@@ -27,7 +27,7 @@ namespace GrönaFastigheter.Pages
             }
             else
             {
-                Error = result.ErrorMessage;
+                Error = result.Message;
                 ShowAuthError = true;
             }
         }

@@ -1,5 +1,7 @@
-﻿window.methods = {
-    CreateCookie: function (name, value, days) {
+﻿window.blazorExtensions = {
+
+    WriteCookie: function (name, value, days) {
+
         var expires;
         if (days) {
             var date = new Date();
