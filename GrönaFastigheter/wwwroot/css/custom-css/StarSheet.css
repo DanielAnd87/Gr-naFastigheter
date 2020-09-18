@@ -16,7 +16,7 @@ label.star {
 }
 
 input.star:checked ~ label.star:before {
-    content: '\f005';
+    content: '\f015';
     color: #FD4;
     transition: all .25s;
 }
@@ -35,6 +35,6 @@ label.star:hover {
 }
 
 label.star:before {
-    content: '\f006';
+    content: '\f015';
     font-family: FontAwesome;
 }

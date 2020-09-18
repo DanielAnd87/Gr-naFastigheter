@@ -2,7 +2,7 @@
 @page "/getuser/{Username}"
 @inject IRealEstateHttpsRepository context
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 @if (user == null)
 {
@@ -12,44 +12,53 @@ else
 {
     <p>@user.UserName</p>
     <br />
-    <p>@user.Rating</p>
+    <div class="stars">
+        <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
+            <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
+            <label class="star star-5" for="star-5"></label>
+            <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
+            <label class="star star-4" for="star-4"></label>
+            <input class="star star-3" value="3" id="star-3" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[2]" />
+            <label class="star star-3" for="star-3"></label>
+            <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[3]" />
+            <label class="star star-2" for="star-2"></label>
+            <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
+            <label class="star star-1" for="star-1"></label>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-success">Rate user</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
     <p>@user.RealEstates</p>
     <p>@user.Comments</p>
     <img src="@user.AvatarImageUrl" class="img-responsive img-rounded" alt="Alternate Text" />
     <GetCommentByUser Username="@user.UserName"></GetCommentByUser>
 }
-<div class="stars">
-    <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
-        <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" />
-        <label class="star star-5" for="star-5"></label>
-        <input class="star star-4" value="2" id="star-4" type="radio" name="star"  @onchange="UpdateSelection" />
-        <label class="star star-4" for="star-4"></label>
-        <input class="star star-3" value="3" id="star-3" type="radio" name="star"  @onchange="UpdateSelection" />
-        <label class="star star-3" for="star-3"></label>
-        <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" />
-        <label class="star star-2" for="star-2"></label>
-        <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" />
-        <label class="star star-1" for="star-1"></label>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-success">Login</button>
-            </div>
-        </div>
-    </EditForm>
-</div>
-
-
 
 @code {
     [Parameter]
     public string Username { get; set; }
     private User user;
-    private int Rating {get; set;}
+    public int Rating { get; set; }
+    private bool[] ratingChecked = new bool[5]
+    {
+        false,
+        false,
+        false,
+        false,
+        false
+    };
+
 
     protected override async Task OnInitializedAsync()
     {
-        //  user = await context.GetUserByUserName(Username);
+        user = await context.GetUserByUserName(Username);
+        RestartRatingList();
+        ratingChecked[4 - ((int)user.Rating - 1)] = true;
     }
+
     public void HandleValidSubmit()
     {
         context.PostRating(Rating, user.UserId);
@@ -57,5 +66,14 @@ else
     public void UpdateSelection(ChangeEventArgs args)
     {
         Rating = Convert.ToInt32(args.Value.ToString());
+        RestartRatingList();
+        ratingChecked[Rating - 1] = true;
+    }
+    private void RestartRatingList()
+    {
+        for (int i = 5 - 1; i >= 0; i--)
+        {
+            ratingChecked[i] = false;
+        }
     }
 }

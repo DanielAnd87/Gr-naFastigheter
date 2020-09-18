@@ -1,6 +1,7 @@
 ﻿using Entities.DTO;
 using GrönaFastigheter.HttpRepository;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter.Pages
@@ -29,6 +30,7 @@ namespace GrönaFastigheter.Pages
             {
                 Error = result.Message;
                 ShowAuthError = true;
+
             }
         }
     }
