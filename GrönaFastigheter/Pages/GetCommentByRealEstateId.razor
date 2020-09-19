@@ -1,0 +1,67 @@
+﻿<h3>GetCommentByRealEstateId</h3>
+@page "/getCommentByEstateId/{Id}"
+@inject IRealEstateHttpsRepository context
+@using System.Security.Claims
+@using Entities.Models
+
+@if (comments == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var comment in comments)
+    {
+        <h3>@comment.UserName</h3>
+        <p>@comment.CreatedOn.ToString()</p>
+        <p>@comment.Content</p>
+    }
+}
+
+<div class="container">
+    <EditForm Model="newComment" OnValidSubmit="AddComment">
+        <DataAnnotationsValidator />
+        <div class="form-group row">
+            <label for="username" class="col-md-2 col-form-label">Username:</label>
+            <div class="col-md-10">
+                <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
+                <ValidationMessage For="@(() => newComment.Content)" />
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-success">Add new</button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+
+    @code {
+        [Parameter]
+        public int Page { get; set; }
+        [Parameter]
+        public int NumItems { get; set; }
+        [Parameter]
+        public string Id { get; set; }
+        private List<Comment> comments;
+        private Comment newComment { get; set; } = new Comment(1, "", "");
+        [CascadingParameter]
+        public Task<AuthenticationState> AuthState { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            //comments = await context.GetCommentsByRealEstateId(Convert.ToInt32(@Id));
+            comments = new List<Comment>() { new Comment(1, "name", "person") };
+        }
+
+        private async void AddComment()
+        {
+            var authState = await AuthState;
+            string userName = authState.User.Identity.Name;
+            newComment.UserName = userName;
+            newComment.RealEstateId = 2;
+            comments.Add(newComment);
+        }
+    }

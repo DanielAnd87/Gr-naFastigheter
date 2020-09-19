@@ -1,0 +1,33 @@
+﻿@page "/getComments"
+@inject IRealEstateHttpsRepository context
+
+@using Entities.Models
+
+@if (comments == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var comment in comments)
+    {
+        <h3>@comment.UserName</h3>
+        <p>@comment.CreatedOn.ToString()</p>
+        <p>@comment.Content</p>
+    }
+}
+
+@code {
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public int NumItems { get; set; }
+    [Parameter]
+    public string Username { get; set; }
+    private IEnumerable<Comment> comments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        comments = await context.GetComments();
+    }
+}

@@ -3,9 +3,9 @@
 <input @bind-value="Searchterm" @bind-value:event="oninput" />
 
 <CascadingValue Value="@Searchterm">
-    <RealEstateSerchResult>
+    <RealEstateSearchResult>
 
-    </RealEstateSerchResult>
+    </RealEstateSearchResult>
 </CascadingValue>
 @code {
     public string Searchterm { get; set; } = "";

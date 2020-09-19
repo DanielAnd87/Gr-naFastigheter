@@ -35,8 +35,6 @@ namespace GrönaFastigheter
 
 
             // RealEstate estate = await PostNewRealEstate(realEstate);
-            Comment testComment = new Comment(){ Content = "hej", RealEstateId = 3};
-            Comment result = await PostComment(testComment);
             string stop = "stop";
 
 
@@ -71,15 +69,37 @@ namespace GrönaFastigheter
             return null;
         }
 
+        public async Task<IEnumerable<Comment>> GetComments()
+        {
+            IEnumerable<Comment> task;
+            try
+            {
+                string userUrl = $"/api/Comments";
+                task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
+                return task;
+
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            return null;
+        }
 
         public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page = 2, int NumItems = 5)
         {
-            throw new NotImplementedException();
-
             IEnumerable<Comment> comment;
             try
             {
-                string userUrl = $"/api/Comments/{id}?skip={Page}&take={NumItems}";
+                string userUrl = $"/api/Comments/{id}";
                 comment = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
                 return comment;
 
@@ -201,7 +221,7 @@ namespace GrönaFastigheter
             }
             return null;
         }
-        public async Task<Comment> PostComment(Comment comment) //MAN MÅSTE HA MED SIG BEARER TOKEN FÖR ATT FÅ LÄGGA TILL COMMENT. FIXA
+        public async Task<bool> PostComment(Comment comment) //MAN MÅSTE HA MED SIG BEARER TOKEN FÖR ATT FÅ LÄGGA TILL COMMENT. FIXA
         {
             try
             {
@@ -212,10 +232,9 @@ namespace GrönaFastigheter
                 if (response.IsSuccessStatusCode)
                 {
                     Comment newComment = JsonSerializer.Deserialize<Comment>(responseContent);
-                    return newComment;
+                    return true;
                 }
-                return null;
-
+                return false;
             }
              catch (HttpRequestException)
             {
@@ -229,7 +248,7 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
-            return null;
+            return false;
         }
         public void PostRating(int rating, int userId) //NYI
         {

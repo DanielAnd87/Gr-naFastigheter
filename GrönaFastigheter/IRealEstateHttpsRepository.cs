@@ -21,12 +21,13 @@ namespace GrönaFastigheter
 
         /// <summary>
         /// fixa null returns vid felaktigt statuscode. isttälet notfound. Skicka också med bearer token.
-        /// </summary>
+        /// </summary>vet inte
         /// <param name="comment"></param>
         /// <returns></returns>
-        Task<Comment> PostComment(Comment comment);
+        Task<bool> PostComment(Comment comment);
         void PostRating(int rating, int userId);
         void TestRepo();
+        Task<IEnumerable<Comment>> GetComments();
 
     }
 }
