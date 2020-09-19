@@ -1,0 +1,12 @@
+﻿@page "/cascadingsearch"
+
+<input @bind-value="Searchterm" @bind-value:event="oninput" />
+
+<CascadingValue Value="@Searchterm">
+    <RealEstateSerchResult>
+
+    </RealEstateSerchResult>
+</CascadingValue>
+@code {
+    public string Searchterm { get; set; } = "";
+}
