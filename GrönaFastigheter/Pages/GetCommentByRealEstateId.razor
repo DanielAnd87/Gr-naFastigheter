@@ -3,6 +3,7 @@
 @inject IRealEstateHttpsRepository context
 @using System.Security.Claims
 @using Entities.Models
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 @if (comments == null)
 {
@@ -10,58 +11,71 @@
 }
 else
 {
-    @foreach (var comment in comments)
-    {
-        <h3>@comment.UserName</h3>
-        <p>@comment.CreatedOn.ToString()</p>
-        <p>@comment.Content</p>
-    }
-}
+<div class="container justify-content-center mt-5 border-left border-right">
+    @*<EditForm Model="newComment" OnValidSubmit="AddComment">
 
-<div class="container">
+            <div class="d-flex justify-content-center pt-3 pb-2"> <input type="text" name="text" placeholder="+ Add a note" class="form-control addtxt"> </div>
+        </EditForm>*@
+
     <EditForm Model="newComment" OnValidSubmit="AddComment">
         <DataAnnotationsValidator />
-        <div class="form-group row">
-            <label for="username" class="col-md-2 col-form-label">Username:</label>
+        <div class="d-flex justify-content-center pt-3 pb-2">
+            <label for="username" class="col-md-2 col-form-label"></label>
             <div class="col-md-10">
                 <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
                 <ValidationMessage For="@(() => newComment.Content)" />
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-success">Add new</button>
+                <button type="submit" class="btn btn-success">Send</button>
             </div>
         </div>
     </EditForm>
-</div>
 
-
-    @code {
-        [Parameter]
-        public int Page { get; set; }
-        [Parameter]
-        public int NumItems { get; set; }
-        [Parameter]
-        public string Id { get; set; }
-        private List<Comment> comments;
-        private Comment newComment { get; set; } = new Comment(1, "", "");
-        [CascadingParameter]
-        public Task<AuthenticationState> AuthState { get; set; }
-
-        protected override async Task OnInitializedAsync()
-        {
-            //comments = await context.GetCommentsByRealEstateId(Convert.ToInt32(@Id));
-            comments = new List<Comment>() { new Comment(1, "name", "person") };
-        }
-
-        private async void AddComment()
-        {
-            var authState = await AuthState;
-            string userName = authState.User.Identity.Name;
-            newComment.UserName = userName;
-            newComment.RealEstateId = 2;
-            comments.Add(newComment);
-        }
+    @foreach (var comment in comments)
+    {
+        <div class="d-flex justify-content-center py-2">
+            <div class="second py-2 px-2">
+                <span class="text1">@comment.Content</span>
+                <div class="d-flex justify-content-between py-1 pt-2">
+                    <div><img src="https://i.imgur.com/tPvlEdq.jpg" width="18"><span class="text2">@comment.UserName</span></div>
+                    <div><span class="text3">Upvote?</span><span class="thumbup"><i class="fa fa-thumbs-o-up"></i></span><span class="text4">3</span></div>
+                </div>
+            </div>
+        </div>
     }
+
+
+
+</div>
+}
+
+@code {
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public int NumItems { get; set; }
+    [Parameter]
+    public string Id { get; set; }
+    private List<Comment> comments;
+    private Comment newComment { get; set; } = new Comment(1, "", "");
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //comments = await context.GetCommentsByRealEstateId(Convert.ToInt32(@Id));
+        comments = new List<Comment>() { new Comment(1, "name", "person") };
+    }
+
+    private async void AddComment()
+    {
+        var authState = await AuthState;
+        string userName = authState.User.Identity.Name;
+        newComment.UserName = userName;
+        newComment.RealEstateId = 2;
+        comments.Add(newComment);
+    }
+}
