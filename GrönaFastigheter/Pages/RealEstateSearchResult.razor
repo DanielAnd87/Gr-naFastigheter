@@ -37,6 +37,8 @@ else
                 {
                     <p>Renting price : @estate.RentingPrice per month</p>
                 }
+                <p>Description : @estate.Description</p>
+                <p>Adress : @estate.Address</p>
                 <img src="@estate.ImageUrl" />
 
                 <NavLink href="@($"realestate/{estate.Id}")" class="btn btn-primary">More Info</NavLink>
@@ -54,12 +56,10 @@ else
     private IEnumerable<RealEstate> realEstates;
     [CascadingParameter]
     public string searchterm { get; set; } = "";
-    List<RealEstate> FilteredEstates => realEstates.Where(i => i.Title.ToLower().Contains(searchterm.ToLower())).ToList();
+    List<RealEstate> FilteredEstates => realEstates.Where(i => i.Title.ToLower().Contains(searchterm.ToLower()) || i.Description.ToLower().Contains(searchterm.ToLower()) || i.Address.ToLower().Contains(searchterm.ToLower())).ToList();
 
     protected override async Task OnInitializedAsync()
     {
         realEstates = await context.GetRealEstates();
     }
-
-
 }

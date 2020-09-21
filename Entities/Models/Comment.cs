@@ -13,8 +13,7 @@ namespace Entities.Models
         public string Content { get; set; }
         public string UserName { get; set; }
         public DateTime CreatedOn { get; set; }
-        public User User { get; set; }
-
+        //public User User { get; set; } = new User();
         public Comment(string content)
         {
             Content = content;

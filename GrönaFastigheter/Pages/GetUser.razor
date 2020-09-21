@@ -56,7 +56,15 @@ else
     {
         user = await context.GetUserByUserName(Username);
         RestartRatingList();
-        ratingChecked[4 - ((int)user.Rating - 1)] = true;
+        int ratingIndex = 4 - ((int) Math.Ceiling(user.Rating) - 1);
+        if (ratingIndex < 0)
+        {
+            ratingIndex = 0;
+        } else if (ratingIndex > 4)
+        {
+            ratingIndex = 4;
+        }
+        ratingChecked[ratingIndex] = true;
     }
 
     public void HandleValidSubmit()

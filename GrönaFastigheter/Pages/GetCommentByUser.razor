@@ -1,5 +1,4 @@
-﻿@page "/getComment"
-@page "/getComment/{Username}"
+﻿@page "/getComment/{Username}"
 @inject IRealEstateHttpsRepository context
 
 @using Entities.Models
@@ -25,10 +24,12 @@ else
     public int NumItems { get; set; }
     [Parameter]
     public string Username { get; set; }
+
     private IEnumerable<Comment> comments;
 
     protected override async Task OnInitializedAsync()
     {
-        comments = await context.GetCommentsByUser(@Username);
+        Console.WriteLine(Username);
+        comments = await context.GetCommentsByUser(Username);
     }
 }
