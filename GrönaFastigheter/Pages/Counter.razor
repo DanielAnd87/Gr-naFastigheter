@@ -25,6 +25,7 @@
         var authState = await AuthState;
         var user = authState.User;
 
+        string userName = user.FindFirst(ClaimTypes.Name).Value.ToString();
         if (user.Identity.IsAuthenticated)
             currentCount++;
         else
