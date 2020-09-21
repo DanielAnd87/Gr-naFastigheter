@@ -39,7 +39,6 @@ namespace GrönaFastigheter
 
 
         }
-
         public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5)
         {
             if (Username == null)
@@ -68,7 +67,6 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
         public async Task<IEnumerable<Comment>> GetComments()
         {
             IEnumerable<Comment> task;
