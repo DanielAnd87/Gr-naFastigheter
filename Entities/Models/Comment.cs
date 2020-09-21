@@ -28,5 +28,9 @@ namespace Entities.Models
             UserName = userName;
             CreatedOn = DateTime.Now;
         }
+        public Comment()
+        {
+
+        }
     }
 }
