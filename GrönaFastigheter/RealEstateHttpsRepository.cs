@@ -69,31 +69,6 @@ namespace GrönaFastigheter
             return null;
         }
 
-        public async Task<IEnumerable<Comment>> GetComments()
-        {
-            IEnumerable<Comment> task;
-            try
-            {
-                string userUrl = $"/api/Comments";
-                task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
-                return task;
-
-            }
-            catch (HttpRequestException)
-            {
-                Console.WriteLine("An error Occured");
-            }
-            catch (NotSupportedException)
-            {
-                Console.WriteLine("Content type is not supported");
-            }
-            catch (System.Text.Json.JsonException)
-            {
-                Console.WriteLine("Invalid Json");
-            }
-            return null;
-        }
-
         public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page = 2, int NumItems = 5)
         {
             IEnumerable<Comment> comment;
