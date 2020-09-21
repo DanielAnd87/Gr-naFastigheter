@@ -27,7 +27,6 @@ namespace GrönaFastigheter
         Task<bool> PostComment(Comment comment);
         void PostRating(int rating, int userId);
         void TestRepo();
-        Task<IEnumerable<Comment>> GetComments();
 
     }
 }
