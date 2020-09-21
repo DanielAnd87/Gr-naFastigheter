@@ -46,12 +46,13 @@ namespace GrönaFastigheter
             {
                 Username = "USERNAME";
             }
-            IEnumerable<Comment> task;
+            IEnumerable<Comment> comments;
             try
             {
                 string userUrl = $"/api/Comments/ByUser/{Username}?skip={Page}&take={NumItems}";
-                task = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
-                return task;
+                comments = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
+                Console.WriteLine(comments);
+                return comments;
 
             }
             catch (HttpRequestException)
@@ -62,9 +63,9 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Content type is not supported");
             }
-            catch (System.Text.Json.JsonException)
+            catch (System.Text.Json.JsonException message)
             {
-                Console.WriteLine("Invalid Json");
+                Console.WriteLine(message);
             }
             return null;
         }
