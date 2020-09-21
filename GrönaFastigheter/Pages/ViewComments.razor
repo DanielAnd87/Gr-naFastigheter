@@ -1,5 +1,4 @@
-﻿<h3>GetCommentByRealEstateId</h3>
-@page "/getCommentByEstateId/{Id}"
+﻿
 @inject IRealEstateHttpsRepository repo
 @using System.Security.Claims
 @using Entities.Models
@@ -17,24 +16,27 @@ else
         @*<EditForm Model="newComment" OnValidSubmit="AddComment">
 
                 <div class="d-flex justify-content-center pt-3 pb-2"> <input type="text" name="text" placeholder="+ Add a note" class="form-control addtxt"> </div>
-            </EditForm>*@
+           /EditForm>*@
+        @if (AuthState != null)
+        {
 
-        <EditForm Model="newComment" OnValidSubmit="AddComment">
-            <DataAnnotationsValidator />
-            <div class="d-flex justify-content-center pt-3 pb-2">
-                <label for="username" class="col-md-2 col-form-label"></label>
-                <div class="col-md-10">
-                    <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
-                    <ValidationMessage For="@(() => newComment.Content)" />
+            <EditForm Model="newComment" OnValidSubmit="AddComment">
+                <DataAnnotationsValidator />
+                <div class="d-flex justify-content-center pt-3 pb-2">
+                    <label for="username" class="col-md-2 col-form-label"></label>
+                    <div class="col-md-10">
+                        <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
+                        <ValidationMessage For="@(() => newComment.Content)" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <button type="submit" class="btn btn-success">Send</button>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </div>
                 </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        }
 
         @foreach (var comment in userComments)
         {
@@ -68,20 +70,18 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        int id = Convert.ToInt32(@Id);
-        RealEstate realEstate = await repo.GetRealEstateById(id);
-        userComments = realEstate.Comments;
-        //comments = new List<Comment>() { new Comment(1, "name", "person") };
-    }
-
     private async void AddComment()
     {
         var authState = await AuthState;
-        string userName = authState.User.FindFirst(ClaimTypes.Name).Value.ToString();
+        string userName = "Stig the man";
+        // todo: The site crashes when I try to get Claims.
+        //string userName = authState.User.FindFirst(ClaimTypes.Name).Value;
         newComment.UserName = userName;
         newComment.RealEstateId = 2;
-        userComments.Add(newComment);
+
+        if (await repo.PostComment(newComment)) {
+            userComments.Add(newComment);
+        }
     }
 }
+
