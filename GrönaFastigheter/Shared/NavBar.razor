@@ -1,5 +1,24 @@
-﻿<h3>NavBaaaar</h3>
-
+﻿<div class="header">
+    <div class="logo">
+        <h4>Gröna Fastigheter</h4>
+    </div>
+    <div class="navmenu">
+        <NavLink href="/" class="link">Köp bostad</NavLink>
+        <NavLink href="realestate/add" class="link">Sälj bostad</NavLink>
+    </div>
+    <div class="loginmenu">
+        <AuthorizeView>
+            <Authorized>
+                <NavLink href="login" class="link">Logga ut</NavLink>
+                <NavLink href="account" class="link">Mitt konto</NavLink>
+            </Authorized>
+            <NotAuthorized>
+                <NavLink href="login" class="link">Logga in</NavLink>
+                <NavLink href="login" class="link">Skapa konto</NavLink>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
 @code {
 
 }

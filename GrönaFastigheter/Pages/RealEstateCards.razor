@@ -1,0 +1,67 @@
+﻿@using System.Net.Http.Json;
+@using Entities.Models
+@inject IRealEstateHttpsRepository context
+@inject NavigationManager NavManager
+
+
+@if (realEstates == null)
+{
+    <p>Loading.....</p>
+}
+else
+{
+    foreach (var estate in realEstates)
+    {
+        int price = 0;
+        if (estate.CanBeSold)
+            price = estate.SellingPrice;
+        else
+            price = estate.RentingPrice;
+
+        <div class="card-container">
+            <div class="estate-card" @onclick="@(e => RedirectToEstate(estate.Id))">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&w=1000&q=80" alt="Bilden kunde inte visas" />
+                </div>
+                <div class="card-data">
+                    <div>
+                        <h4>@estate.Title</h4>
+                        <p>@estate.Address</p>
+                    </div>
+                    <div class="card-data-row">
+                        <div class="card-data-row-item">
+                            <p>@estate.RealEstateType</p>
+                        </div>
+                        <div class="card-data-row-item">
+                            <p>@price</p>
+                        </div>
+                        <div class="card-data-row-item">
+                            <p>@estate.ConstructionYear</p>
+                        </div>
+                    </div>
+                    <div class="card-data-row">
+                        <p>@estate.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public int NumItems { get; set; }
+    private IEnumerable<RealEstate> realEstates;
+
+    protected override async Task OnInitializedAsync()
+    {
+        realEstates = await context.GetRealEstates();
+    }
+
+    private void RedirectToEstate(int id)
+    {
+        NavManager.NavigateTo("/realestate/"+id);
+    }
+}

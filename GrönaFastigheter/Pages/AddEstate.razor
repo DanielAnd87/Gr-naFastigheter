@@ -1,9 +1,10 @@
 ﻿@page "/realestate/add"
 @inject IRealEstateHttpsRepository client
+@using System.Security.Claims
+@inject NavigationManager NavManager
 
-
-<h3>AddEstate</h3>
-<div class="container">
+<div class="page-container">
+    <h3>AddEstate</h3>
     <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit" class="card card-body bg-light mt-5">
         <DataAnnotationsValidator />
         <div class="form-group row">
@@ -76,6 +77,17 @@
 
 @code {
     private RealEstate realEstate = new RealEstate();
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            NavManager.NavigateTo("/login");
+        }
+    }
 
     private void HandleValidSubmit()
     {

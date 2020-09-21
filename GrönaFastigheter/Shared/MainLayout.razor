@@ -2,27 +2,6 @@
 <div class="topbar">
     <NavBar />
 </div>
-<div class="sidebar">
-    <NavMenu />
-</div>
-
 <div class="main">
-    <div class="top-row px-4 auth ">
-        <LoginDisplay />
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-
-        <AuthorizeView>
-            <Authorized>
-                <a href="logout">Logga ut</a>
-
-            </Authorized>
-            <NotAuthorized>
-                <a href="login">Logga in</a>
-            </NotAuthorized>
-        </AuthorizeView>
-    </div>
-
-    <div class="content px-4">
         @Body
-    </div>
 </div>

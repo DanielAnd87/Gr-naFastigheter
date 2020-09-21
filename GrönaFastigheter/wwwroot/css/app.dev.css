@@ -1,9 +1,29 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto');
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto' , sans-serif;
+    background-color: #fafafa;
 }
 
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+/*
 a, .btn-link {
     color: #0366d6;
 }
@@ -15,9 +35,7 @@ a, .btn-link {
 }
 
 app {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    
 }
 
 .top-row {
@@ -117,24 +135,7 @@ app {
     color: red;
 }
 
-#blazor-error-ui {
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-}
 
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
-}
 
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
@@ -178,6 +179,106 @@ app {
 
     .sidebar .collapse {
         /* Never collapse the sidebar for wide screens */
-        display: block;
+        /*display: block;
     }
+}*/
+
+
+/* --- OWN CSS START --- */
+h3, h4, h5, h6 {
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    padding: 0.5em 5em;
+    background-color: green;
+    color: white;
+}
+
+.header > div {
+    margin: auto;
+    width: 50%;
+}
+
+.navmenu {
+    text-align: center;
+}
+
+.loginmenu {
+    text-align: right;
+}
+
+.link {
+    color: white;
+    margin-left: 1em;
+}
+
+.link:hover {
+    color: white;
+}
+
+/*--- HERO IMG START ---*/
+.hero-img {
+    width: 100%;
+    min-height: 25em;
+    background-image: url("../img/hero-bg.png");
+    background-position: left center;
+}
+
+/*--- HERO IMG END ---*/
+
+.page-container {
+    padding: 5em 20em;
+}
+
+.estates-container {
+    display: flex;
+}
+
+.estates-listing {
+    margin-right: 1em;
+    width: 75%;
+}
+.search-container {
+    border: 1px solid black;
+    width: 25%;
+}
+
+.card-container {
+    margin-bottom: 2em;
+}
+
+.estate-card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.estate-card:hover {
+    border-color: limegreen;
+    cursor: pointer;
+}
+
+.card-img {
+    width: auto;
+}
+
+.card-img > img {
+    width: 15em;
+}
+
+.card-data {
+    padding: 1em;
+}
+
+.card-data-row {
+    display: flex;
+}
+
+.card-data-row-item {
+    font-weight: 600;
+    margin-right: 3em;
+    min-width: 80px;
 }
