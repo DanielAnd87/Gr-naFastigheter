@@ -11,14 +11,15 @@
         </div>
         <div class="search-container">
             <h3>Sök/filtrera</h3>
+            <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
             <p>Title:</p>
-            <input @bind-value="searchTerms.SearchtermTitle" @bind-value:event="oninput" />
+            <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
             <p>Adress:</p>
-            <input @bind-value="searchTerms.SearchtermAdress" @bind-value:event="oninput" />
+            <input type="checkbox" @bind-value="searchTerms.AdressCheck" @bind-value:event="oninput" />
             <p>Type:</p>
-            <input @bind-value="searchTerms.SearchtermType" @bind-value:event="oninput" />
+            <input type="checkbox" @bind-value="searchTerms.TypeCheck" @bind-value:event="oninput" />
             <p>Sortera efter:</p>
-            <select class="form-control" list="OrderAlternatives" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
+            <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
                 @foreach (string choice in OrderAlternatives)
                 {
                     <option>@choice</option>
@@ -31,10 +32,17 @@
 
 @code {
     public SearchTerms searchTerms { get; set; } = new SearchTerms();
-    public List<string> OrderAlternatives { get; set; } = new List<string> { 
-        "Säljpris", 
-        "Hyra", 
-        "Titel", 
+    public List<string> OrderAlternatives { get; set; } = new List<string> {
+        "Hyra",
+        "Säljpris",
+        "Titel",
         "Adress"
        };
+
+
+    private void OnPickedOrder(ChangeEventArgs args)
+    {
+        Console.WriteLine(args.ToString());
+        searchTerms.OrderBy = args.Value.ToString();
+    }
 }
