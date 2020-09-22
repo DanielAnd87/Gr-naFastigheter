@@ -1,10 +1,16 @@
-﻿<div class="header">
+﻿@inject NavigationManager NavManager
+
+<div class="header">
     <div class="logo">
         <h4>Gröna Fastigheter</h4>
     </div>
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
         <NavLink href="realestate/add" class="link">Sälj bostad</NavLink>
+        <form @onsubmit="@(e => RedirectToUserPage(UserName))">
+            <input  @bind-value="UserName" type="text" placeholder="användarnamn..." name="search" />
+            <button type="submit">Sök</button>
+        </form>
     </div>
     <div class="loginmenu">
         <AuthorizeView>
@@ -20,5 +26,10 @@
     </div>
 </div>
 @code {
+    private string UserName { get; set; }
 
+    private void RedirectToUserPage(string userName)
+    {
+        NavManager.NavigateTo("/getuser/" + userName);
+    }
 }
