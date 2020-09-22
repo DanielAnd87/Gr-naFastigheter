@@ -10,7 +10,7 @@
 }
 else
 {
-    foreach (var estate in realEstates)
+    foreach (var estate in FilteredEstates)
     {
         int price = 0;
         if (estate.CanBeSold)
@@ -54,6 +54,9 @@ else
     [Parameter]
     public int NumItems { get; set; }
     private IEnumerable<RealEstate> realEstates;
+    [CascadingParameter]
+    public string searchterm { get; set; } = "";
+    List<RealEstate> FilteredEstates => realEstates.Where(i => i.Title.ToLower().Contains(searchterm.ToLower()) || i.Description.ToLower().Contains(searchterm.ToLower()) || i.Address.ToLower().Contains(searchterm.ToLower())).ToList();
 
     protected override async Task OnInitializedAsync()
     {

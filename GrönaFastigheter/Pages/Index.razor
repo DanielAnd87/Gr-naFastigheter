@@ -3,11 +3,22 @@
     <h1>Bostäder till salu</h1>
     <div class="estates-container">
         <div class="estates-listing">
-            <RealEstateCards/>
+
+
+            <CascadingValue Value="@Searchterm">
+                <RealEstateCards />
+            </CascadingValue>
         </div>
         <div class="search-container">
             <h3>Sök/filtrera</h3>
+            <input @bind-value="Searchterm" @bind-value:event="oninput" />
             <p>Test</p>
         </div>
     </div>
 </div>
+
+
+
+@code {
+    public string Searchterm { get; set; } = "";
+}
