@@ -65,9 +65,24 @@ else
     public int NumItems { get; set; }
     private IEnumerable<RealEstate> realEstates;
     [CascadingParameter]
-    public string searchterm { get; set; } = "";
-    List<RealEstate> FilteredEstates => realEstates.Where(i => i.Title.ToLower().Contains(searchterm.ToLower()) || i.Description.ToLower().Contains(searchterm.ToLower()) || i.Address.ToLower().Contains(searchterm.ToLower())).ToList();
+    public SearchTerms searchTerms { get; set; }
+    List<RealEstate> FilteredEstates => realEstates.Where(
+        i => i.Title.ToLower().Contains(searchTerms.SearchtermTitle.ToLower()) &&
+        i.Address.ToLower().Contains(searchTerms.SearchtermAdress.ToLower()) &&
+        i.RealEstateType.ToLower().Contains(searchTerms.SearchtermType.ToLower())
+        ).OrderBy(X => X.RentingPrice
+    //x => {
+    //    if (searchTerms.OrderBy == OrderAlternatives[0])
 
+    //        return x.RentingPrice;
+    //}
+    ).ToList();
+    public List<string> OrderAlternatives { get; set; } = new List<string> {
+        "Säljpris",
+        "Hyra",
+        "Titel",
+        "Adress"
+       };
     protected override async Task OnInitializedAsync()
     {
         realEstates = await context.GetRealEstates();

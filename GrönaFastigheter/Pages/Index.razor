@@ -5,20 +5,36 @@
         <div class="estates-listing">
 
 
-            <CascadingValue Value="@Searchterm">
+            <CascadingValue Value="@searchTerms">
                 <RealEstateCards />
             </CascadingValue>
         </div>
         <div class="search-container">
             <h3>Sök/filtrera</h3>
-            <input @bind-value="Searchterm" @bind-value:event="oninput" />
-            <p>Test</p>
+            <p>Title:</p>
+            <input @bind-value="searchTerms.SearchtermTitle" @bind-value:event="oninput" />
+            <p>Adress:</p>
+            <input @bind-value="searchTerms.SearchtermAdress" @bind-value:event="oninput" />
+            <p>Type:</p>
+            <input @bind-value="searchTerms.SearchtermType" @bind-value:event="oninput" />
+            <p>Sortera efter:</p>
+            <select class="form-control" list="OrderAlternatives" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
+                @foreach (string choice in OrderAlternatives)
+                {
+                    <option>@choice</option>
+                }
+            </select>
+
         </div>
     </div>
 </div>
 
-
-
 @code {
-    public string Searchterm { get; set; } = "";
+    public SearchTerms searchTerms { get; set; } = new SearchTerms();
+    public List<string> OrderAlternatives { get; set; } = new List<string> { 
+        "Säljpris", 
+        "Hyra", 
+        "Titel", 
+        "Adress"
+       };
 }
