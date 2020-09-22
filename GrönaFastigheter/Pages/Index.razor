@@ -1,31 +1,35 @@
 ﻿@page "/"
 <div class="page-container">
-    <h1>Bostäder till salu</h1>
+    <div class="hero-img">
+        <div class="search-container">
+            <div>
+                <h2>Sök bostäder</h2>
+            </div>
+            <div>
+                <h3>Sök/filtrera</h3>
+                <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                <p>Title:</p>
+                <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
+                <p>Adress:</p>
+                <input type="checkbox" @bind-value="searchTerms.AdressCheck" @bind-value:event="oninput" />
+                <p>Type:</p>
+                <input type="checkbox" @bind-value="searchTerms.TypeCheck" @bind-value:event="oninput" />
+                <p>Sortera efter:</p>
+                <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
+                    @foreach (string choice in OrderAlternatives)
+                    {
+                        <option>@choice</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="estates-container">
+        <h1>Bostäder till salu</h1>
         <div class="estates-listing">
-
-
             <CascadingValue Value="@searchTerms">
                 <RealEstateCards />
             </CascadingValue>
-        </div>
-        <div class="search-container">
-            <h3>Sök/filtrera</h3>
-            <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
-            <p>Title:</p>
-            <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
-            <p>Adress:</p>
-            <input type="checkbox" @bind-value="searchTerms.AdressCheck" @bind-value:event="oninput" />
-            <p>Type:</p>
-            <input type="checkbox" @bind-value="searchTerms.TypeCheck" @bind-value:event="oninput" />
-            <p>Sortera efter:</p>
-            <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
-                @foreach (string choice in OrderAlternatives)
-                {
-                    <option>@choice</option>
-                }
-            </select>
-
         </div>
     </div>
 </div>
@@ -42,7 +46,6 @@
 
     private void OnPickedOrder(ChangeEventArgs args)
     {
-        Console.WriteLine(args.ToString());
         searchTerms.OrderBy = args.Value.ToString();
     }
 }
