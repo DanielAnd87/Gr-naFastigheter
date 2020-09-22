@@ -25,21 +25,19 @@ namespace GrönaFastigheter.HttpRepository
             _localStorage = localStorage;
         }
 
-        public async Task<RegistrationResponseDto> RegisterUser(UserForRegistrationDto userForRegistration)
+        public async Task<bool> RegisterUser(UserForRegistrationDto userForRegistration)
         {
-            string content = JsonSerializer.Serialize(userForRegistration);
-            StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+            string content = userForRegistration.ToString();
+            StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            HttpResponseMessage registrationResult = await _client.PostAsync("/api/accounts/registration", bodyContent);
-            string registrationContent = await registrationResult.Content.ReadAsStringAsync();
+            HttpResponseMessage httpResponse = await _client.PostAsync("/api/account/register", bodyContent);
 
-            if (!registrationResult.IsSuccessStatusCode)
+            if (httpResponse.IsSuccessStatusCode)
             {
-                RegistrationResponseDto result = JsonSerializer.Deserialize<RegistrationResponseDto>(registrationContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return result;
+                return true;
             }
 
-            return new RegistrationResponseDto { IsSuccessfulRegistration = true };
+            return false;
         }
 
         public async Task<AuthResponseDto> Login(UserForAuthenticationDto userForAuthentication)
@@ -47,25 +45,21 @@ namespace GrönaFastigheter.HttpRepository
             string content = userForAuthentication.ToString();
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            HttpResponseMessage authResult = await _client.PostAsync("/token", bodyContent);
-            string authContent = await authResult.Content.ReadAsStringAsync();
-            AuthResponseDto result = JsonSerializer.Deserialize<AuthResponseDto>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            HttpResponseMessage httpResponse = await _client.PostAsync("/token", bodyContent);
+            string responseContent = await httpResponse.Content.ReadAsStringAsync();
+            AuthResponseDto result = JsonSerializer.Deserialize<AuthResponseDto>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            if (!authResult.IsSuccessStatusCode)
+            if (!httpResponse.IsSuccessStatusCode)
             {
+                result.Message = httpResponse.ReasonPhrase;
                 return result;
             }
 
-
             await _localStorage.SetItemAsync("authToken", result.Access_Token);
-
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(userForAuthentication.Username);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Access_Token);
-            
-            //string token = await _localStorage.GetItemAsStringAsync("authToken");
-            //_client.DefaultRequestHeaders.Add("Token", result.Token);
 
-            return new AuthResponseDto { IsAuthSuccessful = true };
+            return result;
         }
 
         public async Task Logout()

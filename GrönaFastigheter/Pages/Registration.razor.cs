@@ -24,9 +24,9 @@ namespace GrönaFastigheter.Pages
             ShowRegistrationErros = false;
 
             var result = await AuthenticationService.RegisterUser(_userForRegistration);
-            if(!result.IsSuccessfulRegistration)
+            if(!result)
             {
-                Errors = result.Errors;
+                //Errors = result;
                 ShowRegistrationErros = true;
             }
             else

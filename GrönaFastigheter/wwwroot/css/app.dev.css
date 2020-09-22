@@ -1,8 +1,8 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto');
 
 html, body {
-    font-family: 'Roboto' , sans-serif;
-    background-color: #fafafa;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0eeec;
 }
 
 #blazor-error-ui {
@@ -191,7 +191,7 @@ h3, h4, h5, h6 {
 
 .header {
     display: flex;
-    padding: 0.5em 5em;
+    padding: 1em 25em;
     background-color: green;
     color: white;
 }
@@ -221,28 +221,33 @@ h3, h4, h5, h6 {
 /*--- HERO IMG START ---*/
 .hero-img {
     width: 100%;
-    min-height: 25em;
-    background-image: url("../img/hero-bg.png");
-    background-position: left center;
+    min-height: 22em;
+    margin-bottom: 5em;
+    background-image: url("https://cdn.maklarhuset.se/web/bilder/innehall/2017/fri-vardering.jpg");
+    background-position: 0 -20em;
 }
 
 /*--- HERO IMG END ---*/
 
 .page-container {
-    padding: 5em 20em;
+
 }
 
 .estates-container {
-    display: flex;
+    padding: 0em 25em 5em 25em;
 }
 
 .estates-listing {
-    margin-right: 1em;
-    width: 75%;
 }
 .search-container {
-    border: 1px solid black;
-    width: 25%;
+    padding: 10em 45em;
+    background-color: rgba(0, 61, 0, 0.25)
+}
+
+.search-container h2 {
+    color: white;
+    font-weight: 600;
+    text-align: center;
 }
 
 .card-container {
@@ -259,6 +264,9 @@ h3, h4, h5, h6 {
 .estate-card:hover {
     border-color: limegreen;
     cursor: pointer;
+    -webkit-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+    box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
 }
 
 .card-img {
@@ -266,7 +274,7 @@ h3, h4, h5, h6 {
 }
 
 .card-img > img {
-    width: 15em;
+    width: 40em;
 }
 
 .card-data {

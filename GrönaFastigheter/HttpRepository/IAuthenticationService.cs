@@ -8,7 +8,7 @@ namespace GrönaFastigheter.HttpRepository
 {
     public interface IAuthenticationService
     {
-        Task<RegistrationResponseDto> RegisterUser(UserForRegistrationDto userForRegistration);
+        Task<bool> RegisterUser(UserForRegistrationDto userForRegistration);
         Task<AuthResponseDto> Login(UserForAuthenticationDto userForAuthentication);
         Task Logout();
     }

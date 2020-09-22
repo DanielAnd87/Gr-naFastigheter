@@ -83,6 +83,7 @@
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthState;
+
         if (!authState.User.Identity.IsAuthenticated)
         {
             NavManager.NavigateTo("/login");
