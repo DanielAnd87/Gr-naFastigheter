@@ -1,18 +1,21 @@
 ﻿@page "/"
 <div class="page-container">
-    <h1>Bostäder till salu</h1>
+    <div class="hero-img">
+        <div class="search-container">
+            <div>
+                <h2>Sök bostäder</h2>
+            </div>
+            <div>
+                <input class="form-control" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" />
+            </div>
+        </div>
+    </div>
     <div class="estates-container">
+        <h3>Bostäder till salu</h3>
         <div class="estates-listing">
-
-
             <CascadingValue Value="@Searchterm">
                 <RealEstateCards />
             </CascadingValue>
-        </div>
-        <div class="search-container">
-            <h3>Sök/filtrera</h3>
-            <input @bind-value="Searchterm" @bind-value:event="oninput" />
-            <p>Test</p>
         </div>
     </div>
 </div>

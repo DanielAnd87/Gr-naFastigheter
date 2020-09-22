@@ -22,7 +22,8 @@ namespace GrönaFastigheter.Pages
             ShowAuthError = false;
 
             var result = await AuthenticationService.Login(_userForAuthentication);
-            if (result.IsAuthSuccessful)
+
+            if (result.Status == 200)
             {
                 NavigationManager.NavigateTo("/");
             }

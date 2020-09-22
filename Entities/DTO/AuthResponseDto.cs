@@ -6,7 +6,8 @@ namespace Entities.DTO
 {
     public class AuthResponseDto
     {
-        public bool IsAuthSuccessful { get; set; }
+        public int Status { get; set; }
+        public string Username { get; set; }
         public string Message { get; set; }
         public string Access_Token { get; set; }
     }
