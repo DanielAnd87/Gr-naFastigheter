@@ -1,5 +1,5 @@
 ﻿@page "/"
-<div class="page-container">
+
     <div class="hero-img">
         <div class="search-container">
             <div>
@@ -25,15 +25,12 @@
             </div>
         </div>
     </div>
-    <div class="estates-container">
+    <div class="page-container">
         <h1>Bostäder till salu</h1>
-        <div class="estates-listing">
-            <CascadingValue Value="@searchTerms">
-                <RealEstateCards />
-            </CascadingValue>
-        </div>
+        <CascadingValue Value="@searchTerms">
+            <RealEstateCards />
+        </CascadingValue>
     </div>
-</div>
 
 @code {
     public SearchTerms searchTerms { get; set; } = new SearchTerms();
