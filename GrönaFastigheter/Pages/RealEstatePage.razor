@@ -41,6 +41,9 @@ else
 
                 </ViewComments>
             </CascadingValue>
+            <div @onclick="@(e => AddMoreComments())">
+                <p>Visa fler kommentarer...</p>
+            </div>
         </Authorized>
     </AuthorizeView>
 </div>
@@ -57,7 +60,14 @@ else
         realEstate = await context.GetRealEstateById(Id);
         if (realEstate.Comments != null)
         {
-            UserComments = realEstate.Comments;
+            UserComments = realEstate.Comments.Take(5).ToList();
         }
+    }
+    private async void AddMoreComments()
+    {
+        int commentsToSkip = UserComments.Count;
+        var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
+        Console.WriteLine(commentsToSkip);
+        UserComments.AddRange(response);
     }
 }
