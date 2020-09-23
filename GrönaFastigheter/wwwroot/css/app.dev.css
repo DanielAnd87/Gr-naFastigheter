@@ -279,6 +279,7 @@ h3, h4, h5, h6 {
 
 .card-data {
     padding: 1em;
+    position: relative;
 }
 
 .card-data-row {
@@ -289,4 +290,10 @@ h3, h4, h5, h6 {
     font-weight: 600;
     margin-right: 3em;
     min-width: 80px;
+}
+
+.estate-seller {
+    display: block;
+    position: absolute;
+    bottom: 0;
 }

@@ -6,22 +6,29 @@
                 <h2>Sök bostäder</h2>
             </div>
             <div>
-                <input class="form-control" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" />
+                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres"  @bind-value="searchTerms.SearchtermTitle" @bind-value:event="oninput" />
+            </div>
+            <div>
+                <input type="checkbox" @bind-value="searchTerms.SearchtermType" @bind-value:event="oninput"/>
             </div>
         </div>
     </div>
     <div class="estates-container">
         <h3>Bostäder till salu</h3>
         <div class="estates-listing">
-            <CascadingValue Value="@Searchterm">
+            <CascadingValue Value="@searchTerms">
                 <RealEstateCards />
             </CascadingValue>
         </div>
     </div>
 </div>
 
-
-
 @code {
-    public string Searchterm { get; set; } = "";
+    public SearchTerms searchTerms { get; set; } = new SearchTerms();
+    public List<string> OrderAlternatives { get; set; } = new List<string> {
+        "Säljpris",
+        "Hyra",
+        "Titel",
+        "Adress"
+       };
 }

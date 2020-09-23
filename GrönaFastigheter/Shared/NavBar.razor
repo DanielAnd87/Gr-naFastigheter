@@ -7,10 +7,6 @@
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
         <NavLink href="realestate/add" class="link">Sälj bostad</NavLink>
-        <form @onsubmit="@(e => RedirectToUserPage(UserName))">
-            <input  @bind-value="UserName" type="text" placeholder="användarnamn..." name="search" />
-            <button type="submit">Sök</button>
-        </form>
     </div>
     <div class="loginmenu">
         <AuthorizeView>
