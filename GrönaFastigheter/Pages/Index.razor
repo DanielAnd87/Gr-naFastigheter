@@ -3,12 +3,13 @@
     <div class="hero-img">
         <div class="search-container">
             <div>
-                <h2>Sök bostäder</h2>
+                <!--Texten har ganska dålig contrast ratio-->
+                <h2>Hitta din bostad idag</h2>
             </div>
-            <div>
-                <h3>Sök/filtrera</h3>
-                <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
-                <p>Title:</p>
+            <div class="form-group">
+                @**<h3>Sök/filtrera</h3>*@
+                <input class="form-control" placeholder="Sök efter adress eller typ av byggnad" @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                @*<p>Title:</p>
                 <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
                 <p>Adress:</p>
                 <input type="checkbox" @bind-value="searchTerms.AdressCheck" @bind-value:event="oninput" />
@@ -20,7 +21,7 @@
                     {
                         <option>@choice</option>
                     }
-                </select>
+                </select>*@
             </div>
         </div>
     </div>
