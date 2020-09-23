@@ -41,8 +41,8 @@ else
 
                 </ViewComments>
             </CascadingValue>
-            <div @onclick="@(e => AddMoreComments())">
-                <p>Visa fler kommentarer...</p>
+            <div class="btn" @onclick="@(e => ViewMoreComments())">
+                <p>Visa mer kommentarer...</p>
             </div>
         </Authorized>
     </AuthorizeView>
@@ -63,7 +63,7 @@ else
             UserComments = realEstate.Comments.Take(5).ToList();
         }
     }
-    private async void AddMoreComments()
+    private async void ViewMoreComments() //todo: Första gången man trycker på visa mer uppdateras inte sidan av någon anledning
     {
         int commentsToSkip = UserComments.Count;
         var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
