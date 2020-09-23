@@ -1,6 +1,43 @@
 ﻿@inject NavigationManager NavManager
 
-<div class="header">
+<nav class="navbar navbar-expand-sm bg-success navbar-dark">
+    <span class="navbar-brand">
+        <i class="fas fa-home"></i>
+        <NavLink href="/" class="text-white">Gröna Fastigheter</NavLink>
+    </span>
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <NavLink href="/" class="nav-link">Köp bostad</NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink href="realestate/add" class="nav-link">Sälj bostad</NavLink>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav justify-content-end">
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item">
+                    <NavLink href="logout" class="nav-link">Logga ut</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="account" class="nav-link">Mitt konto</NavLink>
+                </li>
+            </Authorized>
+            <NotAuthorized>
+                <li class="nav-item">
+                    <NavLink href="login" class="nav-link">Logga in</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="login" class="nav-link">Skapa konto</NavLink>
+                </li>
+            </NotAuthorized>
+        </AuthorizeView>
+    </ul>
+</nav>
+
+@*<div class="header">
     <div class="logo h5">
         <i class="fas fa-home"></i>
         <NavLink href="/" class="font-weight-bold text-white">Gröna Fastigheter</NavLink>
@@ -9,10 +46,6 @@
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
         <NavLink href="realestate/add" class="link">Sälj bostad</NavLink>
-        @*<form @onsubmit="@(e => RedirectToUserPage(UserName))">
-            <input  @bind-value="UserName" type="text" placeholder="användarnamn..." name="search" />
-            <button type="submit">Sök</button>
-        </form>*@
     </div>
 
     <div class="loginmenu">
@@ -27,7 +60,7 @@
             </NotAuthorized>
         </AuthorizeView>
     </div>
-</div>
+</div>*@
 @code {
     private string UserName { get; set; }
 
