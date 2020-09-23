@@ -5,14 +5,16 @@
         <i class="fas fa-home"></i>
         <NavLink href="/" class="font-weight-bold text-white">Gröna Fastigheter</NavLink>
     </div>
+
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
         <NavLink href="realestate/add" class="link">Sälj bostad</NavLink>
-        <form @onsubmit="@(e => RedirectToUserPage(UserName))">
+        @*<form @onsubmit="@(e => RedirectToUserPage(UserName))">
             <input  @bind-value="UserName" type="text" placeholder="användarnamn..." name="search" />
             <button type="submit">Sök</button>
-        </form>
+        </form>*@
     </div>
+
     <div class="loginmenu">
         <AuthorizeView>
             <Authorized>
