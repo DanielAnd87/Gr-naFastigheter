@@ -75,7 +75,7 @@ namespace GrönaFastigheter
             IEnumerable<Comment> comment;
             try
             {
-                string userUrl = $"/api/Comments/{id}";
+                string userUrl = $"/api/Comments/{id}"; //todo: lägg till ?skip=page&take=numitems till url.
                 comment = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
                 return comment;
 
@@ -88,9 +88,9 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Content type is not supported");
             }
-            catch (System.Text.Json.JsonException)
+            catch (System.Text.Json.JsonException ex)
             {
-                Console.WriteLine("Invalid Json");
+                Console.WriteLine("Invalid json from /api/comments/id" + ex);
             }
             return null;
         }

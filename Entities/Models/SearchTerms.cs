@@ -6,9 +6,11 @@ namespace Entities.Models
 {
     public class SearchTerms
     {
-        public string SearchtermTitle { get; set; } = "";
-        public string SearchtermAdress { get; set; } = "";
-        public string SearchtermType { get; set; } = "";
+        public string Searchterm { get; set; } = "";
         public string OrderBy { get; set; } = "";
+        public bool TitleCheck { get; set; }
+        public bool AdressCheck { get; set; }
+        public bool TypeCheck { get; set; }
+
     }
 }

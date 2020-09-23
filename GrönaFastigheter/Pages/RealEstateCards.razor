@@ -70,23 +70,47 @@ else
     private IEnumerable<RealEstate> realEstates;
     [CascadingParameter]
     public SearchTerms searchTerms { get; set; }
-    List<RealEstate> FilteredEstates => realEstates.Where(
-        i => i.Title.ToLower().Contains(searchTerms.SearchtermTitle.ToLower()) &&
-        i.Address.ToLower().Contains(searchTerms.SearchtermAdress.ToLower()) &&
-        i.RealEstateType.ToLower().Contains(searchTerms.SearchtermType.ToLower())
-        ).OrderBy(X => X.RentingPrice
-    //x => {
-    //    if (searchTerms.OrderBy == OrderAlternatives[0])
+    private List<RealEstate> FilteredEstates => FilterList();
+    /// <summary>
+    /// This runs everytime the cascading searchterm parameter is updated.
+    /// </summary>
+    /// <returns></returns>
+    private List<RealEstate> FilterList()
+    {
+       
+        List<RealEstate> tempEstates = realEstates.Where(
+        
+        i => searchTerms.TitleCheck ? i.Title.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Title.Contains("") &&
+        searchTerms.AdressCheck ? i.Address.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Address.Contains("") &&
+        //todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
+        searchTerms.TypeCheck ? i.RealEstateType.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.RealEstateType.Contains("")
+        ).ToList();
 
-    //        return x.RentingPrice;
-    //}
-    ).ToList();
+        if (searchTerms.OrderBy == OrderAlternatives[0])
+        {
+            tempEstates = tempEstates.OrderBy(x => x.SellingPrice).ToList();
+        }
+        else if (searchTerms.OrderBy == OrderAlternatives[1])
+        {
+            tempEstates = tempEstates.OrderBy(x => x.RentingPrice).ToList();
+        }
+        else if (searchTerms.OrderBy == OrderAlternatives[2])
+        {
+            tempEstates = tempEstates.OrderBy(x => x.Title).ToList();
+        }
+        else
+        {
+            tempEstates = tempEstates.OrderBy(x => x.Address).ToList();
+        }
+        return tempEstates;
+    }
     public List<string> OrderAlternatives { get; set; } = new List<string> {
-        "Säljpris",
         "Hyra",
+        "Säljpris",
         "Titel",
         "Adress"
        };
+
     protected override async Task OnInitializedAsync()
     {
         realEstates = await context.GetRealEstates();

@@ -6,15 +6,26 @@
                 <h2>Sök bostäder</h2>
             </div>
             <div>
-                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres"  @bind-value="searchTerms.SearchtermTitle" @bind-value:event="oninput" />
-            </div>
-            <div>
-                <input type="checkbox" @bind-value="searchTerms.SearchtermType" @bind-value:event="oninput"/>
+                <h3>Sök/filtrera</h3>
+                <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                <p>Title:</p>
+                <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
+                <p>Adress:</p>
+                <input type="checkbox" @bind-value="searchTerms.AdressCheck" @bind-value:event="oninput" />
+                <p>Type:</p>
+                <input type="checkbox" @bind-value="searchTerms.TypeCheck" @bind-value:event="oninput" />
+                <p>Sortera efter:</p>
+                <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchTerms.OrderBy" @bind-value:event="oninput">
+                    @foreach (string choice in OrderAlternatives)
+                    {
+                        <option>@choice</option>
+                    }
+                </select>
             </div>
         </div>
     </div>
     <div class="estates-container">
-        <h3>Bostäder till salu</h3>
+        <h1>Bostäder till salu</h1>
         <div class="estates-listing">
             <CascadingValue Value="@searchTerms">
                 <RealEstateCards />
@@ -26,9 +37,15 @@
 @code {
     public SearchTerms searchTerms { get; set; } = new SearchTerms();
     public List<string> OrderAlternatives { get; set; } = new List<string> {
-        "Säljpris",
         "Hyra",
+        "Säljpris",
         "Titel",
         "Adress"
        };
+
+
+    private void OnPickedOrder(ChangeEventArgs args)
+    {
+        searchTerms.OrderBy = args.Value.ToString();
+    }
 }
