@@ -197,22 +197,23 @@ namespace GrönaFastigheter
             }
             return null;
         }
-        public async Task<bool> PostComment(Comment comment) //MAN MÅSTE HA MED SIG BEARER TOKEN FÖR ATT FÅ LÄGGA TILL COMMENT. FIXA
+        public async Task<Comment> PostComment(Comment comment)
         {
+            Comment newComment = null;
             try
             {
-                HttpResponseMessage response = await http.PostAsJsonAsync("api/Comments", comment);
+                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
 
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Comment newComment = JsonSerializer.Deserialize<Comment>(responseContent);
-                    return true;
+                    newComment = JsonSerializer.Deserialize<Comment>(responseContent);
+                    return newComment;
                 }
-                return false;
+                return newComment;
             }
-             catch (HttpRequestException)
+            catch (HttpRequestException)
             {
                 Console.WriteLine("An error Occured");
             }
@@ -224,7 +225,7 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
-            return false;
+            return newComment;
         }
         public void PostRating(int rating, int userId) //NYI
         {

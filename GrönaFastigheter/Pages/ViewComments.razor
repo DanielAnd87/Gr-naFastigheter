@@ -17,15 +17,13 @@ else
 
                 <div class="d-flex justify-content-center pt-3 pb-2"> <input type="text" name="text" placeholder="+ Add a note" class="form-control addtxt"> </div>
            /EditForm>*@
-        @if (AuthState != null)
-        {
-
+       
             <EditForm Model="newComment" OnValidSubmit="AddComment">
                 <DataAnnotationsValidator />
                 <div class="d-flex justify-content-center pt-3 pb-2">
-                    <label for="username" class="col-md-2 col-form-label"></label>
+                    <label for="content" class="col-md-2 col-form-label"></label>
                     <div class="col-md-10">
-                        <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
+                        <InputText id="content" class="form-control" @bind-Value="newComment.Content" />
                         <ValidationMessage For="@(() => newComment.Content)" />
                     </div>
                 </div>
@@ -36,7 +34,6 @@ else
                     </div>
                 </div>
             </EditForm>
-        }
 
         @foreach (var comment in userComments)
         {
@@ -60,25 +57,18 @@ else
     [Parameter]
     public int NumItems { get; set; }
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
     [CascadingParameter]
     public List<Comment> userComments { get; set; }
-    private Comment newComment { get; set; } = new Comment(1, "", "");
+    private Comment newComment { get; set; } = new Comment();
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    private async void AddComment()
+    private async Task AddComment()
     {
-        var authState = await AuthState;
-        string userName = "Stig the man";
-        // todo: The site crashes when I try to get Claims.
-        //string userName = authState.User.FindFirst(ClaimTypes.Name).Value;
-        newComment.UserName = userName;
-        newComment.RealEstateId = 2;
-
-        if (await repo.PostComment(newComment)) {
-            userComments.Add(newComment);
-        }
+        newComment.RealEstateId = Id;
+        Comment postedComment = await repo.PostComment(newComment);
+        userComments.Add(postedComment);
     }
 }
 

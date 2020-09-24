@@ -12,66 +12,66 @@
 }
 else
 {
-<div class="page-container">
-    <div class="inner-container">
-        <div class="card">
+    <div class="page-container">
+        <div class="inner-container">
             <div class="card">
-                <h3>@realEstate.Title</h3>
-                @if (@realEstate.CanBeSold)
-                {
-                    <p>Selling price: @realEstate.SellingPrice</p>
-                }
-                else
-                {
-                    <p>Renting price : @realEstate.RentingPrice</p>
-                }
+                <div class="card">
+                    <h3>@realEstate.Title</h3>
+                    @if (@realEstate.CanBeSold)
+                    {
+                        <p>Selling price: @realEstate.SellingPrice</p>
+                    }
+                    else
+                    {
+                        <p>Renting price : @realEstate.RentingPrice</p>
+                    }
+                </div>
+                <br />
+                <p>Description : @realEstate.Description</p>
+                <p>Adress : @realEstate.Address</p>
+                <p>Construction year: @realEstate.ConstructionYear</p>
+                <p>Realestate type : @realEstate.RealEstateType</p>
+                <img src="@realEstate.ImageUrl" />
+                <AuthorizeView>
+                    <Authorized>
+                        <p>Contact: @realEstate.Contact</p>
+                        <p> Comments: </p>
+
+                        <CascadingValue Value="@UserComments">
+                            <ViewComments Id="@realEstate.Id">
+
+
+                            </ViewComments>
+                        </CascadingValue>
+                        <div class="btn" @onclick="@(e => ViewMoreComments())">
+                            <p>Visa mer kommentarer...</p>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
             </div>
-            <br />
-            <p>Description : @realEstate.Description</p>
-            <p>Adress : @realEstate.Address</p>
-            <p>Construction year: @realEstate.ConstructionYear</p>
-            <p>Realestate type : @realEstate.RealEstateType</p>
-            <img src="@realEstate.ImageUrl" />
-            <AuthorizeView>
-                <Authorized>
-                    <p>Contact: @realEstate.Contact</p>
-                    <p> Comments: </p>
-
-                    <CascadingValue Value="@UserComments">
-                        <ViewComments>
-
-
-                        </ViewComments>
-                    </CascadingValue>
-                    <div class="btn" @onclick="@(e => ViewMoreComments())">
-                        <p>Visa mer kommentarer...</p>
-                    </div>
-                </Authorized>
-            </AuthorizeView>
         </div>
     </div>
-</div>
-            }
+}
 
-            @code {
-                [Parameter]
-                public int Id { get; set; }
-        public RealEstate realEstate;
-            public List<Comment> UserComments { get; set; }
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    public RealEstate realEstate;
+    public List<Comment> UserComments { get; set; }
 
-            protected override async Task OnInitializedAsync()
-            {
-                realEstate = await context.GetRealEstateById(Id);
-                if (realEstate.Comments != null)
-                {
-                    UserComments = realEstate.Comments.Take(5).ToList();
-                }
-            }
-            private async Task ViewMoreComments()
-            {
-                int commentsToSkip = UserComments.Count;
-                var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
-                Console.WriteLine(commentsToSkip);
-                UserComments.AddRange(response);
-            }
-            }
+    protected override async Task OnInitializedAsync()
+    {
+        realEstate = await context.GetRealEstateById(Id);
+        if (realEstate.Comments != null)
+        {
+            UserComments = realEstate.Comments.Take(5).ToList();
+        }
+    }
+    private async Task ViewMoreComments()
+    {
+        int commentsToSkip = UserComments.Count;
+        var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
+        Console.WriteLine(commentsToSkip);
+        UserComments.AddRange(response);
+    }
+}

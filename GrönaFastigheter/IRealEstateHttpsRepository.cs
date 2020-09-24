@@ -24,7 +24,7 @@ namespace GrönaFastigheter
         /// </summary>vet inte
         /// <param name="comment"></param>
         /// <returns></returns>
-        Task<bool> PostComment(Comment comment);
+        Task<Comment> PostComment(Comment comment);
         void PostRating(int rating, int userId);
         void TestRepo();
 
