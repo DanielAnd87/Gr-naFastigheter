@@ -121,10 +121,8 @@ else
     private async Task ViewMoreEstates()
     {
         int estatesToSkip = realEstates.Count;
-        Console.WriteLine(realEstates.Count());
-        var moreEstates = await context.GetRealEstates(estatesToSkip, 5);
+        IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
         realEstates.AddRange(moreEstates);
-        Console.WriteLine(realEstates.Count());
     }
 
     private void RedirectToEstate(int id)
