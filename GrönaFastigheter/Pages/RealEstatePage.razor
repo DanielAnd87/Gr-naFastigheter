@@ -38,14 +38,11 @@ else
                         <p> Comments: </p>
 
                         <CascadingValue Value="@UserComments">
-                            <ViewComments Id="@realEstate.Id">
+                            <ViewComments CurrentRealEstateID="@realEstate.Id">
 
 
                             </ViewComments>
                         </CascadingValue>
-                        <div class="btn" @onclick="@(e => ViewMoreComments())">
-                            <p>Visa mer kommentarer...</p>
-                        </div>
                     </Authorized>
                 </AuthorizeView>
             </div>
@@ -67,11 +64,11 @@ else
             UserComments = realEstate.Comments.Take(5).ToList();
         }
     }
-    private async Task ViewMoreComments()
-    {
-        int commentsToSkip = UserComments.Count;
-        var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
-        Console.WriteLine(commentsToSkip);
-        UserComments.AddRange(response);
-    }
+    //private async Task ViewMoreComments()
+    //{
+    //    int commentsToSkip = UserComments.Count;
+    //    var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
+    //    Console.WriteLine(commentsToSkip);
+    //    UserComments.AddRange(response);
+    //}
 }
