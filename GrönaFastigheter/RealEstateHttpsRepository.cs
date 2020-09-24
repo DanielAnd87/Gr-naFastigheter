@@ -70,12 +70,12 @@ namespace GrönaFastigheter
             return null;
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page = 2, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int NumItemsToSkip = 2, int NumItems = 5)
         {
             IEnumerable<Comment> comment;
             try
             {
-                string userUrl = $"/api/Comments/{id}"; //todo: lägg till ?skip=page&take=numitems till url.
+                string userUrl = $"/api/Comments/{id}?skip={NumItemsToSkip}&take={NumItems}";
                 comment = await http.GetFromJsonAsync<IEnumerable<Comment>>(userUrl);
                 return comment;
 
@@ -123,11 +123,11 @@ namespace GrönaFastigheter
             return null;
         }
 
-        public async Task<IEnumerable<RealEstate>> GetRealEstates(int Page = 2, int NumItems = 5)
+        public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 2, int NumItems = 5)
         {
             try
             {
-                string userUrl = $"/api/RealEstates?skip={Page}&take={NumItems}";
+                string userUrl = $"/api/RealEstates?skip={NumItemsToSkip}&take={NumItems}";
                 return await http.GetFromJsonAsync<IEnumerable<RealEstate>>(userUrl);
             }
             catch (HttpRequestException)
