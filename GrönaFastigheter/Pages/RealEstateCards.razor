@@ -99,7 +99,7 @@ else
         {
             tempEstates = tempEstates.OrderBy(x => x.Title).ToList();
         }
-        else
+        else if (searchTerms.OrderBy == OrderAlternatives[3])
         {
             tempEstates = tempEstates.OrderBy(x => x.Address).ToList();
         }

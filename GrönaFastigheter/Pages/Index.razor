@@ -6,8 +6,9 @@
                 <h2>Sök bostäder</h2>
             </div>
             <div>
-                <h3>Sök/filtrera</h3>
-                <input @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+            </div>
+            <div>
                 <p>Title:</p>
                 <input type="checkbox" @bind-value="searchTerms.TitleCheck" @bind-value:event="oninput" />
                 <p>Adress:</p>
@@ -24,8 +25,8 @@
             </div>
         </div>
     </div>
-    <div class="estates-container">
-        <h1>Bostäder till salu</h1>
+    <div class="inner-container">
+        <h3>Bostäder till salu</h3>
         <div class="estates-listing">
             <CascadingValue Value="@searchTerms">
                 <RealEstateCards />
