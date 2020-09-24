@@ -60,6 +60,7 @@ else
             </div>
         </div>
     }
+    <div class="btn" @onclick="@(e => ViewMoreEstates())">Visa fler annonser...</div>
 }
 
 @code {
@@ -67,7 +68,7 @@ else
     public int Page { get; set; }
     [Parameter]
     public int NumItems { get; set; }
-    private IEnumerable<RealEstate> realEstates;
+    private List<RealEstate> realEstates;
     [CascadingParameter]
     public SearchTerms searchTerms { get; set; }
     private List<RealEstate> FilteredEstates => FilterList();
@@ -77,9 +78,9 @@ else
     /// <returns></returns>
     private List<RealEstate> FilterList()
     {
-       
+
         List<RealEstate> tempEstates = realEstates.Where(
-        
+
         i => searchTerms.TitleCheck ? i.Title.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Title.Contains("") &&
         searchTerms.AdressCheck ? i.Address.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Address.Contains("") &&
         //todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
@@ -113,7 +114,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        realEstates = await context.GetRealEstates();
+        var response = await context.GetRealEstates(0, 10);
+        realEstates = response.ToList();
+    }
+
+    private async Task ViewMoreEstates()
+    {
+        int estatesToSkip = realEstates.Count;
+        Console.WriteLine(realEstates.Count());
+        var moreEstates = await context.GetRealEstates(estatesToSkip, 5);
+        realEstates.AddRange(moreEstates);
+        Console.WriteLine(realEstates.Count());
     }
 
     private void RedirectToEstate(int id)
