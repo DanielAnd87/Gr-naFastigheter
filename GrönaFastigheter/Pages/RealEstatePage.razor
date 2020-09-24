@@ -12,40 +12,46 @@
 }
 else
 {
-<div class="card">
-    <div class="card">
-        <h3>@realEstate.Title</h3>
-        @if (@realEstate.CanBeSold)
-        {
-            <p>Selling price: @realEstate.SellingPrice</p>
-        }
-        else
-        {
-            <p>Renting price : @realEstate.RentingPrice</p>
-        }
-    </div>
-    <br />
-    <p>Description : @realEstate.Description</p>
-    <p>Adress : @realEstate.Address</p>
-    <p>Construction year: @realEstate.ConstructionYear</p>
-    <p>Realestate type : @realEstate.RealEstateType</p>
-    <img src="@realEstate.ImageUrl" />
-    <AuthorizeView>
-        <Authorized>
-            <p>Contact: @realEstate.Contact</p>
-            <p> Comments: </p>
-
-            <CascadingValue Value="@UserComments">
-                <ViewComments>
-
-
-                </ViewComments>
-            </CascadingValue>
-            <div @onclick="@(e => AddMoreComments())">
-                <p>Visa fler kommentarer...</p>
+<div class="page-container">
+    <div class="inner-container">
+        <div class="card">
+            <div class="card">
+                <h3>@realEstate.Title</h3>
+                @if (@realEstate.CanBeSold)
+                {
+                    <p>Selling price: @realEstate.SellingPrice</p>
+                }
+                else
+                {
+                    <p>Renting price : @realEstate.RentingPrice</p>
+                }
             </div>
-        </Authorized>
-    </AuthorizeView>
+            <br />
+            <p>Description : @realEstate.Description</p>
+            <p>Adress : @realEstate.Address</p>
+            <p>Construction year: @realEstate.ConstructionYear</p>
+            <p>Realestate type : @realEstate.RealEstateType</p>
+            <img src="@realEstate.ImageUrl" />
+
+
+            <AuthorizeView>
+                <Authorized>
+                    <p>Contact: @realEstate.Contact</p>
+                    <p> Comments: </p>
+
+                    <CascadingValue Value="@UserComments">
+                        <ViewComments>
+
+
+                        </ViewComments>
+                    </CascadingValue>
+                    <div @onclick="@(e => AddMoreComments())">
+                        <p>Visa fler kommentarer...</p>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
 </div>
 }
 
