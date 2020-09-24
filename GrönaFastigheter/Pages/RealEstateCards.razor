@@ -117,9 +117,7 @@ else
         var response = await context.GetRealEstates(0, 10);
         realEstates = response.ToList();
     }
-    /// <summary>
-    ///todo: Första gången man trycker på visa mer uppdateras inte sidan av någon anledning
-    /// </summary>
+
     private async Task ViewMoreEstates()
     {
         int estatesToSkip = realEstates.Count;

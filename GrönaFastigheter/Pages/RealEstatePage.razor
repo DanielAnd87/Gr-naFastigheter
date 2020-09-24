@@ -63,7 +63,7 @@ else
             UserComments = realEstate.Comments.Take(5).ToList();
         }
     }
-    private async Task ViewMoreComments() //todo: Första gången man trycker på visa mer uppdateras inte sidan av någon anledning
+    private async Task ViewMoreComments()
     {
         int commentsToSkip = UserComments.Count;
         var response = await context.GetCommentsByRealEstateId(Id, commentsToSkip, 5);
