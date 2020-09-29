@@ -1,10 +1,10 @@
 ﻿
-@inject IRealEstateHttpsRepository repo
+@inject IRealEstateHttpsRepository context
 @using System.Security.Claims
 @using Entities.Models
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-@if (userComments == null)
+@if (UserComments == null)
 {
     <p>Loading...</p>
 }
@@ -15,30 +15,27 @@ else
     <div class="container justify-content-center mt-5 border-left border-right">
         @*<EditForm Model="newComment" OnValidSubmit="AddComment">
 
-                <div class="d-flex justify-content-center pt-3 pb-2"> <input type="text" name="text" placeholder="+ Add a note" class="form-control addtxt"> </div>
-           /EditForm>*@
-        @if (AuthState != null)
-        {
+                 <div class="d-flex justify-content-center pt-3 pb-2"> <input type="text" name="text" placeholder="+ Add a note" class="form-control addtxt"> </div>
+            /EditForm>*@
 
-            <EditForm Model="newComment" OnValidSubmit="AddComment">
-                <DataAnnotationsValidator />
-                <div class="d-flex justify-content-center pt-3 pb-2">
-                    <label for="username" class="col-md-2 col-form-label"></label>
-                    <div class="col-md-10">
-                        <InputText id="username" class="form-control" @bind-Value="newComment.Content" />
-                        <ValidationMessage For="@(() => newComment.Content)" />
-                    </div>
+        <EditForm Model="newComment" OnValidSubmit="AddComment">
+            <DataAnnotationsValidator />
+            <div class="d-flex justify-content-center pt-3 pb-2">
+                <label for="content" class="col-md-2 col-form-label"></label>
+                <div class="col-md-10">
+                    <InputText id="content" class="form-control" @bind-Value="newComment.Content" />
+                    <ValidationMessage For="@(() => newComment.Content)" />
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12 text-right">
-                        <button type="submit" class="btn btn-success">Send</button>
-                    </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-success">Send</button>
                 </div>
-            </EditForm>
-        }
+            </div>
+        </EditForm>
 
-        @foreach (var comment in userComments)
+        @foreach (var comment in UserComments)
         {
             <div class="d-flex justify-content-center py-2">
                 <div class="second py-2 px-2">
@@ -50,6 +47,9 @@ else
                 </div>
             </div>
         }
+        <div class="btn" @onclick="@(e => ViewMoreComments())">
+            <p>Visa mer kommentarer...</p>
+        </div>
     </div>
 
 }
@@ -60,25 +60,31 @@ else
     [Parameter]
     public int NumItems { get; set; }
     [Parameter]
-    public string Id { get; set; }
+    public int CurrentRealEstateID { get; set; }
     [CascadingParameter]
-    public List<Comment> userComments { get; set; }
-    private Comment newComment { get; set; } = new Comment(1, "", "");
+    public List<Comment> UserComments { get; set; }
+    private Comment newComment { get; set; } = new Comment();
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-    private async void AddComment()
-    {
-        var authState = await AuthState;
-        string userName = "Stig the man";
-        // todo: The site crashes when I try to get Claims.
-        //string userName = authState.User.FindFirst(ClaimTypes.Name).Value;
-        newComment.UserName = userName;
-        newComment.RealEstateId = 2;
 
-        if (await repo.PostComment(newComment)) {
-            userComments.Add(newComment);
-        }
+    /// <summary>
+    /// Todo: Vi kanske vill lägga till hantering om de inte går att lägga till.
+    /// </summary>
+    /// <returns></returns>
+    private async Task AddComment()
+    {
+        newComment.RealEstateId = CurrentRealEstateID;
+        Comment postedComment = await context.PostComment(newComment);
+        UserComments.Add(postedComment);
+
+    }
+    private async Task ViewMoreComments()
+    {
+        int commentsToSkip = UserComments.Count;
+        var moreComments = await context.GetCommentsByRealEstateId(CurrentRealEstateID, commentsToSkip, 5);
+        Console.WriteLine(commentsToSkip);
+        UserComments.AddRange(moreComments);
     }
 }
 
