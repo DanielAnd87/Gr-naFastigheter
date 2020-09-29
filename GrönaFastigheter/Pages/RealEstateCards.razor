@@ -10,7 +10,7 @@
 }
 else
 {
-    foreach (var estate in FilteredEstates)
+    foreach (var estate in CurrentRealEstateList)
     {
         int price = 0;
         if (estate.CanBeSold)
@@ -60,17 +60,25 @@ else
             </div>
         </div>
     }
+<div>
+    <p>Sida: @(searchData.CurrentPage+1)</p>
+    <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
+    <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
+    <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
+</div>
     <div class="btn" @onclick="@(e => ViewMoreEstates())">Visa fler annonser...</div>
 }
 
 @code {
+    public List<RealEstate> CurrentRealEstateList => GetPage(FilteredEstates, searchData.CurrentPage);
+    public int ListPage = 0;
     [Parameter]
     public int Page { get; set; }
     [Parameter]
     public int NumItems { get; set; }
     private List<RealEstate> realEstates;
     [CascadingParameter]
-    public SearchTerms searchTerms { get; set; }
+    public SearchData searchData { get; set; }
     private List<RealEstate> FilteredEstates => FilterList();
     /// <summary>
     /// This runs everytime the cascading searchterm parameter is updated.
@@ -78,28 +86,27 @@ else
     /// <returns></returns>
     private List<RealEstate> FilterList()
     {
-
         List<RealEstate> tempEstates = realEstates.Where(
 
-        i => searchTerms.TitleCheck ? i.Title.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Title.Contains("") &&
-        searchTerms.AdressCheck ? i.Address.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.Address.Contains("") &&
+        i => searchData.TitleCheck ? i.Title.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Title.Contains("") &&
+        searchData.AdressCheck ? i.Address.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Address.Contains("") &&
         //todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
-        searchTerms.TypeCheck ? i.RealEstateType.ToLower().Contains(searchTerms.Searchterm.ToLower()) : i.RealEstateType.Contains("")
+        searchData.TypeCheck ? i.RealEstateType.ToLower().Contains(searchData.Searchterm.ToLower()) : i.RealEstateType.Contains("")
         ).ToList();
 
-        if (searchTerms.OrderBy == OrderAlternatives[0])
+        if (searchData.OrderBy == OrderAlternatives[0])
         {
             tempEstates = tempEstates.OrderBy(x => x.SellingPrice).ToList();
         }
-        else if (searchTerms.OrderBy == OrderAlternatives[1])
+        else if (searchData.OrderBy == OrderAlternatives[1])
         {
             tempEstates = tempEstates.OrderBy(x => x.RentingPrice).ToList();
         }
-        else if (searchTerms.OrderBy == OrderAlternatives[2])
+        else if (searchData.OrderBy == OrderAlternatives[2])
         {
             tempEstates = tempEstates.OrderBy(x => x.Title).ToList();
         }
-        else if (searchTerms.OrderBy == OrderAlternatives[3])
+        else if (searchData.OrderBy == OrderAlternatives[3])
         {
             tempEstates = tempEstates.OrderBy(x => x.Address).ToList();
         }
@@ -114,7 +121,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await context.GetRealEstates(0, 10);
+        var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
         realEstates = response.ToList();
     }
 
@@ -124,9 +131,30 @@ else
         IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
         realEstates.AddRange(moreEstates);
     }
+    private void ChangePage(bool nextPage)
+    {
+        if (nextPage)
+        {
+            searchData.CurrentPage += 1;
+        }
+        else
+        {
+            searchData.CurrentPage -= 1;
+        }
+        Console.WriteLine(ListPage);
+    }
+    private void ChangePage(int firstpage)
+    {
+        searchData.CurrentPage = firstpage;
+        Console.WriteLine(ListPage);
+    }
 
     private void RedirectToEstate(int id)
     {
         NavManager.NavigateTo("/realestate/" + id);
+    }
+    List<RealEstate> GetPage(List<RealEstate> list, int page = 0, int pageSize = 10)
+    {
+        return list.Skip(page * pageSize).Take(pageSize).ToList();
     }
 }
