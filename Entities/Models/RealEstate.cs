@@ -36,5 +36,21 @@ namespace Entities.Models
         public int RentingPrice { get; set; }
         public bool CanBeSold { get; set; }
         public bool CanBeRented { get; set; }
+
+        public RealEstate()
+        {
+        }
+
+        public RealEstate(string imageUrl, string address, string realEstateType, string title, int sellingPrice, int rentingPrice, bool canBeSold, bool canBeRented)
+        {
+            ImageUrl = imageUrl;
+            Address = address;
+            RealEstateType = realEstateType;
+            Title = title;
+            SellingPrice = sellingPrice;
+            RentingPrice = rentingPrice;
+            CanBeSold = canBeSold;
+            CanBeRented = canBeRented;
+        }
     }
 }
