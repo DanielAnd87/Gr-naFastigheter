@@ -6,7 +6,7 @@
                 <h2>Sök bostäder</h2>
             </div>
             <div>
-                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @onchange="@ResetPage" @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
             </div>
             <div>
                 <p>Title:</p>
@@ -44,6 +44,9 @@
         "Adress"
        };
 
+       private void ResetPage(){
+              Console.WriteLine("inputted values");
+       }
 
     private void OnPickedOrder(ChangeEventArgs args)
     {
