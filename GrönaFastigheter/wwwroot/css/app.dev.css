@@ -188,7 +188,7 @@ app {
 h3, h4, h5, h6 {
     margin: 0;
 }
-.header, .footer {
+.header {
     display: flex;
     padding: 1em 25em;
     background-color: green;
@@ -302,6 +302,12 @@ h3, h4, h5, h6 {
 .footer > div {
     margin: auto;
     width: 50%;
+}
+.footer {
+    display: flex;
+    padding: 1em 25em;
+    background-color: green;
+    color: white;
 }
 .user-container {
     padding: 2em;
