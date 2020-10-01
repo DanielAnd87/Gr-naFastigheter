@@ -36,6 +36,7 @@ namespace Entities.Models
         public int RentingPrice { get; set; }
         public bool CanBeSold { get; set; }
         public bool CanBeRented { get; set; }
+        public string UserName { get; set; }
 
         public RealEstate()
         {

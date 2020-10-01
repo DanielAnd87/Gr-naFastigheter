@@ -2,6 +2,9 @@
     width: 270px;
     display: inline-block;
 }
+.stars > button{
+    display: inline-block;
+}
 
 input.star {
     display: none;
@@ -12,6 +15,9 @@ label.star {
     font-size: 36px;
     color: #444;
     transition: all .2s;
+}
+label.star:hover{
+    cursor:pointer;
 }
 
 input.star:checked ~ label.star:before {

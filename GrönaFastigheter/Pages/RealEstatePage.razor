@@ -1,6 +1,7 @@
 ﻿@page "/realestate/{id:int}"
 @using System.Net.Http.Json;
 @inject IRealEstateHttpsRepository context
+@inject NavigationManager NavManager
 
 @using Entities.Models
 
@@ -19,23 +20,24 @@ else
                     <h3>@realEstate.Title</h3>
                     @if (@realEstate.CanBeSold)
                     {
-                        <p>Selling price: @realEstate.SellingPrice</p>
+                        <p>Säljpris: @realEstate.SellingPrice</p>
                     }
                     else
                     {
-                        <p>Renting price : @realEstate.RentingPrice</p>
+                        <p>Uthyrningspris : @realEstate.RentingPrice</p>
                     }
                 </div>
                 <br />
-                <p>Description : @realEstate.Description</p>
-                <p>Adress : @realEstate.Address</p>
-                <p>Construction year: @realEstate.ConstructionYear</p>
-                <p>Realestate type : @realEstate.RealEstateType</p>
+                <p>Beskrivning : @realEstate.Description</p>
+                <p>Address : @realEstate.Address</p>
+                <p>Byggår: @realEstate.ConstructionYear</p>
+                <p>Typ av bostad : @realEstate.RealEstateType</p>
                 <img src="@realEstate.ImageUrl" />
                 <AuthorizeView>
                     <Authorized>
-                        <p>Contact: @realEstate.Contact</p>
-                        <p> Comments: </p>
+                        <p @onclick="(e=> RedirectToUserPage(realEstate.UserName))">Säljes av @realEstate.UserName</p>
+                        <p>Kontakt: @realEstate.Contact</p>
+                        <p> Kommentarer: </p>
 
                         <CascadingValue Value="@UserComments">
                             <ViewComments CurrentRealEstateID="@realEstate.Id">
@@ -54,6 +56,7 @@ else
     [Parameter]
     public int Id { get; set; }
     public RealEstate realEstate;
+    public User user;
     public List<Comment> UserComments { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -64,6 +67,11 @@ else
             UserComments = realEstate.Comments.Take(5).ToList();
         }
     }
+    private void RedirectToUserPage(string userName)
+    {
+        NavManager.NavigateTo("/getuser/" + userName);
+    }
+
     //private async Task ViewMoreComments()
     //{
     //    int commentsToSkip = UserComments.Count;

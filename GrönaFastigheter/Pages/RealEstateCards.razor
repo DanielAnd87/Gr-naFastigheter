@@ -70,7 +70,7 @@ else
 }
 
 @code {
-    public List<RealEstate> CurrentRealEstateList => GetPage(FilteredEstates, searchData.CurrentPage);
+    public List<RealEstate> CurrentRealEstateList => GetPageOfEstates(FilteredEstates, searchData.CurrentPage);
     public int ListPage = 0;
     [Parameter]
     public int Page { get; set; }
@@ -131,7 +131,7 @@ else
         IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
         realEstates.AddRange(moreEstates);
     }
-    private void ChangePage(bool nextPage)
+    private void ChangePage(bool nextPage) //Todo: kan gå framåt fast de inte finns mer estates.
     {
         if (nextPage)
         {
@@ -139,9 +139,15 @@ else
         }
         else
         {
-            searchData.CurrentPage -= 1;
+            if(searchData.CurrentPage -1 < 0)
+            {
+                searchData.CurrentPage = 0;
+            }
+            else
+            {
+                searchData.CurrentPage -= 1;
+            }
         }
-        Console.WriteLine(ListPage);
     }
     private void ChangePage(int firstpage)
     {
@@ -153,7 +159,8 @@ else
     {
         NavManager.NavigateTo("/realestate/" + id);
     }
-    List<RealEstate> GetPage(List<RealEstate> list, int page = 0, int pageSize = 10)
+
+    List<RealEstate> GetPageOfEstates(List<RealEstate> list, int page = 0, int pageSize = 10)
     {
         return list.Skip(page * pageSize).Take(pageSize).ToList();
     }
