@@ -8,14 +8,29 @@
                 <h2>Sök bostäder</h2>
             </div>
             <div>
-                <input class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchTerms.Searchterm" @bind-value:event="oninput" />
+                <input @onchange="ResetCurrentPage" class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchData.Searchterm" @bind-value:event="oninput" />
+            </div>
+            <div>
+                <p>Title:</p>
+                <input type="checkbox" @bind-value="searchData.TitleCheck" @bind-value:event="oninput" />
+                <p>Adress:</p>
+                <input type="checkbox" @bind-value="searchData.AdressCheck" @bind-value:event="oninput" />
+                <p>Type:</p>
+                <input type="checkbox" @bind-value="searchData.TypeCheck" @bind-value:event="oninput" />
+                <p>Sortera efter:</p>
+                <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchData.OrderBy" @bind-value:event="oninput">
+                    @foreach (string choice in OrderAlternatives)
+                    {
+                        <option>@choice</option>
+                    }
+                </select>
             </div>
         </div>
     </div>
     <div class="inner-container">
         <h3>Bostäder till salu</h3>
         <div class="estates-listing">
-            <CascadingValue Value="@searchTerms">
+            <CascadingValue Value="@searchData">
                 <RealEstateCards />
             </CascadingValue>
         </div>
@@ -23,7 +38,7 @@
 </div>
 
 @code {
-    public SearchTerms searchTerms { get; set; } = new SearchTerms();
+    public SearchData searchData { get; set; } = new SearchData();
     public List<string> OrderAlternatives { get; set; } = new List<string> {
         "Hyra",
         "Säljpris",
@@ -34,6 +49,11 @@
 
     private void OnPickedOrder(ChangeEventArgs args)
     {
-        searchTerms.OrderBy = args.Value.ToString();
+        searchData.OrderBy = args.Value.ToString();
     }
+    private void ResetCurrentPage()
+    {
+        searchData.CurrentPage = 0;
+    }
+
 }
