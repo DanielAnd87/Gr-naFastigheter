@@ -1,29 +1,21 @@
 console.log("This is service worker talking!");
+const version = 'v3';
 var cacheName = 'app-bzcl';
 var filesToCache = [
     './',
        //Html and css files
     './index.html',
     './css/app.css',
-    //'./lib/bootstrap/dist/css/bootstrap.min.css',
-    
-    // js libraries
-    //'./lib/jquery/jquery.min.js',
-    //'./lib/bootstrap/dist/js/bootstrap.bundle.min.js',
     './css/bootstrap/bootstrap.min.css',
     './css/custom-css/StarSheet.css',
     './css/custom-css/CommentSheet.css',
 
-    ////blazor framework
-    //'./_framework/wasm/mono.js',
-    //'./_framework/wasm/mono.wasm',
-    //'./_framework/blazor.boot.json',
-    //'./_framework/blazor.webassembly.js',
 
     //    //Our additional files
     './favicon.ico',
     './manifest.json',
     './blazorserviceworker.js',
+    './offlineEstate.json',
     './icon-512.png'
 ];
 
@@ -43,64 +35,58 @@ self.addEventListener('install', function (e) {
 
 self.addEventListener('activate', event => {
     console.log('[ServiceWorker] waiting for activate');
-
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(
+        caches.keys()
+            .then(function (keys) {
+                return Promise.all(keys.filter(function (key) {
+                    return key !== version;
+                }).map(function (key) {
+                    // todo: This deletes all other cashes and clones it in a new one, wich is good, but blazor therefore has to recach despite that we has made a copy.
+                    return caches.delete(key);
+                }));
+            }));
 });
 
 self.addEventListener('fetch', event => {
+    console.log('fetching ' + (event.request.url));
+    testLogging(event);
     event.respondWith(
-        caches.match(event.request, { ignoreSearch: true }).then(response => {
-            return response || fetch(event.request);
-        })
-    );
+        caches.match(event.request)
+            .then(function (res) {
+                if (res) {
+                    return res;
+                }
+                if (!navigator.onLine) {
+
+                    var urlString = event.request.url;
+                    if (urlString.includes('/RealEstates/')) {
+                        var offlineRequest = new Request('https://mockapi-gronafastigheter.herokuapp.com/api/RealEstates/1');
+                        return caches.match(offlineRequest);
+                    }
+                    //event.request.url
+                    //return new Response('<h1> Offline :( </h1>', { headers: { 'Content-Type': 'text/html' } });
+                    return caches.match(new Request('./Content/offline'));
+                }
+                return fetchAndUpdate(event.request);
+            }));
 });
 
+function testLogging(event) {
+    var urlString = event.request.url;
+    console.log(urlString.includes('localhost'));
+}
 
-
-
-//var filesToCache = [
-//    './',
-//    //Html and css files
-//    './index.html',
-//    './css/app.css',
-//    './lib/bootstrap/dist/css/bootstrap.min.css',
-//    //'./css/open-iconic/font/css/open-iconic-bootstrap.min.css',
-//    './css/open-iconic/font/fonts/open-iconic.woff',
-//    //'./styles/style.min.css',
-//    //'./scripts/application.min.js',
-
-//    // js libraries
-//    './lib/jquery/jquery.min.js',
-//    './lib/bootstrap/dist/js/bootstrap.bundle.min.js',
-
-//    //Blazor framework
-//    //'./_framework/wasm/mono.js',
-//    //'./_framework/wasm/mono.wasm',
-//    //'./_framework/blazor.boot.json',
-//    //'./_framework/blazor.webassembly.js',
-
-//    //Our additional files
-//    './favicon.ico',
-//    './manifest.json',
-//    './blazorServiceWorker.js',
-//    //'./icons/icon-192x192.png',
-//    './icon-512.png'
-
-//    //The web assembly/.net dll's
-//    //'./_framework/_bin/Microsoft.AspNetCore.Blazor.dll',
-//    //'./_framework/_bin/Microsoft.AspNetCore.Components.Browser.dll',
-//    //'./_framework/_bin/Microsoft.AspNetCore.Components.dll',
-//    //'./_framework/_bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll',
-//    //'./_framework/_bin/Microsoft.Extensions.DependencyInjection.dll',
-//    //'./_framework/_bin/Microsoft.JSInterop.dll',
-//    //'./_framework/_bin/Mono.Security.dll',
-//    //'./_framework/_bin/Mono.WebAssembly.Interop.dll',
-//    //'./_framework/_bin/mscorlib.dll',
-//    //'./_framework/_bin/System.ComponentModel.Annotations.dll',
-//    //'./_framework/_bin/System.Core.dll',
-//    //'./_framework/_bin/System.dll',
-//    //'./_framework/_bin/System.Net.Http.dll'
-
-//    //The compiled project .dll's
-//    //'./_framework/_bin/App.BzCl.dll'
-//];
+function fetchAndUpdate(request) {
+    return fetch(request)
+    .then(function (res) {
+        if (res) {
+            return caches.open(version)
+            .then(function (cache) {
+                return cache.put(request, res.clone())
+                    .then(function () {
+                        return res;
+                    })
+            });
+        }
+    });
+}

@@ -1,6 +1,7 @@
 ﻿
 using Blazored.LocalStorage;
 using Entities.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,11 @@ namespace GrönaFastigheter
         private readonly HttpClient http;
 
         public ILocalStorageService LocalStorage { get; }
-
-        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage)
+        public NavigationManager NavManager { get; }
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
         {
             this.http = http;
+            this.NavManager = NavManager;
             LocalStorage = localStorage;
         }
 
@@ -66,6 +68,11 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException message)
             {
                 Console.WriteLine(message);
+            }
+            catch
+            {
+                NavManager.NavigateTo("./Content/offline");
+
             }
             return null;
         }
