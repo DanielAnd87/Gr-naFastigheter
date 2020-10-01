@@ -17,12 +17,12 @@ html, body {
     z-index: 1000;
 }
 
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
-}
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
 /*
 a, .btn-link {
     color: #0366d6;
@@ -179,7 +179,7 @@ app {
 
     .sidebar .collapse {
         /* Never collapse the sidebar for wide screens */
-        /*display: block;
+/*display: block;
     }
 }*/
 
@@ -196,10 +196,10 @@ h3, h4, h5, h6 {
     color: white;
 }
 
-.header > div {
-    margin: auto;
-    width: 50%;
-}
+    .header > div {
+        margin: auto;
+        width: 50%;
+    }
 
 .logo img {
     width: 10em;
@@ -218,9 +218,9 @@ h3, h4, h5, h6 {
     margin-left: 1em;
 }
 
-.link:hover {
-    color: white;
-}
+    .link:hover {
+        color: white;
+    }
 
 /*--- HERO IMG START ---*/
 .hero-img {
@@ -234,7 +234,6 @@ h3, h4, h5, h6 {
 /*--- HERO IMG END ---*/
 
 .page-container {
-
 }
 
 .inner-container {
@@ -243,16 +242,17 @@ h3, h4, h5, h6 {
 
 .estates-listing {
 }
+
 .search-container {
     padding: 10em 45em;
     background-color: rgba(0, 61, 0, 0.25)
 }
 
-.search-container h2 {
-    color: white;
-    font-weight: 600;
-    text-align: center;
-}
+    .search-container h2 {
+        color: white;
+        font-weight: 600;
+        text-align: center;
+    }
 
 .card-container {
     margin-bottom: 2em;
@@ -265,21 +265,21 @@ h3, h4, h5, h6 {
     background-color: #fff;
 }
 
-.estate-card:hover {
-    border-color: limegreen;
-    cursor: pointer;
-    -webkit-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
-    box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
-}
+    .estate-card:hover {
+        border-color: limegreen;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+        box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+    }
 
 .card-img {
     width: auto;
 }
 
-.card-img > img {
-    width: 40em;
-}
+    .card-img > img {
+        width: 40em;
+    }
 
 .card-data {
     padding: 1em;
@@ -319,10 +319,43 @@ h3, h4, h5, h6 {
     text-align: center;
 }
 
-.filter-btn:hover {
-    border: 2px solid limegreen;
+    .filter-btn:hover {
+        border: 2px solid limegreen;
+    }
+
+    .filter-btn > p {
+        margin: 0;
+    }
+
+.footer-icons {
+    font-size: 2em;
 }
 
-.filter-btn > p {
-    margin: 0;
+.footer > div {
+    margin: auto;
+    width: 50%;
+}
+
+.footer {
+    display: flex;
+    padding: 1em 25em;
+    background-color: green;
+    color: white;
+}
+
+.user-container {
+    padding: 2em;
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    display: table;
+    margin: 3em auto;
+}
+
+.user-container:hover {
+        border-color: limegreen;
+        -webkit-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+        box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
 }
