@@ -201,6 +201,10 @@ h3, h4, h5, h6 {
     width: 50%;
 }
 
+.logo img {
+    width: 10em;
+}
+
 .navmenu {
     text-align: center;
 }
@@ -296,4 +300,29 @@ h3, h4, h5, h6 {
     display: block;
     position: absolute;
     bottom: 0;
+}
+
+.filters {
+    text-align: center;
+    padding: 1em 0em;
+}
+
+.filter-btn {
+    margin: auto 0.5em;
+    padding: 10px 25px;
+    background-color: #fff;
+    border: 2px solid green;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 8em;
+    text-align: center;
+}
+
+.filter-btn:hover {
+    border: 2px solid limegreen;
+}
+
+.filter-btn > p {
+    margin: 0;
 }
