@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
 <div class="page-container">
     <div class="hero-img">
         <div class="search-container">
@@ -7,21 +9,6 @@
             </div>
             <div>
                 <input @onchange="ResetCurrentPage" class="form-control form-control-lg" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchData.Searchterm" @bind-value:event="oninput" />
-            </div>
-            <div>
-                <p>Title:</p>
-                <input type="checkbox" @bind-value="searchData.TitleCheck" @bind-value:event="oninput" />
-                <p>Adress:</p>
-                <input type="checkbox" @bind-value="searchData.AdressCheck" @bind-value:event="oninput" />
-                <p>Type:</p>
-                <input type="checkbox" @bind-value="searchData.TypeCheck" @bind-value:event="oninput" />
-                <p>Sortera efter:</p>
-                <select class="form-control" list="OrderAlternatives" @onchange="OnPickedOrder" @bind-value="searchData.OrderBy" @bind-value:event="oninput">
-                    @foreach (string choice in OrderAlternatives)
-                    {
-                        <option>@choice</option>
-                    }
-                </select>
             </div>
         </div>
     </div>

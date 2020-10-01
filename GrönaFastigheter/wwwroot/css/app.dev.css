@@ -188,6 +188,7 @@ app {
 h3, h4, h5, h6 {
     margin: 0;
 }
+
 .header {
     display: flex;
     padding: 1em 25em;
@@ -195,9 +196,13 @@ h3, h4, h5, h6 {
     color: white;
 }
 
-.header > div{
+.header > div {
     margin: auto;
     width: 50%;
+}
+
+.logo img {
+    width: 10em;
 }
 
 .navmenu {
@@ -296,31 +301,28 @@ h3, h4, h5, h6 {
     position: absolute;
     bottom: 0;
 }
-.footer-icons {
-    font-size: 2em;
+
+.filters {
+    text-align: center;
+    padding: 1em 0em;
 }
-.footer > div {
-    margin: auto;
-    width: 50%;
-}
-.footer {
-    display: flex;
-    padding: 1em 25em;
-    background-color: green;
-    color: white;
-}
-.user-container {
-    padding: 2em;
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+
+.filter-btn {
+    margin: auto 0.5em;
+    padding: 10px 25px;
     background-color: #fff;
-    display: table;
-    margin: 3em auto;
+    border: 2px solid green;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 8em;
+    text-align: center;
 }
-.user-container:hover {
-    border-color: limegreen;
-    -webkit-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
-    box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+
+.filter-btn:hover {
+    border: 2px solid limegreen;
+}
+
+.filter-btn > p {
+    margin: 0;
 }
