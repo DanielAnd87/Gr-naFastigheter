@@ -2,13 +2,12 @@
 using Blazored.LocalStorage;
 using Entities.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter
@@ -20,11 +19,14 @@ namespace GrönaFastigheter
 
         public ILocalStorageService LocalStorage { get; }
         public NavigationManager NavManager { get; }
-        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
+        public IBackgroundService BackgroundService { get; set; }
+
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager, IBackgroundService backgroundService)
         {
             this.http = http;
             this.NavManager = NavManager;
             LocalStorage = localStorage;
+            BackgroundService = backgroundService;
         }
 
         public async void TestRepo()
@@ -202,8 +204,40 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch
+            {
+                PostNewRealEstateInBackground(realEstate, 8);
+            }
             return null;
         }
+
+
+        private void PostNewRealEstateInBackground(RealEstate realEstate, int seconds)
+        {
+            Task.Run(async () =>
+            {
+                bool sucess = false;
+                while (!sucess)
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
+                        sucess = response.IsSuccessStatusCode;
+
+                        Console.WriteLine(response.StatusCode);
+                        if (sucess)
+                        {
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds));
+                    }
+                }
+            });
+        }
+
         public async Task<Comment> PostComment(Comment comment)
         {
             Comment newComment = null;
@@ -217,6 +251,10 @@ namespace GrönaFastigheter
                 {
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);
                     return newComment;
+                }
+                else
+                {
+                    PostCommentInBackground(comment, 3);
                 }
                 return newComment;
             }
@@ -232,16 +270,111 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                PostCommentInBackground(comment, 3);
+
+            }
             return newComment;
         }
-        public void PostRating(int rating, int userId) //NYI
+        public async void PostRating(int rating, int userId) //NYI
         {
             rating += 1;
-            var result = http.PostAsJsonAsync("/api/Users/Rate", rating);
-            
+
+
+            try
+            {
+                HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", rating);
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                PostRatingInBackground(rating, userId, 7);
+            }
+        }
+        private void PostRatingInBackground(int rating, int userId, int seconds)
+        {
+            Task.Run(async () =>
+            {
+                bool sucess = false;
+                while (!sucess)
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await http.PostAsJsonAsync("/api/Users/Rate", rating);
+
+                        sucess = response.IsSuccessStatusCode;
+                        Console.WriteLine(response.StatusCode);
+                        if (sucess)
+                        {
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds));
+                    }
+                }
+            });
         }
 
+        private void PostCommentInBackground(Comment comment, int seconds)
+        {
+            Task.Run(async () =>
+            {
+                bool sucess = false;
+                while (!sucess)
+                {
+                    try
+                    {
 
+                        HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
+                        string responseContent = await response.Content.ReadAsStringAsync();
 
+                        sucess = response.IsSuccessStatusCode;
+
+                        Console.WriteLine(response.StatusCode);
+                        if (sucess)
+                        {
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds));
+                    }
+                }
+            });
+        }
+
+        private void RT(Action action, int seconds, CancellationToken token)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            Task.Run(async () =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    action();
+                    await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                }
+            }, token);
+        }
     }
 }

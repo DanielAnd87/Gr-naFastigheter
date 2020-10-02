@@ -1,6 +1,5 @@
 console.log("This is service worker talking!");
 const version = 'v3';
-var cacheName = 'app-bzcl';
 var filesToCache = [
     './',
        //Html and css files
@@ -22,7 +21,7 @@ var filesToCache = [
 self.addEventListener('install', function (e) {
     console.log('[ServiceWorker] Install');
     e.waitUntil(
-        caches.open(cacheName)
+        caches.open(version)
             .then(function (cache) {
             console.log('[ServiceWorker] Caching app shell');
             return cache.addAll(filesToCache);
@@ -51,6 +50,7 @@ self.addEventListener('fetch', event => {
     console.log('fetching ' + (event.request.url));
     testLogging(event);
     event.respondWith(
+        //caches.match(event.request, { cacheName: version, ignoreVary:true })
         caches.match(event.request)
             .then(function (res) {
                 if (res) {
@@ -60,12 +60,39 @@ self.addEventListener('fetch', event => {
 
                     var urlString = event.request.url;
                     if (urlString.includes('/RealEstates/')) {
-                        var offlineRequest = new Request('https://mockapi-gronafastigheter.herokuapp.com/api/RealEstates/1');
-                        return caches.match(offlineRequest);
+
+                        
+                        
+
+
+                        // testing with short url whithout options
+                        var shortRequestNoOptions = new Request('https://localhost:44373/offlineEstate.json');
+                        var matchShortNoOptions= caches.match(shortRequestNoOptions);
+
+                        // testing with short url
+                        var shortRequest= new Request('https://localhost:44373/offlineEstate.json', { headers: { 'Content-Type': 'application/json' } });
+
+                        var matchShort         = caches.match(shortRequest);
+                        // testing with full url and options
+                        var offlineRequest = new Request('https://localhost:44373/offlineEstate.json', { headers: { 'Content-Type': 'application/json' } });
+                        var matchLong = caches.match(offlineRequest);
+
+
+                        offlineMatch = caches.match(offlineRequest);
+                        
+                        caches.open(version).then(function (cache) {
+                            cache.matchAll('/offlineEstate.json').then(function (response) {
+                                response.forEach(function (element, index, array) {
+                                    console.log(element.url);
+                                    console.log(element.body);
+                                });
+                            });
+                        });
+                        return offlineMatch;
                     }
                     //event.request.url
                     //return new Response('<h1> Offline :( </h1>', { headers: { 'Content-Type': 'text/html' } });
-                    return caches.match(new Request('./Content/offline'));
+                    return caches.match(new Request('/Content/offline'));
                 }
                 return fetchAndUpdate(event.request);
             }));
@@ -81,12 +108,15 @@ function fetchAndUpdate(request) {
     .then(function (res) {
         if (res) {
             return caches.open(version)
-            .then(function (cache) {
+                .then(function (cache) {
                 return cache.put(request, res.clone())
                     .then(function () {
                         return res;
                     })
-            });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     });
 }
