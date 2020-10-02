@@ -14,6 +14,13 @@
 <EditForm Model="_userForRegistration" OnValidSubmit="Register" class="card card-body bg-light mt-5">
     <DataAnnotationsValidator />
     <div class="form-group row">
+        <label for="email" class="col-md-2 col-form-label">Användarnamn:</label>
+        <div class="col-md-10">
+            <InputText id="email" class="form-control" @bind-Value="_userForRegistration.Username" />
+            <ValidationMessage For="@(() => _userForRegistration.Username)" />
+        </div>
+    </div>
+    <div class="form-group row">
         <label for="email" class="col-md-2 col-form-label">Email:</label>
         <div class="col-md-10">
             <InputText id="email" class="form-control" @bind-Value="_userForRegistration.Email" />
@@ -22,7 +29,7 @@
     </div>
 
     <div class="form-group row">
-        <label for="password" class="col-md-2 col-form-label">Password:</label>
+        <label for="password" class="col-md-2 col-form-label">Lösenord:</label>
         <div class="col-md-10">
             <InputText type="password" id="password" class="form-control" @bind-Value="_userForRegistration.Password" />
             <ValidationMessage For="@(() => _userForRegistration.Password)" />
@@ -30,7 +37,7 @@
     </div>
 
     <div class="form-group row">
-        <label for="confirm" class="col-md-2 col-form-label">Confirm Password:</label>
+        <label for="confirm" class="col-md-2 col-form-label">Bekräfta lösenord:</label>
         <div class="col-md-10">
             <InputText type="password" id="confirm" class="form-control" @bind-Value="_userForRegistration.ConfirmPassword" />
             <ValidationMessage For="@(() => _userForRegistration.ConfirmPassword)" />
