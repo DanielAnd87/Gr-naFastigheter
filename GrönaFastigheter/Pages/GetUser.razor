@@ -10,19 +10,21 @@
 }
 else
 {
-    <div class="user-container">
-        <h2>@user.UserName</h2>
-        @if(user.AvatarImageUrl != null) { 
-        <img src="@user.AvatarImageUrl" class="img-responsive img-rounded text-center" alt="Alternate Text" />
-        }
-        else
-        {
-            <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png" class="img-responsive img-rounded h-25 w-25 m-auto" alt="Profile Picture"/>
-        }
-        <br />
-        <div class="stars">
-            <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
-      
+    <div class="user-container text-center">
+        <div class="profile-card">
+            <h2>@user.UserName</h2>
+            @if (user.AvatarImageUrl != null)
+            {
+                <img src="@user.AvatarImageUrl" class="img-responsive img-rounded text-center" alt="Alternate Text" />
+            }
+            else
+            {
+                <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png" class="img-responsive img-rounded h-25 w-25 m-auto" alt="Profile Picture" />
+            }
+            <br />
+            <div class="stars">
+                <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
+
                     <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
                     <label class="star star-5" for="star-5"></label>
                     <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
@@ -33,17 +35,22 @@ else
                     <label class="star star-2" for="star-2"></label>
                     <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
                     <label class="star star-1" for="star-1"></label>
-      
+
                     <button type="submit" class="btn btn-success">Sätt Betyg</button>
-     
-            </EditForm>
+
+                </EditForm>
+            </div>
         </div>
-        <p>Statistik</p>
+        <h5 class="mt-5">Statistik</h5>
+        <div class="table-responsive-md">
+            <p class="mb-0">Bostäder: @user.RealEstates</p>
+            <p id="view-comments" @onclick="ToggleComments">Kommentarer: @user.Comments</p>
+        </div>
         <div class="text-left">
-            <p> Bostäder: @user.RealEstates</p>
-            <p> Kommentarer: @user.Comments</p>
+            <div class="@ToggleCommentsCssClass">
+                <GetCommentByUser Username="@user.UserName"></GetCommentByUser>
+            </div>
         </div>
-        <GetCommentByUser Username="@user.UserName"></GetCommentByUser>
     </div>
 }
 
@@ -95,5 +102,13 @@ else
         {
             ratingChecked[i] = false;
         }
+    }
+    private bool collapseComments = true;
+
+    private string ToggleCommentsCssClass => collapseComments ? "collapse" : null;
+
+    private void ToggleComments()
+    {
+        collapseComments = !collapseComments;
     }
 }
