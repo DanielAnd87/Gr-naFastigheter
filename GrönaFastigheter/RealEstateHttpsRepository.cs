@@ -19,14 +19,12 @@ namespace GrönaFastigheter
 
         public ILocalStorageService LocalStorage { get; }
         public NavigationManager NavManager { get; }
-        public IBackgroundService BackgroundService { get; set; }
 
-        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager, IBackgroundService backgroundService)
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
         {
             this.http = http;
             this.NavManager = NavManager;
             LocalStorage = localStorage;
-            BackgroundService = backgroundService;
         }
 
         public async void TestRepo()
@@ -373,6 +371,38 @@ namespace GrönaFastigheter
                 {
                     action();
                     await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                }
+            }, token);
+        }
+        private void RepeatPOST(Func<HttpResponseMessage> action, int seconds, CancellationToken token)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            Task.Run(async () =>
+            {
+                bool sucess = false;
+                while (!sucess && !token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        HttpResponseMessage response = action();
+                        string responseContent = await response.Content.ReadAsStringAsync();
+
+                        sucess = response.IsSuccessStatusCode;
+
+                        Console.WriteLine(response.StatusCode);
+                        if (sucess)
+                        {
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                    }
                 }
             }, token);
         }
