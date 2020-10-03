@@ -1,5 +1,4 @@
 ﻿@page "/registration"
-<h3>Registration</h3>
 
 @if (ShowRegistrationErros)
 {
@@ -11,42 +10,44 @@
     </div>
 }
 
-<EditForm Model="_userForRegistration" OnValidSubmit="Register" class="card card-body bg-light mt-5">
-    <DataAnnotationsValidator />
-    <div class="form-group row">
-        <label for="email" class="col-md-2 col-form-label">Användarnamn:</label>
-        <div class="col-md-10">
-            <InputText id="email" class="form-control" @bind-Value="_userForRegistration.Username" />
+<div class="container card card-body my-5" style="background-color: #fff;">
+    <EditForm Model="_userForRegistration" OnValidSubmit="Register">
+        <DataAnnotationsValidator />
+        <h3 class="h3 text-center my-2">Skapa konto</h3>
+
+        <div class="form-group">
+            <label for="email">Användarnamn:</label>
+            <InputText id="email" class="form-control border border-success" placeholder="Användarnamn" @bind-Value="_userForRegistration.Username" />
             <ValidationMessage For="@(() => _userForRegistration.Username)" />
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="email" class="col-md-2 col-form-label">Email:</label>
-        <div class="col-md-10">
-            <InputText id="email" class="form-control" @bind-Value="_userForRegistration.Email" />
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <InputText id="email" class="form-control border border-success" placeholder="Email" @bind-Value="_userForRegistration.Email" />
             <ValidationMessage For="@(() => _userForRegistration.Email)" />
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="password" class="col-md-2 col-form-label">Lösenord:</label>
-        <div class="col-md-10">
-            <InputText type="password" id="password" class="form-control" @bind-Value="_userForRegistration.Password" />
+        <div class="form-group">
+            <label for="password">Lösenord:</label>
+            <InputText type="password" id="password" class="form-control border border-success" placeholder="Lösenord" @bind-Value="_userForRegistration.Password" />
             <ValidationMessage For="@(() => _userForRegistration.Password)" />
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="confirm" class="col-md-2 col-form-label">Bekräfta lösenord:</label>
-        <div class="col-md-10">
-            <InputText type="password" id="confirm" class="form-control" @bind-Value="_userForRegistration.ConfirmPassword" />
+        <div class="form-group">
+            <label for="confirm">Bekräfta lösenord:</label>
+            <InputText type="password" id="confirm" class="form-control border border-success" placeholder="Bekräfta lösenord" @bind-Value="_userForRegistration.ConfirmPassword" />
             <ValidationMessage For="@(() => _userForRegistration.ConfirmPassword)" />
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button type="submit" class="btn btn-success">Register</button>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Skapa konto</button>
         </div>
+    </EditForm>
+
+    <div class="text-center">
+        <p class="mt-2 mb-0">Har du redan ett konto?</p>
+        <NavLink class="nav-link text-center" href="/login">
+            <span aria-hidden="true">Logga in</span>
+        </NavLink>
     </div>
-</EditForm>
+</div>
