@@ -5,49 +5,67 @@
 
 @using Entities.Models
 
-<h3>Estate Details</h3>
-
 @if (realEstate == null)
 {
-    <p>Loading.....</p>
+    <h1 class="h1 text-center">Ingen fastighet hittades</h1>
 }
 else
 {
-    <div class="page-container">
-        <div class="inner-container">
-            <div class="card">
-                <div class="card">
-                    <h3>@realEstate.Title</h3>
-                    @if (@realEstate.CanBeSold)
-                    {
-                        <p>Säljpris: @realEstate.SellingPrice</p>
-                    }
-                    else
-                    {
-                        <p>Uthyrningspris : @realEstate.RentingPrice</p>
-                    }
-                </div>
-                <br />
-                <p>Beskrivning : @realEstate.Description</p>
-                <p>Address : @realEstate.Address</p>
-                <p>Byggår: @realEstate.ConstructionYear</p>
-                <p>Typ av bostad : @realEstate.RealEstateType</p>
-                <img src="@realEstate.ImageUrl" />
-                <AuthorizeView>
-                    <Authorized>
-                        <p @onclick="(e=> RedirectToUserPage(realEstate.UserName))">Säljes av @realEstate.UserName</p>
-                        <p>Kontakt: @realEstate.Contact</p>
-                        <p> Kommentarer: </p>
+    @*  Göra image länken dynamisk när det fungerar *@
+    <div class="jumbotron jumbotron-fluid" style="height: 720px;
+        background-image: url('https://photo.barnes-international.com/annonces/bms/38/xl/29-8z0zc-hutton-9.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    ">
+        <div class="text-center position-relative" style="top: 580px;">
+            <a class="btn btn-primary btn-lg text-white">Alla bilder</a>
+        </div>
+    </div>
 
-                        <CascadingValue Value="@UserComments">
-                            <ViewComments CurrentRealEstateID="@realEstate.Id">
+    <div class="container w-75 mb-5" style="background-color:#f0eeec;">
+        <div class="text-center">
+            <h4>@realEstate.Address</h4>
+            @*<h1 class="mb-3">@realEstate.Title</h1>*@
+            @*  Använder denna tills vi har bättre Titlar *@
+            <h1 class="mb-3">Stort välskött hus i vackra Los Angeles</h1>
+            @if (realEstate.CanBeSold)
+            {
+                <h6 class="font-weight-bold">Till salu</h6>
+                <h2 class="font-weight-bold">@realEstate.SellingPrice kr</h2>
+            }
+            else
+            {
+                <h6 class="font-weight-bold">Uthyrning</h6>
+                <h2 class="font-weight-bold">@realEstate.RentingPrice kr/mån</h2>
+            }
+        </div>
 
+        <div class="row text-center mt-3">
+            <div class="col-md-6 p-4"><i class="fas fa-building"></i><i class="fas fa-home"></i>Typ av byggnad: @realEstate.RealEstateType</div>
+            <div class="col-md-6 p-4"><i class="fas fa-hammer"></i>Byggår: @realEstate.ConstructionYear</div>
+        </div>
 
-                            </ViewComments>
-                        </CascadingValue>
-                    </Authorized>
-                </AuthorizeView>
-            </div>
+        <div class="row text-center mt-1">
+            <div class="col-md-6 p-4">Beskrivning: @realEstate.Description</div>
+            <div class="col-md-6 p-4"><i class="fas fa-user"></i>Säljare: @realEstate.UserName</div>
+        </div>
+
+        <div>
+            <AuthorizeView>
+                <Authorized>
+                    @*<p @onclick="(e=> RedirectToUserPage(realEstate.UserName))">Säljes av @realEstate.UserName</p>*@
+                    <p>Kontakt: @realEstate.Contact</p>
+                    <h3> Kommentarer: </h3>
+                    <CascadingValue Value="@UserComments">
+                        <ViewComments CurrentRealEstateID="@realEstate.Id">
+                        </ViewComments>
+                    </CascadingValue>
+                </Authorized>
+                <NotAuthorized>
+                    <h3 class="text-center mt-3">Logga in för att se kommentarer</h3>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </div>
 }
