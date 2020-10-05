@@ -1,13 +1,13 @@
 ﻿
 using Blazored.LocalStorage;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter
@@ -19,13 +19,17 @@ namespace GrönaFastigheter
     {
 
         private readonly HttpClient http;
-
+        public Dictionary<int, BackgroundData> BackgroundDatas { get; set; } = new Dictionary<int, BackgroundData>();
         public ILocalStorageService LocalStorage { get; }
+        public NavigationManager NavManager { get; }
+        public EventHandler EventHandler { get; set; }
 
-        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage)
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
         {
             this.http = http;
+            this.NavManager = NavManager;
             LocalStorage = localStorage;
+            EventHandler += PostSuccessInside;
         }
 
         public async void TestRepo()
@@ -69,6 +73,11 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException message)
             {
                 Console.WriteLine(message);
+            }
+            catch
+            {
+                NavManager.NavigateTo("./Content/offline");
+
             }
             return null;
         }
@@ -198,14 +207,23 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch
+            {
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(() => http.PostAsJsonAsync("api/Realestates", realEstate), 5,"", cancellationToken);
+            }
             return null;
         }
+
+
         public async Task<Comment> PostComment(Comment comment)
         {
+            
+           
             Comment newComment = null;
             try
             {
-                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
+                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -214,7 +232,10 @@ namespace GrönaFastigheter
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);
                     return newComment;
                 }
-                return newComment;
+                else
+                {
+                    return new Comment { Content= "Servererror", RealEstateId= -1, UserName= "Error"};
+                }
             }
             catch (HttpRequestException)
             {
@@ -227,6 +248,14 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException)
             {
                 Console.WriteLine("Invalid Json");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(() => http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }), 5,"", cancellationToken);
+
+
             }
             return newComment;
         }
@@ -251,7 +280,30 @@ namespace GrönaFastigheter
             
         }
 
+                while(BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await action();
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        BackgroundDatas[id].IsRunning = !response.IsSuccessStatusCode;
+                        Console.WriteLine(response.StatusCode);
+                        EventHandler.Invoke(this, new EventArgs());
+                        BackgroundDatas.Remove(id);
+                        break;
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                    }
+                }
+            }, token);
+        }
 
+        private void PostSuccessInside(object sender, EventArgs arg)
+        {
+            Console.WriteLine("The comment is upploaded from inside handler!");
+        }
 
     }
 }

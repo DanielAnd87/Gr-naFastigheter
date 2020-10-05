@@ -123,6 +123,12 @@ else
     {
         var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
         realEstates = response.ToList();
+        context.EventHandler += PostSuccess;
+    }
+
+    public void PostSuccess(object sender, EventArgs arg)
+    {
+        Console.WriteLine("The comment is upploaded!");
     }
 
     private async Task ViewMoreEstates()

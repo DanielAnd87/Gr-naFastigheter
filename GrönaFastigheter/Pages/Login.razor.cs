@@ -2,6 +2,7 @@
 using GrönaFastigheter.HttpRepository;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter.Pages
@@ -16,11 +17,10 @@ namespace GrönaFastigheter.Pages
         public NavigationManager NavigationManager { get; set; }
         public bool ShowAuthError { get; set; }
         public string Error { get; set; }
-
+        
         public async Task ExecuteLogin()
         {
             ShowAuthError = false;
-
             var result = await AuthenticationService.Login(_userForAuthentication);
 
             if (result.Status == 200)
