@@ -131,11 +131,15 @@ else
         IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
         realEstates.AddRange(moreEstates);
     }
-    private void ChangePage(bool nextPage) //Todo: kan gå framåt fast de inte finns mer estates.
+    private void ChangePage(bool nextPage)
     {
         if (nextPage)
         {
             searchData.CurrentPage += 1;
+            if (searchData.CurrentPage + 1 > GetAmountOfPages())
+            {
+                searchData.CurrentPage = GetAmountOfPages() - 1;
+            }
         }
         else
         {
@@ -169,7 +173,7 @@ else
         int numberOfPages = (int)result;
         if(numberOfPages < 1)
         {
-           return numberOfPages = 1;
+            return numberOfPages = 1;
         }
         return numberOfPages+1;
 
