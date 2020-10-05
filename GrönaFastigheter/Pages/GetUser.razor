@@ -3,6 +3,7 @@
 @inject IRealEstateHttpsRepository context
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<p class="alert-danger">@message</p>
 
 @if (user == null)
 {
@@ -64,6 +65,7 @@ else
 }
 
 @code {
+    private string message;
     [Parameter]
     public string Username { get; set; }
     private User user;
@@ -95,9 +97,17 @@ else
         ratingChecked[ratingIndex] = true;
     }
 
-    public void HandleValidSubmit()
+    public async Task HandleValidSubmit()
     {
-        context.PostRating(Rating, user.UserId);
+        var response = await context.PostRating(Rating, user.UserId);
+        if (response)
+        {
+            message = "Rating uppdaterad";
+        }
+        else
+        {
+            message = "Kunde inte skicka in rating";
+        }
     }
     public void UpdateSelection(ChangeEventArgs args)
     {

@@ -230,10 +230,24 @@ namespace GrönaFastigheter
             }
             return newComment;
         }
-        public void PostRating(int rating, int userId) //NYI
+        /// <summary>
+        /// Posts a rating to a user through the api
+        /// </summary>
+        /// <param name="rating">the rating value</param>
+        /// <param name="userId">userId</param>
+        /// <returns>true if successfull, false if not.</returns>
+        public async Task<bool> PostRating(int rating, int userId)
         {
-            rating += 1;
-            var result = http.PostAsJsonAsync("/api/Users/Rate", rating);
+            var requestBody = new { UserId = userId, Value = rating };
+            var result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
             
         }
 
