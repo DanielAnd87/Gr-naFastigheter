@@ -210,7 +210,11 @@ namespace GrönaFastigheter
             catch
             {
                 CancellationToken cancellationToken = new CancellationToken();
-                RepeatPOST(() => http.PostAsJsonAsync("api/Realestates", realEstate), 5,"", cancellationToken);
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("api/Realestates", realEstate), // Request that will be sent offline
+                    5,                                                         // time intervall between tries
+                    realEstate.Address,                                        // Description to show for user
+                    cancellationToken);                                        // A way to instantly abort this operation 
             }
             return null;
         }
@@ -218,8 +222,8 @@ namespace GrönaFastigheter
 
         public async Task<Comment> PostComment(Comment comment)
         {
-            
-           
+
+
             Comment newComment = null;
             try
             {
@@ -234,7 +238,7 @@ namespace GrönaFastigheter
                 }
                 else
                 {
-                    return new Comment { Content= "Servererror", RealEstateId= -1, UserName= "Error"};
+                    return new Comment { Content = "Servererror", RealEstateId = -1, UserName = "Error" };
                 }
             }
             catch (HttpRequestException)
@@ -253,7 +257,11 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine(e.Message);
                 CancellationToken cancellationToken = new CancellationToken();
-                RepeatPOST(() => http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }), 5,"", cancellationToken);
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }), // Request that will be sent offline
+                    5,                                                                                                                      // time intervall between tries
+                    comment.Content,                                                                                                        // Description to show for user
+                    cancellationToken);                                                                                                     // A way to instantly abort this operation 
 
 
             }
@@ -268,16 +276,40 @@ namespace GrönaFastigheter
         public async Task<bool> PostRating(int rating, int userId)
         {
             var requestBody = new { UserId = userId, Value = rating };
-            var result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
-            if (result.IsSuccessStatusCode)
+            try
             {
-                return true;
+                HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
+                if (result.IsSuccessStatusCode)
+                {
+                    return true;
+                }
             }
-            else
+            catch (HttpRequestException)
             {
-                return false;
+                Console.WriteLine("An error Occured");
             }
-            
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            // todo: Find the exception used for no connection.
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("/api/Users/Rate", requestBody), // Request that will be sent offline
+                    5,                                                          // time intervall between tries
+                    "Rating of: " + rating,                                     // Description to show for user
+                    cancellationToken);                                         // A way to instantly abort this operation 
+
+
+            }
+            return false;
         }
 
 
@@ -299,7 +331,8 @@ namespace GrönaFastigheter
                     }
                 }
                 id++;
-                BackgroundDatas.Add(id, new BackgroundData(description, true));
+                int length = description.Length >= 20 ? 20 : description.Length;
+                BackgroundDatas.Add(id, new BackgroundData(description.Substring(0, length), true));
 
                 while (BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
                 {
