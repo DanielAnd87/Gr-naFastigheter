@@ -280,7 +280,28 @@ namespace GrönaFastigheter
             
         }
 
-                while(BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
+
+        private void RepeatPOST(Func<Task<HttpResponseMessage>> action, int seconds, string description, CancellationToken token)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            Task.Run(async () =>
+            {
+                int id = -1;
+                foreach (int key in BackgroundDatas.Keys)
+                {
+                    if (key > id)
+                    {
+                        id = key;
+                    }
+                }
+                id++;
+                BackgroundDatas.Add(id, new BackgroundData(description, true));
+
+                while (BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
                 {
                     try
                     {
