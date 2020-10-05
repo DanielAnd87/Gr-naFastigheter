@@ -61,7 +61,7 @@ else
         </div>
     }
 <div>
-    <p>Sida: @(searchData.CurrentPage+1)</p>
+    <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
     <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
     <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
     <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
@@ -152,7 +152,6 @@ else
     private void ChangePage(int firstpage)
     {
         searchData.CurrentPage = firstpage;
-        Console.WriteLine(ListPage);
     }
 
     private void RedirectToEstate(int id)
@@ -163,5 +162,16 @@ else
     List<RealEstate> GetPageOfEstates(List<RealEstate> list, int page = 0, int pageSize = 10)
     {
         return list.Skip(page * pageSize).Take(pageSize).ToList();
+    }
+    private int GetAmountOfPages()
+    {
+        decimal result = Math.Floor((decimal)FilteredEstates.Count / 10);
+        int numberOfPages = (int)result;
+        if(numberOfPages < 1)
+        {
+           return numberOfPages = 1;
+        }
+        return numberOfPages+1;
+
     }
 }
