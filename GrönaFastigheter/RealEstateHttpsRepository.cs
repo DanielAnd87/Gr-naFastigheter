@@ -16,15 +16,17 @@ namespace GrönaFastigheter
     {
 
         private readonly HttpClient http;
-
+        public Dictionary<int, BackgroundData> BackgroundDatas { get; set; } = new Dictionary<int, BackgroundData>();
         public ILocalStorageService LocalStorage { get; }
         public NavigationManager NavManager { get; }
+        public EventHandler EventHandler { get; set; }
 
         public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
         {
             this.http = http;
             this.NavManager = NavManager;
             LocalStorage = localStorage;
+            EventHandler += PostSuccessInside;
         }
 
         public async void TestRepo()
@@ -204,44 +206,21 @@ namespace GrönaFastigheter
             }
             catch
             {
-                PostNewRealEstateInBackground(realEstate, 8);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(() => http.PostAsJsonAsync("api/Realestates", realEstate), 5,"", cancellationToken);
             }
             return null;
         }
 
 
-        private void PostNewRealEstateInBackground(RealEstate realEstate, int seconds)
-        {
-            Task.Run(async () =>
-            {
-                bool sucess = false;
-                while (!sucess)
-                {
-                    try
-                    {
-                        HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
-                        sucess = response.IsSuccessStatusCode;
-
-                        Console.WriteLine(response.StatusCode);
-                        if (sucess)
-                        {
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(seconds));
-                    }
-                }
-            });
-        }
-
         public async Task<Comment> PostComment(Comment comment)
         {
+            
+           
             Comment newComment = null;
             try
             {
-                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
+                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -252,9 +231,8 @@ namespace GrönaFastigheter
                 }
                 else
                 {
-                    PostCommentInBackground(comment, 3);
+                    return new Comment { Content= "Servererror", RealEstateId= -1, UserName= "Error"};
                 }
-                return newComment;
             }
             catch (HttpRequestException)
             {
@@ -271,7 +249,9 @@ namespace GrönaFastigheter
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                PostCommentInBackground(comment, 3);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(() => http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }), 5,"", cancellationToken);
+
 
             }
             return newComment;
@@ -300,65 +280,12 @@ namespace GrönaFastigheter
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                PostRatingInBackground(rating, userId, 7);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(() => http.PostAsJsonAsync("/api/Users/Rate", rating), 5,"", cancellationToken);
             }
         }
-        private void PostRatingInBackground(int rating, int userId, int seconds)
-        {
-            Task.Run(async () =>
-            {
-                bool sucess = false;
-                while (!sucess)
-                {
-                    try
-                    {
-                        HttpResponseMessage response = await http.PostAsJsonAsync("/api/Users/Rate", rating);
-
-                        sucess = response.IsSuccessStatusCode;
-                        Console.WriteLine(response.StatusCode);
-                        if (sucess)
-                        {
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(seconds));
-                    }
-                }
-            });
-        }
-
-        private void PostCommentInBackground(Comment comment, int seconds)
-        {
-            Task.Run(async () =>
-            {
-                bool sucess = false;
-                while (!sucess)
-                {
-                    try
-                    {
-
-                        HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
-                        string responseContent = await response.Content.ReadAsStringAsync();
-
-                        sucess = response.IsSuccessStatusCode;
-
-                        Console.WriteLine(response.StatusCode);
-                        if (sucess)
-                        {
-                            break;
-                        }
-                    }
-                    catch
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(seconds));
-                    }
-                }
-            });
-        }
-
-        private void RT(Action action, int seconds, CancellationToken token)
+       
+        private void RepeatPOST(Func<Task<HttpResponseMessage>> action, int seconds, string description, CancellationToken token)
         {
             if (action == null)
             {
@@ -367,37 +294,28 @@ namespace GrönaFastigheter
 
             Task.Run(async () =>
             {
-                while (!token.IsCancellationRequested)
+                int id = -1;
+                foreach (int key in BackgroundDatas.Keys)
                 {
-                    action();
-                    await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                    if (key > id)
+                    {
+                        id = key;
+                    }
                 }
-            }, token);
-        }
-        private void RepeatPOST(Func<HttpResponseMessage> action, int seconds, CancellationToken token)
-        {
-            if (action == null)
-            {
-                return;
-            }
+                id++;
+                BackgroundDatas.Add(id, new BackgroundData(description, true));
 
-            Task.Run(async () =>
-            {
-                bool sucess = false;
-                while (!sucess && !token.IsCancellationRequested)
+                while(BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
                 {
                     try
                     {
-                        HttpResponseMessage response = action();
+                        HttpResponseMessage response = await action();
                         string responseContent = await response.Content.ReadAsStringAsync();
-
-                        sucess = response.IsSuccessStatusCode;
-
+                        BackgroundDatas[id].IsRunning = !response.IsSuccessStatusCode;
                         Console.WriteLine(response.StatusCode);
-                        if (sucess)
-                        {
-                            break;
-                        }
+                        EventHandler.Invoke(this, new EventArgs());
+                        BackgroundDatas.Remove(id);
+                        break;
                     }
                     catch
                     {
@@ -406,5 +324,11 @@ namespace GrönaFastigheter
                 }
             }, token);
         }
+
+        private void PostSuccessInside(object sender, EventArgs arg)
+        {
+            Console.WriteLine("The comment is upploaded from inside handler!");
+        }
+
     }
 }
