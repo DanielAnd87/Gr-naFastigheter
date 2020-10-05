@@ -35,11 +35,13 @@
         {
             Console.WriteLine("inputted values");
         }
-
     private void OnPickedOrder(ChangeEventArgs args)
     {
         searchData.OrderBy = args.Value.ToString();
     }
+    /// <summary>
+    /// Whenever a search is performed our current page has to return to 0. If the new searchresult doesent have enought pages an error ocours.
+    /// </summary>
     private void ResetCurrentPage()
     {
         searchData.CurrentPage = 0;
