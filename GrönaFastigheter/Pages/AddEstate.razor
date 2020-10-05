@@ -4,75 +4,79 @@
 @inject NavigationManager NavManager
 
 <div class="page-container">
-    <h3>AddEstate</h3>
-    <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit" class="card card-body bg-light mt-5">
-        <DataAnnotationsValidator />
-        <div class="form-group row">
-            <label for="title" class="col-md-2 col-form-label">Title:</label>
-            <div class="col-md-10">
-                <InputText id="title" class="form-control" @bind-Value="realEstate.Title" />
-                <ValidationMessage For="@(() => realEstate.Title)" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="description" class="col-md-2 col-form-label">Description:</label>
-            <div class="col-md-10">
-                <InputText id="description" class="form-control" @bind-Value="realEstate.Description" />
-                <ValidationMessage For="@(() => realEstate.Description)" />
-            </div>
-        </div>
+    <div class="inner-container">
+        <h3>AddEstate</h3>
+        <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit">
+            <div class="form-group">
+                <DataAnnotationsValidator />
+                <div class="form-group row">
+                    <label for="title" class="col-md-2 col-form-label">Title:</label>
+                    <div class="col-md-10">
+                        <InputText id="title" class="form-control" @bind-Value="realEstate.Title" />
+                        <ValidationMessage For="@(() => realEstate.Title)" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-md-2 col-form-label">Description:</label>
+                    <div class="col-md-10">
+                        <InputTextArea id="description" class="form-control" @bind-Value="realEstate.Description" />
+                        <ValidationMessage For="@(() => realEstate.Description)" />
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <label for="address" class="col-md-2 col-form-label">Address:</label>
-            <div class="col-md-10">
-                <InputText id="address" class="form-control" @bind-Value="realEstate.Address" />
-                <ValidationMessage For="@(() => realEstate.Address)" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="contact" class="col-md-2 col-form-label">Contact:</label>
-            <div class="col-md-10">
-                <InputText id="contact" class="form-control" @bind-Value="realEstate.Contact" />
-                <ValidationMessage For="@(() => realEstate.Contact)" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="constructionYear" class="col-md-2 col-form-label">Construction Year:</label>
-            <div class="col-md-10">
-                <InputNumber id="constructionYear" class="form-control" @bind-Value="realEstate.ConstructionYear" />
-                <ValidationMessage For="@(() => realEstate.ConstructionYear)" />
-            </div>
-        </div>
+                <div class="form-group row">
+                    <label for="address" class="col-md-2 col-form-label">Address:</label>
+                    <div class="col-md-10">
+                        <InputText id="address" class="form-control" @bind-Value="realEstate.Address" />
+                        <ValidationMessage For="@(() => realEstate.Address)" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="contact" class="col-md-2 col-form-label">Contact:</label>
+                    <div class="col-md-10">
+                        <InputText id="contact" class="form-control" @bind-Value="realEstate.Contact" />
+                        <ValidationMessage For="@(() => realEstate.Contact)" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="constructionYear" class="col-md-2 col-form-label">Construction Year:</label>
+                    <div class="col-md-10">
+                        <InputNumber id="constructionYear" class="form-control" @bind-Value="realEstate.ConstructionYear" />
+                        <ValidationMessage For="@(() => realEstate.ConstructionYear)" />
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <label for="sellingPrice" class="col-md-2 col-form-label">Selling Price:</label>
-            <div class="col-md-10">
-                <InputNumber id="sellingPrice" class="form-control" @bind-Value="realEstate.SellingPrice" />
-                <ValidationMessage For="@(() => realEstate.SellingPrice)" />
-            </div>
-        </div>
+                <div class="form-group row">
+                    <label for="sellingPrice" class="col-md-2 col-form-label">Selling Price:</label>
+                    <div class="col-md-10">
+                        <InputNumber id="sellingPrice" class="form-control" @bind-Value="realEstate.SellingPrice" />
+                        <ValidationMessage For="@(() => realEstate.SellingPrice)" />
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <label for="rentingPrice" class="col-md-2 col-form-label">Renting Price:</label>
-            <div class="col-md-10">
-                <InputNumber id="rentingPrice" class="form-control" @bind-Value="realEstate.RentingPrice" />
-                <ValidationMessage For="@(() => realEstate.RentingPrice)" />
-            </div>
-        </div>
+                <div class="form-group row">
+                    <label for="rentingPrice" class="col-md-2 col-form-label">Renting Price:</label>
+                    <div class="col-md-10">
+                        <InputNumber id="rentingPrice" class="form-control" @bind-Value="realEstate.RentingPrice" />
+                        <ValidationMessage For="@(() => realEstate.RentingPrice)" />
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <label for="realEstateType" class="col-md-2 col-form-label">Real Estate Type:</label>
-            <div class="col-md-10">
-                <InputText id="realEstateType" class="form-control" @bind-Value="realEstate.RealEstateType" />
-                <ValidationMessage For="@(() => realEstate.RealEstateType)" />
+                <div class="form-group row">
+                    <label for="realEstateType" class="col-md-2 col-form-label">Real Estate Type:</label>
+                    <div class="col-md-10">
+                        <InputText id="realEstateType" class="form-control" @bind-Value="realEstate.RealEstateType" />
+                        <ValidationMessage For="@(() => realEstate.RealEstateType)" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-success">Add new</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-success">Add new</button>
-            </div>
-        </div>
-    </EditForm>
+        </EditForm>
+    </div>
 </div>
 
 @code {
