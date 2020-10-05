@@ -5,6 +5,7 @@
 
 <div class="page-container">
     <h3>AddEstate</h3>
+    <p class="alert-danger">@message</p>
     <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit" class="card card-body bg-light mt-5">
         <DataAnnotationsValidator />
         <div class="form-group row">
@@ -73,12 +74,14 @@
 
             <div class="col-sm-10">
                 <InputSelect id="type" class="form-control" @bind-Value="realEstate.RealEstateType">
+                    <option value="">Välj typ...</option>
                     <option value="Hus">Hus</option>
                     <option value="Lägenhet">Lägenhet</option>
                     <option value="Kontor">Kontor</option>
                     <option value="Lagerlokal">Lagerlokal</option>
 
-            </InputSelect>
+                </InputSelect>
+                <ValidationMessage For="@(() => realEstate.RealEstateType)" />
             </div>
 
         </div>
@@ -91,6 +94,7 @@
 </div>
 
 @code {
+    private string message;
     private RealEstate realEstate = new RealEstate();
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
@@ -105,9 +109,18 @@
         }
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        client.PostNewRealEstate(realEstate);
+        var response =  await client.PostNewRealEstate(realEstate);
+        if(response == null)
+        {
+            message = "Kunde inte lägga till annons";
+        }
+        else
+        {
+            message = "Tillagd!";
+            Console.WriteLine(response);
+        }
 
     }
 }

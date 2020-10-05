@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace GrönaFastigheter
 {
+    /// <summary>
+    /// Class with methods to interact with the api. post gets etc.
+    /// </summary>
     public class RealEstateHttpsRepository : IRealEstateHttpsRepository
     {
 
