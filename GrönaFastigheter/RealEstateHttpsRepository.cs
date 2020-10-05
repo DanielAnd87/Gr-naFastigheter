@@ -29,7 +29,6 @@ namespace GrönaFastigheter
             this.http = http;
             this.NavManager = NavManager;
             LocalStorage = localStorage;
-            EventHandler += PostSuccessInside;
         }
 
         public async void TestRepo()
@@ -46,7 +45,13 @@ namespace GrönaFastigheter
 
 
         }
-
+        /// <summary>
+        /// Recieves all comments with this username
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <param name="Page"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5)
         {
             if (Username == null)
@@ -81,9 +86,16 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// All RealEstates with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="NumItemsToSkip"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int NumItemsToSkip = 2, int NumItems = 5)
         {
+            //todo: remove default values when it safe to do so.
             IEnumerable<Comment> comment;
             try
             {
@@ -106,7 +118,11 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Gets userdata with this username. Recievs different values if logged in (having correct token in default headervalues)
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <returns></returns>
         public async Task<User> GetUserByUserName(string Username)
         {
             if (Username == null)
@@ -134,7 +150,12 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Gets realestates
+        /// </summary>
+        /// <param name="NumItemsToSkip"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 2, int NumItems = 5)
         {
             try
@@ -178,7 +199,11 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Sends newly created RealEstate to backen. Repeats request if no connection
+        /// </summary>
+        /// <param name="realEstate"></param>
+        /// <returns></returns>
         public async Task<RealEstate> PostNewRealEstate(RealEstate realEstate) //Kan behöva optimering men funkar, status code 200
         {
             try
@@ -219,7 +244,11 @@ namespace GrönaFastigheter
             return null;
         }
 
-
+        /// <summary>
+        /// Sends newly created comment to backen. Repeats request if no connection
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public async Task<Comment> PostComment(Comment comment)
         {
 
@@ -268,7 +297,7 @@ namespace GrönaFastigheter
             return newComment;
         }
         /// <summary>
-        /// Posts a rating to a user through the api
+        /// Posts a rating to a user through the api. Repeats request if no connection.
         /// </summary>
         /// <param name="rating">the rating value</param>
         /// <param name="userId">userId</param>
@@ -312,7 +341,13 @@ namespace GrönaFastigheter
             return false;
         }
 
-
+        /// <summary>
+        /// Runs asyncronous until request is completed or canceled using token.
+        /// </summary>
+        /// <param name="action">A func delegate that returns a HttpResponseMessage Task</HttpResponseMessage></param>
+        /// <param name="seconds">Interval between connection tries</param>
+        /// <param name="description">A descritption for user to check progress</param>
+        /// <param name="token">A token to instantly end operation</param>
         private void RepeatPOST(Func<Task<HttpResponseMessage>> action, int seconds, string description, CancellationToken token)
         {
             if (action == null)
@@ -353,11 +388,5 @@ namespace GrönaFastigheter
                 }
             }, token);
         }
-
-        private void PostSuccessInside(object sender, EventArgs arg)
-        {
-            Console.WriteLine("The comment is upploaded from inside handler!");
-        }
-
     }
 }
