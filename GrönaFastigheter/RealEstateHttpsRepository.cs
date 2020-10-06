@@ -52,7 +52,7 @@ namespace GrönaFastigheter
         /// <param name="Page"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 0, int NumItems = 5)
         {
             if (Username == null)
             {
@@ -116,6 +116,10 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid json from /api/comments/id" + ex);
             }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
+            }
             return null;
         }
         /// <summary>
@@ -148,6 +152,10 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
+            }
             return null;
         }
         /// <summary>
@@ -156,7 +164,7 @@ namespace GrönaFastigheter
         /// <param name="NumItemsToSkip"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 2, int NumItems = 5)
+        public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 0, int NumItems = 100)
         {
             try
             {
@@ -201,6 +209,10 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException)
             {
                 Console.WriteLine("Invalid Json");
+            }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
             }
             return null;
         }
@@ -268,6 +280,7 @@ namespace GrönaFastigheter
                 if (response.IsSuccessStatusCode)
                 {
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);
+                    Console.WriteLine("Hit når vi");
                     return newComment;
                 }
                 else
@@ -332,7 +345,7 @@ namespace GrönaFastigheter
                 Console.WriteLine("Invalid Json");
             }
             // todo: Find the exception used for no connection.
-            catch (Exception e)
+            catch (TaskCanceledException e)
             {
                 Console.WriteLine(e.Message);
                 CancellationToken cancellationToken = new CancellationToken();
@@ -375,6 +388,7 @@ namespace GrönaFastigheter
                 int length = description.Length >= 20 ? 20 : description.Length;
                 BackgroundDatas.Add(id, new BackgroundData(description.Substring(0, length), true));
 
+                EventHandler.Invoke(this, new EventArgs());
                 while (BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
                 {
                     try
@@ -383,8 +397,8 @@ namespace GrönaFastigheter
                         string responseContent = await response.Content.ReadAsStringAsync();
                         BackgroundDatas[id].IsRunning = !response.IsSuccessStatusCode;
                         Console.WriteLine(response.StatusCode);
-                        EventHandler.Invoke(this, new EventArgs());
                         BackgroundDatas.Remove(id);
+                        EventHandler.Invoke(this, new EventArgs());
                         break;
                     }
                     catch

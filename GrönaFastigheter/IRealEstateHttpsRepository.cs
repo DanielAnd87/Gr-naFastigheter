@@ -9,6 +9,8 @@ namespace GrönaFastigheter
     public interface IRealEstateHttpsRepository
     {
         EventHandler EventHandler { get; set; }
+        Dictionary<int, BackgroundData> BackgroundDatas { get; set; }
+
         Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page = 2, int NumItems = 5);
         Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5);
         Task<RealEstate> GetRealEstateById(int Id);
