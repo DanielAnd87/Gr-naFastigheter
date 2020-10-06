@@ -12,11 +12,7 @@ else
 {
     foreach (var estate in CurrentRealEstateList)
     {
-        int price = 0;
-        if (estate.CanBeSold)
-            price = estate.SellingPrice;
-        else
-            price = estate.RentingPrice;
+        
         string typeOfSale = "";
         @if (estate.CanBeSold)
         {
@@ -43,7 +39,7 @@ else
                             <p>@estate.RealEstateType</p>
                         </div>
                         <div class="card-data-row-item">
-                            <p>@price</p>
+                            <p>Säjpris:@estate.SellingPrice Hyrpris:@estate.RentingPrice</p>
                         </div>
                         <div class="card-data-row-item">
                             <p>@estate.ConstructionYear</p>
