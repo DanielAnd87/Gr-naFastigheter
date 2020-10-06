@@ -279,6 +279,7 @@ namespace GrönaFastigheter
                 if (response.IsSuccessStatusCode)
                 {
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);
+                    Console.WriteLine("Hit når vi");
                     return newComment;
                 }
                 else
