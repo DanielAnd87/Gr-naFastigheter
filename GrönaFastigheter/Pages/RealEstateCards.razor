@@ -82,31 +82,32 @@ else
     /// <returns></returns>
     private List<RealEstate> FilterList()
     {
-        List<RealEstate> tempEstates = realEstates.Where(
+        //List<RealEstate> tempEstates = realEstates.Where(
 
-        i => searchData.TitleCheck ? i.Title.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Title.Contains("") &&
-        searchData.AdressCheck ? i.Address.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Address.Contains("") &&
-        //todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
-        searchData.TypeCheck ? i.RealEstateType.ToLower().Contains(searchData.Searchterm.ToLower()) : i.RealEstateType.Contains("")
-        ).ToList();
+        //i => searchData.TitleCheck ? i.Title.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Title.Contains("") &&
+        //searchData.AdressCheck ? i.Address.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Address.Contains("") &&
+        ////todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
+        //searchData.TypeCheck ? i.RealEstateType.ToLower().Contains(searchData.Searchterm.ToLower()) : i.RealEstateType.Contains("")
+        //).ToList();
 
-        if (searchData.OrderBy == OrderAlternatives[0])
-        {
-            tempEstates = tempEstates.OrderBy(x => x.SellingPrice).ToList();
-        }
-        else if (searchData.OrderBy == OrderAlternatives[1])
-        {
-            tempEstates = tempEstates.OrderBy(x => x.RentingPrice).ToList();
-        }
-        else if (searchData.OrderBy == OrderAlternatives[2])
-        {
-            tempEstates = tempEstates.OrderBy(x => x.Title).ToList();
-        }
-        else if (searchData.OrderBy == OrderAlternatives[3])
-        {
-            tempEstates = tempEstates.OrderBy(x => x.Address).ToList();
-        }
-        return tempEstates;
+        //if (searchData.OrderBy == OrderAlternatives[0])
+        //{
+        //    tempEstates = tempEstates.OrderBy(x => x.SellingPrice).ToList();
+        //}
+        //else if (searchData.OrderBy == OrderAlternatives[1])
+        //{
+        //    tempEstates = tempEstates.OrderBy(x => x.RentingPrice).ToList();
+        //}
+        //else if (searchData.OrderBy == OrderAlternatives[2])
+        //{
+        //    tempEstates = tempEstates.OrderBy(x => x.Title).ToList();
+        //}
+        //else if (searchData.OrderBy == OrderAlternatives[3])
+        //{
+        //    tempEstates = tempEstates.OrderBy(x => x.Address).ToList();
+        //}
+        //return tempEstates;
+        return realEstates;
     }
     public List<string> OrderAlternatives { get; set; } = new List<string> {
         "Hyra",
@@ -119,7 +120,15 @@ else
     {
         var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
         if(response != null)
+        {
             realEstates = response.ToList();
+            foreach (var item in realEstates)
+            {
+                Console.WriteLine(item.Title);
+                Console.WriteLine(item.Id);
+            }
+        }
+
 
         context.EventHandler += PostSuccess; //todo: Varför är denna här?
     }

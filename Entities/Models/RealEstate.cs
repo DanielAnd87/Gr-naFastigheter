@@ -31,8 +31,8 @@ namespace Entities.Models
         [StringLength(50, MinimumLength = 5)]
         public string Title { get; set; }
         [Required(ErrorMessage ="Välj pris.")]
-        public int SellingPrice { get; set; }
-        public int RentingPrice { get; set; }
+        public int? SellingPrice { get; set; }
+        public int? RentingPrice { get; set; }
         public bool CanBeSold { get; set; }
         public bool CanBeRented { get; set; }
         public string UserName { get; set; }
