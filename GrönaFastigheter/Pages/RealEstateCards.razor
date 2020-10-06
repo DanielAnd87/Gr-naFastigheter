@@ -88,7 +88,7 @@ else
     {
         List<RealEstate> tempEstates = realEstates.Where(
 
-        i => searchData.TitleCheck ? i.Title.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Title.Contains("") && 
+        i => searchData.TitleCheck ? i.Title.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Title.Contains("") &&
         searchData.AdressCheck ? i.Address.ToLower().Contains(searchData.Searchterm.ToLower()) : i.Address.Contains("") &&
         //todo: En bug när man söker på både adress och type så får man ibland inga resulat. "apartment" funkar för type men inte för type och adress.
         searchData.TypeCheck ? i.RealEstateType.ToLower().Contains(searchData.Searchterm.ToLower()) : i.RealEstateType.Contains("")
@@ -136,6 +136,8 @@ else
     public void PostSuccess(object sender, EventArgs arg)
     {
         Console.WriteLine("The comment is upploaded!");
+        this.StateHasChanged();
+        // todo: Check if page updates when comment was posted!
     }
 
     private async Task ViewMoreEstates() //TOdo: Den här ska bort
