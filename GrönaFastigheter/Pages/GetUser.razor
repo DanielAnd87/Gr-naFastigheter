@@ -85,16 +85,23 @@ else
     {
         user = await context.GetUserByUserName(Username);
         RestartRatingList();
-        int ratingIndex = 4 - ((int)Math.Ceiling(user.Rating) - 1);
-        if (ratingIndex < 0)
+        try
         {
-            ratingIndex = 0;
+            int ratingIndex = 4 - ((int)Math.Ceiling(user.Rating) - 1);
+            if (ratingIndex < 0)
+            {
+                ratingIndex = 0;
+            }
+            else if (ratingIndex > 4)
+            {
+                ratingIndex = 4;
+            }
+            ratingChecked[ratingIndex] = true;
         }
-        else if (ratingIndex > 4)
+        catch
         {
-            ratingIndex = 4;
+
         }
-        ratingChecked[ratingIndex] = true;
     }
 
     public async Task HandleValidSubmit()

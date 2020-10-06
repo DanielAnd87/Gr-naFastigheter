@@ -52,7 +52,7 @@ namespace GrönaFastigheter
         /// <param name="Page"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 0, int NumItems = 5)
         {
             if (Username == null)
             {
@@ -116,6 +116,10 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid json from /api/comments/id" + ex);
             }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
+            }
             return null;
         }
         /// <summary>
@@ -148,6 +152,10 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
+            }
             return null;
         }
         /// <summary>
@@ -156,7 +164,7 @@ namespace GrönaFastigheter
         /// <param name="NumItemsToSkip"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 2, int NumItems = 5)
+        public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 0, int NumItems = 100)
         {
             try
             {
@@ -174,6 +182,10 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException)
             {
                 Console.WriteLine("Invalid Json");
+            }
+            catch
+            {
+                Console.WriteLine("Service worker error");
             }
             return null;
         }
@@ -196,6 +208,10 @@ namespace GrönaFastigheter
             catch (System.Text.Json.JsonException)
             {
                 Console.WriteLine("Invalid Json");
+            }
+            catch
+            {
+                Console.WriteLine("servicec worker error");
             }
             return null;
         }
@@ -326,7 +342,7 @@ namespace GrönaFastigheter
                 Console.WriteLine("Invalid Json");
             }
             // todo: Find the exception used for no connection.
-            catch (Exception e)
+            catch (TaskCanceledException e)
             {
                 Console.WriteLine(e.Message);
                 CancellationToken cancellationToken = new CancellationToken();
