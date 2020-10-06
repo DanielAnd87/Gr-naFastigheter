@@ -7,15 +7,13 @@
     </div>
 
     <div @ref="UpploadsMenu">
-        
-            @foreach (var item in context.BackgroundDatas.Values)
-            {
-                <p>@item.Description</p>
-                <div class="loader"></div>
-            }
-        
 
-        <button>@hasBackgroundRequests</button>
+        @foreach (var item in context.BackgroundDatas.Values)
+        {
+            <p>@item.Description</p>
+        }
+        <div class="loader">je</div>
+
     </div>
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
