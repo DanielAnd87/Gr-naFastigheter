@@ -47,8 +47,6 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    console.log('fetching ' + (event.request.url));
-    testLogging(event);
     event.respondWith(
         //caches.match(event.request, { cacheName: version, ignoreVary:true })
         caches.match(event.request)
@@ -98,10 +96,6 @@ self.addEventListener('fetch', event => {
             }));
 });
 
-function testLogging(event) {
-    var urlString = event.request.url;
-    console.log(urlString.includes('localhost'));
-}
 
 function fetchAndUpdate(request) {
     return fetch(request)
