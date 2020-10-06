@@ -10,7 +10,9 @@
     <link href="css/custom-css/StarSheet.css" rel="stylesheet" />
     <link href="css/custom-css/CommentSheet.css" rel="stylesheet" />
     <link href="css/app.dev.css" rel="stylesheet" />
-    <script src="blazorSWRegister.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <script src="LinusServiceWorker.js"></script>
+    <meta name="theme-color" content="#052767" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <script src="font-awesome/js/all.min.js"></script>
 </head>
@@ -25,7 +27,19 @@
     </div>
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
-    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/LinusServiceWorker.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>

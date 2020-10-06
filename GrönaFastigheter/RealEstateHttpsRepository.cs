@@ -175,6 +175,11 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("EX E");
+                Console.WriteLine(e);
+            }
             return null;
         }
         public async Task<RealEstate> GetRealEstateById(int Id)
@@ -212,7 +217,7 @@ namespace GrönaFastigheter
                 HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-
+                Console.WriteLine(responseContent);
                 if (response.IsSuccessStatusCode)
                 {
                     RealEstate newEstate = JsonSerializer.Deserialize<RealEstate>(responseContent);
@@ -284,6 +289,7 @@ namespace GrönaFastigheter
             }
             catch (Exception e)
             {
+                Console.WriteLine("MESSAGE: \n");
                 Console.WriteLine(e.Message);
                 CancellationToken cancellationToken = new CancellationToken();
                 RepeatPOST(

@@ -4,87 +4,79 @@
 @inject NavigationManager NavManager
 
 <div class="page-container">
-    <h3>AddEstate</h3>
-    <p class="alert">@message</p>
-    <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit" class="card card-body bg-light mt-5">
-        <DataAnnotationsValidator />
-        <div class="form-group row">
-            <label for="title" class="col-md-2 col-form-label">Title:</label>
-            <div class="col-md-10">
-                <InputText id="title" class="form-control" @bind-Value="realEstate.Title" />
-                <ValidationMessage For="@(() => realEstate.Title)" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="description" class="col-md-2 col-form-label">Description:</label>
-            <div class="col-md-10">
-                <InputText id="description" class="form-control" @bind-Value="realEstate.Description" />
-                <ValidationMessage For="@(() => realEstate.Description)" />
-            </div>
-        </div>
-
-                <div class="form-group row">
-                    <label for="address" class="col-md-2 col-form-label">Address:</label>
-                    <div class="col-md-10">
+    <div class="inner-container">
+        <div class="box-container">
+            <EditForm Model="realEstate" OnValidSubmit="@HandleValidSubmit">
+                <h3>Ny annons</h3>
+                <hr>
+                <DataAnnotationsValidator />
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="title">Titel</label>
+                        <InputText id="title" class="form-control" @bind-Value="realEstate.Title" />
+                        <ValidationMessage For="@(() => realEstate.Title)" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="description">Beskrivning</label>
+                        <InputTextArea id="description" class="form-control" @bind-Value="realEstate.Description" />
+                        <ValidationMessage For="@(() => realEstate.Description)" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="address">Adress</label>
                         <InputText id="address" class="form-control" @bind-Value="realEstate.Address" />
                         <ValidationMessage For="@(() => realEstate.Address)" />
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="contact" class="col-md-2 col-form-label">Contact:</label>
-                    <div class="col-md-10">
-                        <InputText id="contact" class="form-control" @bind-Value="realEstate.Contact" />
-                        <ValidationMessage For="@(() => realEstate.Contact)" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="realEstateType">Bostadstyp</label>
+                        <InputSelect id="realEstateType" class="form-control" @bind-Value="realEstate.RealEstateType">
+                            <option selected disabled hidden>Välj typ...</option>
+                            <option value="Hus">Hus</option>
+                            <option value="Lägenhet">Lägenhet</option>
+                            <option value="Kontor">Kontor</option>
+                            <option value="Lagerlokal">Lagerlokal</option>
+                        </InputSelect>
+                        <ValidationMessage For="@(() => realEstate.RealEstateType)" />
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="constructionYear" class="col-md-2 col-form-label">Construction Year:</label>
-                    <div class="col-md-10">
+                    <div class="form-group col-md-6">
+                        <label for="constructionYear">Byggnadsår</label>
                         <InputNumber id="constructionYear" class="form-control" @bind-Value="realEstate.ConstructionYear" />
                         <ValidationMessage For="@(() => realEstate.ConstructionYear)" />
                     </div>
                 </div>
-
-                <div class="form-group row">
-                    <label for="sellingPrice" class="col-md-2 col-form-label">Selling Price:</label>
-                    <div class="col-md-10">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="sellingPrice">Försäljningspris</label>
                         <InputNumber id="sellingPrice" class="form-control" @bind-Value="realEstate.SellingPrice" />
                         <ValidationMessage For="@(() => realEstate.SellingPrice)" />
                     </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="rentingPrice" class="col-md-2 col-form-label">Renting Price:</label>
-                    <div class="col-md-10">
+                    <div class="form-group col-md-6">
+                        <label for="rentingPrice">Hyrespris</label>
                         <InputNumber id="rentingPrice" class="form-control" @bind-Value="realEstate.RentingPrice" />
                         <ValidationMessage For="@(() => realEstate.RentingPrice)" />
                     </div>
                 </div>
-
-        <div class="form-group row">
-            <label for="department" class="col-sm-2 col-form-label">
-                Typ av bostad
-            </label>
-
-            <div class="col-sm-10">
-                <InputSelect id="type" class="form-control" @bind-Value="realEstate.RealEstateType">
-                    <option value="">Välj typ...</option>
-                    <option value="Hus">Hus</option>
-                    <option value="Lägenhet">Lägenhet</option>
-                    <option value="Kontor">Kontor</option>
-                    <option value="Lagerlokal">Lagerlokal</option>
-
-                </InputSelect>
-                <ValidationMessage For="@(() => realEstate.RealEstateType)" />
-            </div>
-
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="contact">Kontaktperson</label>
+                        <InputText id="contact" class="form-control" @bind-Value="realEstate.Contact" />
+                        <ValidationMessage For="@(() => realEstate.Contact)" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md text-right">
+                        <input type="submit" class="btn btn-success" value="Lägg till" />
+                    </div>
+                </div>
+                <p class="message">@message</p>
+            </EditForm>
         </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-success">Add new</button>
-            </div>
-        </div>
-    </EditForm>
+    </div>
 </div>
 
 @code {
@@ -112,8 +104,7 @@
         }
         else
         {
-            message = "Tillagd!";
-            Console.WriteLine(response);
+            NavManager.NavigateTo("realestate/add/success");
         }
 
     }
