@@ -60,7 +60,7 @@ var urlsToCache = [
     '/_framework/blazor.boot.json',
     //Our additional files
     '/manifest.json',
-    '/LinusServiceWorker.js',
+    '/serviceworker.js',
     '/favicon.ico',
     '/icon-512.png',
     '/appsettings.json',
