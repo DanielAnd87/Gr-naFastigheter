@@ -15,19 +15,20 @@ namespace Entities.Models
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime CreatedOn { get; set; }
         [Required]
-        [Range(1600, 2020)]
+        [Range(1600, 2025)]
         public int ConstructionYear { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]
         public string RealEstateType { get; set; }
         [Required]
+        [StringLength(1000, MinimumLength = 10)]
         public string Description { get; set; }
         [Required]
 
         public int Id { get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(50, MinimumLength = 5)]
         public string Title { get; set; }
         [Required]
 

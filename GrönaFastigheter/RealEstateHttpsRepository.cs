@@ -1,27 +1,33 @@
 ﻿
 using Blazored.LocalStorage;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter
 {
+    /// <summary>
+    /// Class with methods to interact with the api. post gets etc.
+    /// </summary>
     public class RealEstateHttpsRepository : IRealEstateHttpsRepository
     {
 
         private readonly HttpClient http;
-
+        public Dictionary<int, BackgroundData> BackgroundDatas { get; set; } = new Dictionary<int, BackgroundData>();
         public ILocalStorageService LocalStorage { get; }
+        public NavigationManager NavManager { get; }
+        public EventHandler EventHandler { get; set; }
 
-        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage)
+        public RealEstateHttpsRepository(HttpClient http, ILocalStorageService localStorage, NavigationManager NavManager)
         {
             this.http = http;
+            this.NavManager = NavManager;
             LocalStorage = localStorage;
         }
 
@@ -39,7 +45,13 @@ namespace GrönaFastigheter
 
 
         }
-
+        /// <summary>
+        /// Recieves all comments with this username
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <param name="Page"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5)
         {
             if (Username == null)
@@ -67,11 +79,23 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine(message);
             }
+            catch
+            {
+                NavManager.NavigateTo("./Content/offline");
+
+            }
             return null;
         }
-
+        /// <summary>
+        /// All RealEstates with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="NumItemsToSkip"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int NumItemsToSkip = 2, int NumItems = 5)
         {
+            //todo: remove default values when it safe to do so.
             IEnumerable<Comment> comment;
             try
             {
@@ -94,7 +118,11 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Gets userdata with this username. Recievs different values if logged in (having correct token in default headervalues)
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <returns></returns>
         public async Task<User> GetUserByUserName(string Username)
         {
             if (Username == null)
@@ -122,7 +150,12 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Gets realestates
+        /// </summary>
+        /// <param name="NumItemsToSkip"></param>
+        /// <param name="NumItems"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<RealEstate>> GetRealEstates(int NumItemsToSkip = 2, int NumItems = 5)
         {
             try
@@ -166,7 +199,11 @@ namespace GrönaFastigheter
             }
             return null;
         }
-
+        /// <summary>
+        /// Sends newly created RealEstate to backen. Repeats request if no connection
+        /// </summary>
+        /// <param name="realEstate"></param>
+        /// <returns></returns>
         public async Task<RealEstate> PostNewRealEstate(RealEstate realEstate) //Kan behöva optimering men funkar, status code 200
         {
             try
@@ -195,14 +232,31 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch
+            {
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("api/Realestates", realEstate), // Request that will be sent offline
+                    5,                                                         // time intervall between tries
+                    realEstate.Address,                                        // Description to show for user
+                    cancellationToken);                                        // A way to instantly abort this operation 
+            }
             return null;
         }
+
+        /// <summary>
+        /// Sends newly created comment to backen. Repeats request if no connection
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public async Task<Comment> PostComment(Comment comment)
         {
+
+
             Comment newComment = null;
             try
             {
-                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); ;
+                HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -211,7 +265,10 @@ namespace GrönaFastigheter
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);
                     return newComment;
                 }
-                return newComment;
+                else
+                {
+                    return new Comment { Content = "Servererror", RealEstateId = -1, UserName = "Error" };
+                }
             }
             catch (HttpRequestException)
             {
@@ -225,16 +282,111 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }), // Request that will be sent offline
+                    5,                                                                                                                      // time intervall between tries
+                    comment.Content,                                                                                                        // Description to show for user
+                    cancellationToken);                                                                                                     // A way to instantly abort this operation 
+
+
+            }
             return newComment;
         }
-        public void PostRating(int rating, int userId) //NYI
+        /// <summary>
+        /// Posts a rating to a user through the api. Repeats request if no connection.
+        /// </summary>
+        /// <param name="rating">the rating value</param>
+        /// <param name="userId">userId</param>
+        /// <returns>true if successfull, false if not.</returns>
+        public async Task<bool> PostRating(int rating, int userId)
         {
-            rating += 1;
-            var result = http.PostAsJsonAsync("/api/Users/Rate", rating);
-            
+            var requestBody = new { UserId = userId, Value = rating };
+            try
+            {
+                HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
+                if (result.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("An error Occured");
+            }
+            catch (NotSupportedException)
+            {
+                Console.WriteLine("Content type is not supported");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                Console.WriteLine("Invalid Json");
+            }
+            // todo: Find the exception used for no connection.
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                CancellationToken cancellationToken = new CancellationToken();
+                RepeatPOST(
+                    () => http.PostAsJsonAsync("/api/Users/Rate", requestBody), // Request that will be sent offline
+                    5,                                                          // time intervall between tries
+                    "Rating of: " + rating,                                     // Description to show for user
+                    cancellationToken);                                         // A way to instantly abort this operation 
+
+
+            }
+            return false;
         }
 
+        /// <summary>
+        /// Runs asyncronous until request is completed or canceled using token.
+        /// </summary>
+        /// <param name="action">A func delegate that returns a HttpResponseMessage Task</HttpResponseMessage></param>
+        /// <param name="seconds">Interval between connection tries</param>
+        /// <param name="description">A descritption for user to check progress</param>
+        /// <param name="token">A token to instantly end operation</param>
+        private void RepeatPOST(Func<Task<HttpResponseMessage>> action, int seconds, string description, CancellationToken token)
+        {
+            if (action == null)
+            {
+                return;
+            }
 
+            Task.Run(async () =>
+            {
+                int id = -1;
+                foreach (int key in BackgroundDatas.Keys)
+                {
+                    if (key > id)
+                    {
+                        id = key;
+                    }
+                }
+                id++;
+                int length = description.Length >= 20 ? 20 : description.Length;
+                BackgroundDatas.Add(id, new BackgroundData(description.Substring(0, length), true));
 
+                while (BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await action();
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        BackgroundDatas[id].IsRunning = !response.IsSuccessStatusCode;
+                        Console.WriteLine(response.StatusCode);
+                        EventHandler.Invoke(this, new EventArgs());
+                        BackgroundDatas.Remove(id);
+                        break;
+                    }
+                    catch
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(seconds), token);
+                    }
+                }
+            }, token);
+        }
     }
 }

@@ -1,8 +1,13 @@
 ﻿@inject NavigationManager NavManager
+@inject IRealEstateHttpsRepository context
 
 <div class="header">
     <div class="logo">
         <a href="/"><img src="/img/logo-white.png" alt="Gröna Fastigheter" /></a>
+    </div>
+
+    <div @ref="UpploadsMenu">
+        <button>@hasBackgroundRequests</button>
     </div>
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
@@ -16,16 +21,30 @@
             </Authorized>
             <NotAuthorized>
                 <NavLink href="login" class="link">Logga in</NavLink>
-                <NavLink href="login" class="link">Skapa konto</NavLink>
+                <NavLink href="registration" class="link">Skapa konto</NavLink>
             </NotAuthorized>
         </AuthorizeView>
     </div>
 </div>
 @code {
+    private ElementReference UpploadsMenu;
     private string UserName { get; set; }
+    private bool hasBackgroundRequests { get; set; }
 
     private void RedirectToUserPage(string userName)
     {
         NavManager.NavigateTo("/getuser/" + userName);
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context.EventHandler += OnOfflineRequestsDone;
+    }
+
+    public void OnOfflineRequestsDone(object sender, EventArgs arg)
+    {
+        hasBackgroundRequests = true;
+        this.StateHasChanged();
+    }
+
 }

@@ -23,6 +23,11 @@ namespace GrönaFastigheter.Features
             return claims;
         }
 
+        /// <summary>
+        /// Jwt is obscured for humans and therefore needs to be parsed before used.
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <returns></returns>
         private static byte[] ParseBase64WithoutPadding(string base64)
         {
             switch (base64.Length % 4)

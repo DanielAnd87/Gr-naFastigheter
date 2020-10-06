@@ -3,6 +3,7 @@
 @inject IRealEstateHttpsRepository context
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<p class="alert-danger">@message</p>
 
 @if (user == null)
 {
@@ -10,44 +11,61 @@
 }
 else
 {
-    <div class="user-container">
-        <h2>@user.UserName</h2>
-        @if(user.AvatarImageUrl != null) { 
-        <img src="@user.AvatarImageUrl" class="img-responsive img-rounded text-center" alt="Alternate Text" />
-        }
-        else
-        {
-            <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png" class="img-responsive img-rounded h-25 w-25 m-auto" alt="Profile Picture"/>
-        }
-        <br />
-        <div class="stars">
-            <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
-      
-                    <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
-                    <label class="star star-5" for="star-5"></label>
-                    <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
-                    <label class="star star-4" for="star-4"></label>
-                    <input class="star star-3" value="3" id="star-3" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[2]" />
-                    <label class="star star-3" for="star-3"></label>
-                    <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[3]" />
-                    <label class="star star-2" for="star-2"></label>
-                    <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
-                    <label class="star star-1" for="star-1"></label>
-      
-                    <button type="submit" class="btn btn-success">Sätt Betyg</button>
-     
-            </EditForm>
+    <div class="user-container text-center">
+        <div class="profile-card">
+            <h2>@user.UserName</h2>
+            @if (user.AvatarImageUrl != null)
+            {
+                <img src="@user.AvatarImageUrl" class="img-responsive img-rounded text-center" alt="Alternate Text" />
+            }
+            else
+            {
+                <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png" class="img-responsive img-rounded h-25 w-25 m-auto" alt="Profile Picture" />
+            }
+            <br />
+            
+                    <div class="stars">
+                        <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
+
+                            <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
+                            <label class="star star-5" for="star-5"></label>
+                            <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
+                            <label class="star star-4" for="star-4"></label>
+                            <input class="star star-3" value="3" id="star-3" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[2]" />
+                            <label class="star star-3" for="star-3"></label>
+                            <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[3]" />
+                            <label class="star star-2" for="star-2"></label>
+                            <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
+                            <label class="star star-1" for="star-1"></label>
+
+                            <AuthorizeView>
+                                <Authorized Context="Auth">
+                                    <button type="submit" class="btn btn-success">Sätt Betyg</button>
+                                </Authorized>
+                                <NotAuthorized Context="Auth">
+                                    <small>Logga in för att sätta betyg.</small>
+                                </NotAuthorized>
+                            </AuthorizeView>
+
+                        </EditForm>
+                    </div>
+                
         </div>
-        <p>Statistik</p>
+        <h5 class="mt-5">Statistik</h5>
+        <div class="table-responsive-md">
+            <p class="mb-0">Bostäder: @user.RealEstates</p>
+            <p id="view-comments" @onclick="ToggleComments">Kommentarer: @user.Comments</p>
+        </div>
         <div class="text-left">
-            <p> Bostäder: @user.RealEstates</p>
-            <p> Kommentarer: @user.Comments</p>
+            <div class="@ToggleCommentsCssClass">
+                <GetCommentByUser Username="@user.UserName"></GetCommentByUser>
+            </div>
         </div>
-        <GetCommentByUser Username="@user.UserName"></GetCommentByUser>
     </div>
 }
 
 @code {
+    private string message;
     [Parameter]
     public string Username { get; set; }
     private User user;
@@ -79,9 +97,17 @@ else
         ratingChecked[ratingIndex] = true;
     }
 
-    public void HandleValidSubmit()
+    public async Task HandleValidSubmit()
     {
-        context.PostRating(Rating, user.UserId);
+        var response = await context.PostRating(Rating, user.UserId);
+        if (response)
+        {
+            message = "Rating uppdaterad";
+        }
+        else
+        {
+            message = "Kunde inte skicka in rating";
+        }
     }
     public void UpdateSelection(ChangeEventArgs args)
     {
@@ -95,5 +121,13 @@ else
         {
             ratingChecked[i] = false;
         }
+    }
+    private bool collapseComments = true;
+
+    private string ToggleCommentsCssClass => collapseComments ? "collapse" : null;
+
+    private void ToggleComments()
+    {
+        collapseComments = !collapseComments;
     }
 }

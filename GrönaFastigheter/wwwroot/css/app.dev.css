@@ -342,10 +342,18 @@ h3, h4, h5, h6 {
     background-color: green;
     color: white;
 }
-
+.profile-card {
+    border: 1px solid #ddd;
+    padding: 2em;
+    border-radius: 5px;
+    background-color: rgb(215, 255, 179);
+    display: table;
+    margin: 3em auto;
+}
 .user-container {
     padding: 2em;
     display: flex;
+    width:30%;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #fff;
@@ -359,3 +367,8 @@ h3, h4, h5, h6 {
         -moz-box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
         box-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
 }
+#view-comments:hover {
+    cursor: pointer;
+    text-shadow: 0px 15px 73px -50px rgba(0,0,0,0.75);
+}
+

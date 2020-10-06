@@ -1,5 +1,4 @@
 ﻿@page "/login"
-<h3>Login</h3>
 
 @if (ShowAuthError)
 {
@@ -8,30 +7,35 @@
     </div>
 }
 
-<EditForm Model="_userForAuthentication" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-5">
-    <DataAnnotationsValidator />
-    <div class="form-group row">
-        <label for="username" class="col-md-2 col-form-label">Username:</label>
-        <div class="col-md-10">
-            <InputText id="username" class="form-control" @bind-Value="_userForAuthentication.Username" />
+<div class="container card card-body my-5" style="background-color: #fff;">
+    <EditForm Model="_userForAuthentication" OnValidSubmit="ExecuteLogin">
+        <DataAnnotationsValidator />
+        <h3 class="h3 text-center my-2">Logga in</h3>
+
+        <div class="form-group">
+            <label for="username">Användarnamn</label>
+            <InputText id="username" class="form-control border border-success" placeholder="Användarnamn" @bind-Value="_userForAuthentication.Username" />
             <ValidationMessage For="@(() => _userForAuthentication.Username)" />
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="password" class="col-md-2 col-form-label">Password:</label>
-        <div class="col-md-10">
-            <InputText type="password" id="password" class="form-control" @bind-Value="_userForAuthentication.Password" />
+        <div class="form-group">
+            <label for="password">Lösenord</label>
+            <InputText type="password" id="password" class="form-control border border-success" placeholder="Lösenord" @bind-Value="_userForAuthentication.Password" />
             <ValidationMessage For="@(() => _userForAuthentication.Password)" />
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button type="submit" class="btn btn-success">Login</button>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Logga in</button>
         </div>
+    </EditForm>
+
+    <div class="text-center">
+        <p class="mt-2 mb-0">Har du inget konto?</p>
+        <NavLink class="nav-link" href="/registration">
+            <span aria-hidden="true">Skapa nytt konto</span>
+        </NavLink>
     </div>
-</EditForm>
+</div>
 
 @code {
 
