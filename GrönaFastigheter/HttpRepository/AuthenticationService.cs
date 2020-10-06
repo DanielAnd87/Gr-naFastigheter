@@ -17,19 +17,28 @@ namespace GrönaFastigheter.HttpRepository
         private readonly HttpClient _client;
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly ILocalStorageService _localStorage;
-
+        /// <summary>
+        /// Automaticaly injects project instances of all parameters.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="authStateProvider"></param>
+        /// <param name="localStorage"></param>
         public AuthenticationService(HttpClient client, AuthenticationStateProvider authStateProvider, ILocalStorageService localStorage)
         {
             _client = client;
             _authStateProvider = authStateProvider;
             _localStorage = localStorage;
         }
-
+        /// <summary>
+        /// Runs when user register and comfirm. Returns if the operations worked in the backend. User HAS to be informed if operation failed!
+        /// </summary>
+        /// <param name="userForRegistration"></param>
+        /// <returns></returns>
         public async Task<bool> RegisterUser(UserForRegistrationDto userForRegistration)
         {
             string content = userForRegistration.ToString();
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
-
+            // todo: Add try/catch
             HttpResponseMessage httpResponse = await _client.PostAsync("/api/account/register", bodyContent);
 
             if (httpResponse.IsSuccessStatusCode)
@@ -39,7 +48,11 @@ namespace GrönaFastigheter.HttpRepository
 
             return false;
         }
-
+        /// <summary>
+        /// Sends password and username and get a jwt token in the result package.
+        /// </summary>
+        /// <param name="userForAuthentication"></param>
+        /// <returns></returns>
         public async Task<AuthResponseDto> Login(UserForAuthenticationDto userForAuthentication)
         {
             string content = userForAuthentication.ToString();
@@ -61,7 +74,10 @@ namespace GrönaFastigheter.HttpRepository
 
             return result;
         }
-
+        /// <summary>
+        /// Removes user jwt token from cache and changes the authproviders status.
+        /// </summary>
+        /// <returns></returns>
         public async Task Logout()
         {
             await _localStorage.RemoveItemAsync("authToken");

@@ -18,6 +18,10 @@ namespace GrönaFastigheter.AuthProviders
             _httpClient = httpClient;
             _localStorage = localStorage;
         }
+        /// <summary>
+        /// Whenever <Authorezed> is used in razor files this method will check if logged in or not.
+        /// </summary>
+        /// <returns></returns>
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -35,7 +39,9 @@ namespace GrönaFastigheter.AuthProviders
             Task<AuthenticationState> authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);
         }
-
+        /// <summary>
+        /// Changes the authstate to anonomous. User can no longer see pages market with <Authorized>
+        /// </summary>
         public void NotifyUserLogout()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
