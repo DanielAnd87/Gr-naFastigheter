@@ -78,7 +78,10 @@ else
         try
         {
             Comment postedComment = await context.PostComment(newComment);
-            UserComments.Add(postedComment);
+            if(postedComment != null)
+            {
+                UserComments.Add(postedComment);
+            }
         }
         catch
         {
