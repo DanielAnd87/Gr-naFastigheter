@@ -386,6 +386,7 @@ namespace GrönaFastigheter
                 int length = description.Length >= 20 ? 20 : description.Length;
                 BackgroundDatas.Add(id, new BackgroundData(description.Substring(0, length), true));
 
+                EventHandler.Invoke(this, new EventArgs());
                 while (BackgroundDatas[id].IsRunning && !token.IsCancellationRequested)
                 {
                     try
@@ -394,8 +395,8 @@ namespace GrönaFastigheter
                         string responseContent = await response.Content.ReadAsStringAsync();
                         BackgroundDatas[id].IsRunning = !response.IsSuccessStatusCode;
                         Console.WriteLine(response.StatusCode);
-                        EventHandler.Invoke(this, new EventArgs());
                         BackgroundDatas.Remove(id);
+                        EventHandler.Invoke(this, new EventArgs());
                         break;
                     }
                     catch
