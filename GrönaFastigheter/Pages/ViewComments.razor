@@ -75,16 +75,28 @@ else
     private async Task AddComment()
     {
         newComment.RealEstateId = CurrentRealEstateID;
-        Comment postedComment = await context.PostComment(newComment);
-        UserComments.Add(postedComment);
+        try
+        {
+            Comment postedComment = await context.PostComment(newComment);
+            UserComments.Add(postedComment);
+        }
+        catch
+        {
 
+        }
     }
     private async Task ViewMoreComments()
     {
         int commentsToSkip = UserComments.Count;
-        var moreComments = await context.GetCommentsByRealEstateId(CurrentRealEstateID, commentsToSkip, 5);
-        Console.WriteLine(commentsToSkip);
-        UserComments.AddRange(moreComments);
+        try
+        {
+            var moreComments = await context.GetCommentsByRealEstateId(CurrentRealEstateID, commentsToSkip, 5);
+            UserComments.AddRange(moreComments);
+        }
+        catch
+        {
+
+        }
     }
 }
 

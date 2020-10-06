@@ -121,8 +121,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
-        realEstates = response.ToList();
+        try
+        {
+            var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
+            realEstates = response.ToList();
+        }
+        catch
+        {
+
+        }
         context.EventHandler += PostSuccess;
     }
 
@@ -131,11 +138,19 @@ else
         Console.WriteLine("The comment is upploaded!");
     }
 
-    private async Task ViewMoreEstates()
+    private async Task ViewMoreEstates() //TOdo: Den här ska bort
     {
         int estatesToSkip = realEstates.Count;
-        IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
-        realEstates.AddRange(moreEstates);
+        try
+        {
+            IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
+            realEstates.AddRange(moreEstates);
+        }
+        catch
+        {
+
+        }
+
     }
     private void ChangePage(bool nextPage)
     {

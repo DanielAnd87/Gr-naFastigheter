@@ -80,10 +80,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        realEstate = await context.GetRealEstateById(Id);
-        if (realEstate.Comments != null)
+        try
         {
-            UserComments = realEstate.Comments.Take(5).ToList();
+            var response = await context.GetRealEstateById(Id);
+            realEstate = response;
+            if (realEstate.Comments != null)
+            {
+                UserComments = realEstate.Comments.Take(5).ToList();
+            }
+        }
+        catch
+        {
+
         }
     }
     private void RedirectToUserPage(string userName)
