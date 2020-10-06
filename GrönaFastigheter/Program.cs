@@ -22,7 +22,7 @@ namespace GrönaFastigheter
             builder.RootComponents.Add<App>("app");
             builder.Services.AddScoped(sp =>
             {
-                Uri uri = new Uri("https://mockapi-gronafastigheter.herokuapp.com");
+                Uri uri = new Uri("https://blocketliteresourcegroup.azurewebsites.net");
                 return new HttpClient { BaseAddress = uri };
             });
            

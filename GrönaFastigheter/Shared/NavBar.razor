@@ -5,15 +5,18 @@
     <div class="logo">
         <a href="/"><img src="/img/logo-white.png" alt="Gröna Fastigheter" /></a>
     </div>
-
-    <div @ref="UpploadsMenu">
+    <div>
 
         @foreach (var item in context.BackgroundDatas.Values)
         {
-            <p>@item.Description</p>
-        }
-        <div class="loader">je</div>
+            <div @ref="UpploadsMenu" class="d-flex">
 
+                <div>
+                    <p>@item.Description</p>
+                </div>
+            </div>
+            <div class="loader"></div>
+        }
     </div>
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>
