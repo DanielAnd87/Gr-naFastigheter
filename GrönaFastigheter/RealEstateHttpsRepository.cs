@@ -183,9 +183,10 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Invalid Json");
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("Service worker error");
+                Console.WriteLine("EX E");
+                Console.WriteLine(e);
             }
             return null;
         }
@@ -228,7 +229,7 @@ namespace GrönaFastigheter
                 HttpResponseMessage response = await http.PostAsJsonAsync("api/Realestates", realEstate);
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-
+                Console.WriteLine(responseContent);
                 if (response.IsSuccessStatusCode)
                 {
                     RealEstate newEstate = JsonSerializer.Deserialize<RealEstate>(responseContent);
@@ -301,6 +302,7 @@ namespace GrönaFastigheter
             }
             catch (Exception e)
             {
+                Console.WriteLine("MESSAGE: \n");
                 Console.WriteLine(e.Message);
                 CancellationToken cancellationToken = new CancellationToken();
                 RepeatPOST(

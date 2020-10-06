@@ -121,16 +121,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
+        var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
+        if(response != null)
             realEstates = response.ToList();
-        }
-        catch
-        {
 
-        }
-        context.EventHandler += PostSuccess;
+        context.EventHandler += PostSuccess; //todo: Varför är denna här?
     }
 
     public void PostSuccess(object sender, EventArgs arg)
