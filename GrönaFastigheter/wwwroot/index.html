@@ -45,7 +45,21 @@
             await new Promise(r => setTimeout(r, 2000));
             const easteregg = document.querySelector('#spin')
             const app = document.querySelector('app')
-            easteregg.addEventListener('click', () => { app.classList.toggle('easteregg') })
+            var audio = new Audio('./js/easteraudio.mp3');
+            audio.loop = true;
+            var isPlaying = false;
+
+            easteregg.addEventListener('click', () => {
+                app.classList.toggle('easteregg')
+                if (isPlaying) {
+                    audio.pause()
+                    audio.currentTime = 0;
+                    isPlaying = false
+                } else {
+                    audio.play()
+                    isPlaying = true
+                }
+            })
         });
     </script>
 </body>
