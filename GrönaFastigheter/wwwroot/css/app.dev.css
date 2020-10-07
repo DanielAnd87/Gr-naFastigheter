@@ -213,19 +213,17 @@ h3, h4, h5, h6 {
 }
 
 .header {
-    display: flex;
-    padding: 1em 25em;
-    background-color: green;
+    background-color: green !important;
     color: white;
 }
 
-    .header > div {
-        margin: auto;
-        width: 50%;
-    }
+.header > div {
+    margin: auto;
+    width: 50%;
+}
 
-.logo img {
-    width: 10em;
+.logo {
+    width: 8em;
 }
 
 .navmenu {
@@ -236,14 +234,17 @@ h3, h4, h5, h6 {
     text-align: right;
 }
 
-.link {
-    color: white;
-    margin-left: 1em;
+.nav-link {
+    color: white!important;
 }
 
-    .link:hover {
-        color: white;
-    }
+.nav-link:hover {
+    color: white!important;
+}
+
+.active {
+    color: white!important;
+}
 
 /*--- HERO IMG START ---*/
 .hero-img {
@@ -251,6 +252,11 @@ h3, h4, h5, h6 {
     min-height: 22em;
     background-image: url("https://cdn.maklarhuset.se/web/bilder/innehall/2017/fri-vardering.jpg");
     background-position: 0 -20em;
+}
+
+.hero-img-overlay {
+    min-height: inherit;
+    background-color: rgba(0, 61, 0, 0.25)
 }
 
 /*--- HERO IMG END ---*/
@@ -265,9 +271,8 @@ h3, h4, h5, h6 {
 .estates-listing {
 }
 
-.search-container {
-    padding: 10em 45em;
-    background-color: rgba(0, 61, 0, 0.25)
+.search-container input {
+    width: 20em;
 }
 
 .search-container h2 {

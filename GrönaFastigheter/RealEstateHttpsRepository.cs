@@ -178,7 +178,7 @@ namespace GrönaFastigheter
             {
                 Console.WriteLine("Content type is not supported");
             }
-            catch (System.Text.Json.JsonException)
+            catch (System.Text.Json.JsonException e)
             {
                 Console.WriteLine("Invalid Json");
             }
