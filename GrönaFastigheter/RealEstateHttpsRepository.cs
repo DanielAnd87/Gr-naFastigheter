@@ -52,7 +52,7 @@ namespace GrönaFastigheter
         /// <param name="Page"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 0, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page, int NumItems)
         {
             if (Username == null)
             {

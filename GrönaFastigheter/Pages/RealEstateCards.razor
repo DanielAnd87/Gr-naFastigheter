@@ -55,7 +55,6 @@ else
         <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
         <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
     </div>
-    <div class="btn" @onclick="@(e => ViewMoreEstates())">Visa fler annonser...</div>
 }
 
 @code {
@@ -116,20 +115,18 @@ else
         // todo: Check if page updates when comment was posted!
     }
 
-    private async Task ViewMoreEstates() //TOdo: Den här ska bort
-    {
-        int estatesToSkip = realEstates.Count;
-        try
-        {
-            IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
-            realEstates.AddRange(moreEstates);
-        }
-        catch
-        {
-
-        }
-
-    }
+    //private async Task ViewMoreEstates() //TOdo: Den här ska bort
+    //{
+    //    int estatesToSkip = realEstates.Count;
+    //    try
+    //    {
+    //        IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
+    //        realEstates.AddRange(moreEstates);
+    //    }
+    //    catch
+    //    {
+    //    }
+    //}
     private void ChangePage(bool nextPage)
     {
         if (nextPage)
