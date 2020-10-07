@@ -80,7 +80,8 @@ else
             Comment postedComment = await context.PostComment(newComment);
             if(postedComment != null)
             {
-                UserComments.Add(postedComment);
+                var response = await context.GetCommentsByRealEstateId(CurrentRealEstateID, 0 , 5);
+                UserComments = response.ToList();
             }
         }
         catch
