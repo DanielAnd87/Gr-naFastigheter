@@ -324,12 +324,11 @@ namespace GrönaFastigheter
         /// <param name="rating">the rating value</param>
         /// <param name="userId">userId</param>
         /// <returns>true if successfull, false if not.</returns>
-        public async Task<bool> PostRating(int rating, int userId)
+        public async Task<bool> PostRating(int rating, string userId)
         {
             var requestBody = new { UserId = userId.ToString(), Value = rating };
             try
             {
-                //HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
                 HttpResponseMessage result = await http.PutAsJsonAsync("/api/Users/Rate", requestBody);
                 if (result.IsSuccessStatusCode)
                 {

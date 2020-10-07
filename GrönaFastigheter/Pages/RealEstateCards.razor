@@ -26,7 +26,7 @@ else
         <div class="card-container">
             <div class="estate-card" @onclick="@(e => RedirectToEstate(estate.Id))">
                 <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&w=1000&q=80" alt="Bilden kunde inte visas" />
+                    <img src="@estate.ImageUrl" alt="Bilden kunde inte visas" />
                 </div>
                 <div class="card-data">
                     <div>
@@ -105,6 +105,11 @@ else
             {
                 Console.WriteLine(item.Title);
                 Console.WriteLine(item.Id);
+                if (item.ImageUrl == null)
+                {
+                    item.ImageUrl = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&w=1000&q=80";
+                }
+
             }
         }
 

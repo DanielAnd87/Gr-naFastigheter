@@ -32,20 +32,15 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    @*<div class="form-group col-md-6">
-            <label for="realEstateType">Bostadstyp</label>
-            <InputSelect id="realEstateType" class="form-control" @bind-Value="realEstate.Type">
-
-                <option value="@EstateTypeEnum.Hus">Hus</option>
-                <option value="@EstateTypeEnum.Lägenhet">Lägenhet</option>
-                <option value="@EstateTypeEnum.Kontor">Kontor</option>
-                <option value="@EstateTypeEnum.Lagerhus">Lagerlokal</option>
-            </InputSelect>
-            <ValidationMessage For="@(() => realEstate.Type)" />
-        </div>*@
                     <div class="form-group col-md-6">
-                        <label for="constructionYear">type</label>
-                        <InputNumber id="constructionYear" class="form-control" @bind-Value="realEstate.Type" />
+                        <label for="realEstateType">Bostadstyp</label>
+                        <InputSelectNumber id="realEstateType" class="form-control" @bind-Value="realEstate.Type">
+
+                            <option value="1">Hus</option>
+                            <option value="2">Lägenhet</option>
+                            <option value="3">Kontor</option>
+                            <option value="4">Lagerlokal</option>
+                        </InputSelectNumber>
                         <ValidationMessage For="@(() => realEstate.Type)" />
                     </div>
                     <div class="form-group col-md-6">
@@ -71,6 +66,13 @@
                         <label for="contact">Kontaktperson</label>
                         <InputText id="contact" class="form-control" @bind-Value="realEstate.Contact" />
                         <ValidationMessage For="@(() => realEstate.Contact)" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md">
+                        <label for="contact">Bild url</label>
+                        <InputText id="ImageUrl" class="form-control" @bind-Value="realEstate.ImageUrl" />
+                        <ValidationMessage For="@(() => realEstate.ImageUrl)" />
                     </div>
                 </div>
                 <div class="form-row">

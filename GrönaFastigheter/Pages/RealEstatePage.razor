@@ -13,16 +13,20 @@
 else
 {
     @*  Göra image länken dynamisk när det fungerar *@
-    <div class="jumbotron jumbotron-fluid" style="height: 720px;
-        background-image: url('https://photo.barnes-international.com/annonces/bms/38/xl/29-8z0zc-hutton-9.jpg');
+    
+<div class="jumbotron jumbotron-fluid" style="height: 720px;
+
+        /*background-image: url('https://photo.barnes-international.com/annonces/bms/38/xl/29-8z0zc-hutton-9.jpg');*/
+        background-image: url('@realEstate.ImageUrl');
+
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
     ">
-        <div class="text-center position-relative" style="top: 580px;">
-            <a class="btn btn-primary btn-lg text-white">Alla bilder</a>
-        </div>
+    <div class="text-center position-relative" style="top: 580px;">
+        <a class="btn btn-primary btn-lg text-white">Alla bilder</a>
     </div>
+</div>
 
     <div class="container w-75 mb-5" style="background-color:#f0eeec;">
         <div class="text-center">
@@ -84,6 +88,11 @@ else
         {
             var response = await context.GetRealEstateById(Id);
             realEstate = response;
+            if (realEstate.ImageUrl == null)
+            {
+                realEstate.ImageUrl = "https://photo.barnes-international.com/annonces/bms/38/xl/29-8z0zc-hutton-9.jpg";
+            }
+            
             if (realEstate.Comments != null)
             {
                 UserComments = realEstate.Comments.Take(5).ToList();

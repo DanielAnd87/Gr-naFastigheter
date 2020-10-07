@@ -106,11 +106,12 @@ else
 
     public async Task HandleValidSubmit()
     {
-        var response = await context.PostRating(Rating, user.UserId);
+
+        var response = await context.PostRating(5 - Rating, user.UserId);
         if (response)
         {
             message = "Rating uppdaterad";
-        }
+        }  
         else
         {
             message = "Kunde inte skicka in rating";
