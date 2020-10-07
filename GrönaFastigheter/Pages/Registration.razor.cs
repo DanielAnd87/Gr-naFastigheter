@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GrönaFastigheter.Pages
@@ -17,20 +18,25 @@ namespace GrönaFastigheter.Pages
         [Inject]
         public NavigationManager NavigationManager { get; set; }
         public bool ShowRegistrationErros { get; set; }
-        public IEnumerable<string> Errors { get; set; }
+        public string ErrorMessage { get; set; }
 
         public async Task Register()
         {
             ShowRegistrationErros = false;
 
             var result = await AuthenticationService.RegisterUser(_userForRegistration);
-            if(!result)
+            Console.WriteLine(result.IsSuccessStatusCode);
+            if(!result.IsSuccessStatusCode)
             {
-                //Errors = result;
+                var response = await result.Content.ReadAsStringAsync();
+                RegistrationResponseDto registrationResponseDto = JsonSerializer.Deserialize<RegistrationResponseDto>(response, new JsonSerializerOptions {PropertyNameCaseInsensitive = true });
+                ErrorMessage = registrationResponseDto.Message;
+
                 ShowRegistrationErros = true;
             }
             else
             {
+                Console.WriteLine("De som gör de");
                 NavigationManager.NavigateTo("/");
             }
         }

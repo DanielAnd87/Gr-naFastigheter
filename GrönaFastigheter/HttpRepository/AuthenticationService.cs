@@ -34,20 +34,20 @@ namespace GrönaFastigheter.HttpRepository
         /// </summary>
         /// <param name="userForRegistration"></param>
         /// <returns></returns>
-        public async Task<bool> RegisterUser(UserForRegistrationDto userForRegistration)
+        public async Task<HttpResponseMessage> RegisterUser(UserForRegistrationDto userForRegistration)
         {
             string content = userForRegistration.ToString();
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
             Console.WriteLine(await bodyContent.ReadAsStringAsync());
-            
-            HttpResponseMessage httpResponse = await _client.PostAsync("/api/account/register", bodyContent);
-
-            if (httpResponse.IsSuccessStatusCode)
+            try
             {
-                return true;
+                HttpResponseMessage httpResponse = await _client.PostAsync("/api/account/register", bodyContent);
+                return httpResponse;
             }
-
-            return false;
+            catch
+            {
+                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.BadGateway };
+            }  
         }
         /// <summary>
         /// Sends password and username and get a jwt token in the result package.
