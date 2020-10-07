@@ -62,7 +62,8 @@ namespace GrönaFastigheter.HttpRepository
             HttpResponseMessage httpResponse = await _client.PostAsync("/token", bodyContent);
             string responseContent = await httpResponse.Content.ReadAsStringAsync();
             AuthResponseDto result = JsonSerializer.Deserialize<AuthResponseDto>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
+            Console.WriteLine("Access granted is: " + httpResponse.IsSuccessStatusCode);
+            result.Status =(int) httpResponse.StatusCode;
             if (!httpResponse.IsSuccessStatusCode)
             {
                 result.Message = httpResponse.ReasonPhrase;
