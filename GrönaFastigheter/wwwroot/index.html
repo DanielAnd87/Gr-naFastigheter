@@ -22,7 +22,6 @@
 
 <body>
     <app></app>
-
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
@@ -42,6 +41,12 @@
                 });
             });
         }
+        $(document).ready(async function () {
+            await new Promise(r => setTimeout(r, 2000));
+            const easteregg = document.querySelector('#spin')
+            const app = document.querySelector('app')
+            easteregg.addEventListener('click', () => { app.classList.toggle('easteregg') })
+        });
     </script>
 </body>
 
