@@ -1,11 +1,5 @@
 ﻿@inject NavigationManager NavManager
 @inject IRealEstateHttpsRepository context
-@*<div class="header">
-    <div class="logo">
-        <a href="/"><img src="/img/logo-white.png" alt="Gröna Fastigheter" /></a>
-    </div>
-    <div>*@
-
 @*@foreach (var item in context.BackgroundDatas.Values)
         {
             <div @ref="UpploadsMenu" class="d-flex upploads">
@@ -53,6 +47,7 @@
                         </NotAuthorized>
                     </AuthorizeView>
                 </li>
+                @*En loop här för väntande posts*@
             </ul>
         </div>
     </nav>
