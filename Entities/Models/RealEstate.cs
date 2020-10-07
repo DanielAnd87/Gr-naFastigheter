@@ -35,7 +35,6 @@ namespace Entities.Models
         [Required(ErrorMessage ="Skriv en titel.")]
         [StringLength(50, MinimumLength = 5)]
         public string Title { get; set; }
-        [Required(ErrorMessage ="Välj pris.")]
         public int? SellingPrice { get; set; }
         public int? RentingPrice { get; set; }
         public bool CanBeSold { get; set; }

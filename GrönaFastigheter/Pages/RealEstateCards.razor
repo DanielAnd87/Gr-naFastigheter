@@ -18,9 +18,13 @@ else
         {
             typeOfSale = "Säljes";
         }
-        else
+        if(estate.CanBeRented)
         {
             typeOfSale = "Uthyres";
+        }
+        @if(estate.CanBeSold && estate.CanBeRented)
+        {
+            typeOfSale = "Säljes/Uthyres";
         }
 
         <div class="card-container">
