@@ -9,7 +9,7 @@
 
         @foreach (var item in context.BackgroundDatas.Values)
         {
-            <div @ref="UpploadsMenu" class="d-flex">
+            <div @ref="UpploadsMenu" class="d-flex upploads">
 
                 <div>
                     <p>@item.Description</p>
@@ -17,6 +17,16 @@
             </div>
             <div class="loader"></div>
         }
+    </div>
+
+
+
+    <div @ref="UpploadsMenu" class="d-flex">
+
+        <div class="upploads">
+            <p>test</p>
+        </div>
+    <div class="loader"></div>
     </div>
     <div class="navmenu">
         <NavLink href="/" class="link">Köp bostad</NavLink>

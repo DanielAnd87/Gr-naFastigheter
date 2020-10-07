@@ -38,6 +38,8 @@ namespace GrönaFastigheter.HttpRepository
         {
             string content = userForRegistration.ToString();
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
+            Console.WriteLine(await bodyContent.ReadAsStringAsync());
+            
             HttpResponseMessage httpResponse = await _client.PostAsync("/api/account/register", bodyContent);
 
             if (httpResponse.IsSuccessStatusCode)

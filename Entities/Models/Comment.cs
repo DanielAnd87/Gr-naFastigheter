@@ -32,5 +32,10 @@ namespace Entities.Models
         {
 
         }
+
+        public override string ToString()
+        {
+            return Content + UserName + CreatedOn.ToString();
+        }
     }
 }

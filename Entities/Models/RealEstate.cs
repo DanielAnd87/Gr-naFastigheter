@@ -11,6 +11,11 @@ namespace Entities.Models
     public class RealEstate
     {
         public string ImageUrl { get; set; }
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone Number")]
+        [Required(ErrorMessage = "Phone Number Required!")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",
+                   ErrorMessage = "Entered phone format is not valid.")]
         public string Contact { get; set; }
         public List<Comment> Comments { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
@@ -21,7 +26,7 @@ namespace Entities.Models
         [Required(ErrorMessage = "Address är obligatorisk.")]
         public string Address { get; set; }
         [Required(ErrorMessage ="Bostadstyp är obligatorisk.")]
-        public string RealEstateType { get; set; }
+        public int Type { get; set; }
         [Required(ErrorMessage = "Skriv en beskrivning av fastigheten, mellan 10 och 1000 tecken.")]
         [StringLength(1000, MinimumLength = 10)]
         public string Description { get; set; }
@@ -41,16 +46,17 @@ namespace Entities.Models
         {
         }
 
-        public RealEstate(string imageUrl, string address, string realEstateType, string title, int sellingPrice, int rentingPrice, bool canBeSold, bool canBeRented)
+        public RealEstate(string imageUrl, string address, int realEstateType, string title, int sellingPrice, int rentingPrice, bool canBeSold, bool canBeRented)
         {
             ImageUrl = imageUrl;
             Address = address;
-            RealEstateType = realEstateType;
+            Type = realEstateType;
             Title = title;
             SellingPrice = sellingPrice;
             RentingPrice = rentingPrice;
             CanBeSold = canBeSold;
             CanBeRented = canBeRented;
         }
+        
     }
 }

@@ -138,7 +138,6 @@ namespace GrönaFastigheter
                 string userUrl = $"/api/Users/{Username}";
                 User task = await http.GetFromJsonAsync<User>(userUrl);
                 return task;
-
             }
             catch (HttpRequestException)
             {
@@ -194,7 +193,7 @@ namespace GrönaFastigheter
         {
             try
             {
-                string userUrl = $"/api/RealEstates/{Id}";
+                string userUrl = $"/api/RealEstates/{Id}/secure";
                 return await http.GetFromJsonAsync<RealEstate>(userUrl);
 
             }
@@ -223,6 +222,10 @@ namespace GrönaFastigheter
         /// <returns></returns>
         public async Task<RealEstate> PostNewRealEstate(RealEstate realEstate) //Kan behöva optimering men funkar, status code 200
         {
+
+            Console.WriteLine(realEstate.ToString());
+
+
             try
             {
                 //http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accesstoken);
@@ -269,7 +272,7 @@ namespace GrönaFastigheter
         public async Task<Comment> PostComment(Comment comment)
         {
 
-
+            Console.WriteLine(comment.ToString());
             Comment newComment = null;
             try
             {
@@ -323,10 +326,11 @@ namespace GrönaFastigheter
         /// <returns>true if successfull, false if not.</returns>
         public async Task<bool> PostRating(int rating, int userId)
         {
-            var requestBody = new { UserId = userId, Value = rating };
+            var requestBody = new { UserId = userId.ToString(), Value = rating };
             try
             {
-                HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
+                //HttpResponseMessage result = await http.PostAsJsonAsync("/api/Users/Rate", requestBody);
+                HttpResponseMessage result = await http.PutAsJsonAsync("/api/Users/Rate", requestBody);
                 if (result.IsSuccessStatusCode)
                 {
                     return true;

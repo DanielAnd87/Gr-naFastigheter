@@ -12,6 +12,5 @@ namespace Entities.Models
         public bool AdressCheck { get; set; }
         public bool TypeCheck { get; set; }
         public int CurrentPage { get; set; }
-
     }
 }
