@@ -93,7 +93,7 @@ namespace GrönaFastigheter
         /// <param name="NumItemsToSkip"></param>
         /// <param name="NumItems"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int NumItemsToSkip = 2, int NumItems = 5)
+        public async Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int NumItemsToSkip = 0, int NumItems = 5)
         {
             //todo: remove default values when it safe to do so.
             IEnumerable<Comment> comment;
