@@ -420,6 +420,7 @@ h3, h4, h5, h6 {
     }
 }
 
-p, h1, h2, img{
+/* EASTER EGG!
+input, p, h1, h2, h4, img{
     animation: spin 2.5s linear infinite;
-}
+}*/
