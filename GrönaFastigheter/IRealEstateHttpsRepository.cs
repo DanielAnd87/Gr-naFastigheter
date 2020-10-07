@@ -12,7 +12,7 @@ namespace GrönaFastigheter
         Dictionary<int, BackgroundData> BackgroundDatas { get; set; }
 
         Task<IEnumerable<Comment>> GetCommentsByRealEstateId(int id, int Page, int NumItems);
-        Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 2, int NumItems = 5);
+        Task<IEnumerable<Comment>> GetCommentsByUser(string Username, int Page = 0, int NumItems = 100);
         Task<RealEstate> GetRealEstateById(int Id);
         Task<IEnumerable<RealEstate>> GetRealEstates(int Page = 0, int NumItems = 100);
         Task<User> GetUserByUserName(string Username);
