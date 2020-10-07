@@ -56,8 +56,8 @@ else
             <AuthorizeView>
                 <Authorized>
                     @*<p @onclick="(e=> RedirectToUserPage(realEstate.UserName))">Säljes av @realEstate.UserName</p>*@
-                    <p>Kontakt: @realEstate.Contact</p>
-                    <h3> Kommentarer: </h3>
+                    <p class="text-center">Kontakt: @realEstate.Contact</p>
+                    <h3 class="text-center"> Kommentarer: </h3>
                     <CascadingValue Value="@UserComments">
                         <ViewComments CurrentRealEstateID="@realEstate.Id">
                         </ViewComments>
