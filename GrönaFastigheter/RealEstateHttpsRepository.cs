@@ -193,7 +193,7 @@ namespace GrönaFastigheter
         {
             try
             {
-                string userUrl = $"/api/RealEstates/{Id}/secure";
+                string userUrl = $"/api/RealEstates/{Id}";
                 return await http.GetFromJsonAsync<RealEstate>(userUrl);
 
             }
