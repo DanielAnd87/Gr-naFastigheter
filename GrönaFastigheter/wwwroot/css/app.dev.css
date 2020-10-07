@@ -3,6 +3,7 @@
 html, body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0eeec;
+    scroll-behavior: smooth;
 }
 
 #blazor-error-ui {
