@@ -12,11 +12,8 @@
 }
 else
 {
-    @*  Göra image länken dynamisk när det fungerar *@
     
 <div class="jumbotron jumbotron-fluid" style="height: 720px;
-
-        /*background-image: url('https://photo.barnes-international.com/annonces/bms/38/xl/29-8z0zc-hutton-9.jpg');*/
         background-image: url('@realEstate.ImageUrl');
 
         background-position: center;
@@ -27,13 +24,12 @@ else
         <a class="btn btn-primary btn-lg text-white">Alla bilder</a>
     </div>
 </div>
-
     <div class="container w-75 mb-5" style="background-color:#f0eeec;">
         <div class="text-center">
             <h4>@realEstate.Address</h4>
             @*<h1 class="mb-3">@realEstate.Title</h1>*@
             @*  Använder denna tills vi har bättre Titlar *@
-            <h1 class="mb-3">Stort välskött hus i vackra Los Angeles</h1>
+            <h1 class="mb-3">@realEstate.Title</h1>
             @if (realEstate.CanBeSold)
             {
                 <h6 class="font-weight-bold">Till salu</h6>
