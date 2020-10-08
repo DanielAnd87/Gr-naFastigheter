@@ -97,9 +97,19 @@ else
     }
     public async void PostSuccess(object sender, EventArgs arg)
     {
-        Console.WriteLine("The comment is upploaded!");
-        var response = await context.GetCommentsByRealEstateId(CurrentRealEstateID, 0, 5);
-        UserComments = response.ToList();
+        try
+        {
+            Console.WriteLine("The comment is upploaded!");
+            var response = await context.GetCommentsByRealEstateId(CurrentRealEstateID, 0, 5);
+            UserComments = response.ToList();
+            StateHasChanged();
+    
+        }
+        catch
+        {
+
+        }
+
     }
     private async Task ViewMoreComments()
     {
