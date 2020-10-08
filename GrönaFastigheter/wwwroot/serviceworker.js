@@ -16,7 +16,6 @@ var urlsToCache = [
     '/_framework/blazor.boot.json',
     //Our additional files
     '/manifest.json',
-    '/serviceworker.js',
     '/favicon.ico',
     '/icon-512.png',
     '/appsettings.json',
