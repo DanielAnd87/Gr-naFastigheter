@@ -18,15 +18,26 @@ else
         {
             typeOfSale = "Säljes";
         }
-        if(estate.CanBeRented)
+        if (estate.CanBeRented)
         {
             typeOfSale = "Uthyres";
         }
-        @if(estate.CanBeSold && estate.CanBeRented)
+        @if (estate.CanBeSold && estate.CanBeRented)
         {
             typeOfSale = "Säljes/Uthyres";
         }
 
+        <div class="card mb-3" @onclick="(e => RedirectToEstate(estate.Id))">
+            <img class="card-img card-img-top" src="@estate.ImageUrl" alt="Bilden kunde inte visas">
+            <div class="card-body">
+                <h4 class="card-title">@estate.Title</h4>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+
+        if (false)
+        {
         <div class="card-container">
             <div class="estate-card" @onclick="@(e => RedirectToEstate(estate.Id))">
                 <div class="card-img">
@@ -52,6 +63,7 @@ else
                 </div>
             </div>
         </div>
+        }
     }
     <div>
         <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
