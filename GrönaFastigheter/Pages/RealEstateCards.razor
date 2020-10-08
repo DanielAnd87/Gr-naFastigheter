@@ -59,41 +59,17 @@ else
                 </div>
             </div>
         </a>
-
-        if (false)
-        {
-        <div class="card-container">
-            <div class="estate-card" @onclick="@(e => RedirectToEstate(estate.Id))">
-                <div class="card-img">
-                    <img src="@estate.ImageUrl" alt="Bilden kunde inte visas" />
-                </div>
-                <div class="card-data">
-                    <div>
-                        <h4>@estate.Title</h4>
-                        <p>@typeOfSale</p>
-                    </div>
-                    <div class="card-data-row">
-                        <div class="card-data-row-item">
-                            @if (estate.SellingPrice > 0)
-                            {
-                                <p>Säjpris: @(estate.SellingPrice)kr</p>
-                            }
-                            @if (estate.RentingPrice > 0)
-                            {
-                                <p>Hyra: @(estate.RentingPrice)kr / månad</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        }
     }
-    <div>
-        <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
-        <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
-        <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
-        <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
+        </div>
+        <div class="row justify-content-center">
+            <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
+            <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
+            <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
+        </div>
     </div>
 }
 
@@ -147,7 +123,7 @@ else
 
 
     }
-    
+
 
     //private async Task ViewMoreEstates() //TOdo: Den här ska bort
     //{

@@ -314,6 +314,10 @@ h3, h4, h5, h6 {
     transition: 0.3s;
 }
 
+.card {
+    transition: 0.3s;
+}
+
 .filters {
     text-align: center;
     padding: 1em 0em;
