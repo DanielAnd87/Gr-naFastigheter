@@ -26,8 +26,8 @@ else
             typeOfSale = "Säljes/Uthyres";
         }
 
-        <a href="/realestate/@estate.Id" class="text-dark text-decoration-none">
-            <div class="px-5 mb-5">
+        <div class="px-5 mb-5">
+            <a href="/realestate/@estate.Id" class="text-dark text-decoration-none">
                 <div class="card mb-3 shadow">
                     <img class="card-img card-img-top" src="@estate.ImageUrl" alt="Bilden kunde inte visas">
                     <div class="card-body row pb-0">
@@ -56,37 +56,37 @@ else
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     }
 
-<div class="container mb-5">
-    <div class="row justify-content-center">
-        <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser)</p>
-    </div>
-    <div class="row justify-content-center mb-1">
-        @if (searchData.CurrentPage <= 0)
-        {
-            <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" disabled />
-        }
-        else
-        {
-            <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" />
-        }
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser)</p>
+        </div>
+        <div class="row justify-content-center mb-1">
+            @if (searchData.CurrentPage <= 0)
+            {
+                <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" disabled />
+            }
+            else
+            {
+                <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" />
+            }
 
-        @if (searchData.CurrentPage >= GetAmountOfPages() - 1)
-        {
-            <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" disabled />
-        }
-        else
-        {
-            <input type="button" class="mx-1" value="Nästa sida" @onclick="(e=>ChangePage(true))" />
-        }
+            @if (searchData.CurrentPage >= GetAmountOfPages() - 1)
+            {
+                <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" disabled />
+            }
+            else
+            {
+                <input type="button" class="mx-1" value="Nästa sida" @onclick="(e=>ChangePage(true))" />
+            }
+        </div>
+        <div class="row justify-content-center">
+            <input type="button" class="mx-1" value="Första sidan" @onclick="(e=>ChangePage(0))" />
+        </div>
     </div>
-    <div class="row justify-content-center">
-        <input type="button" class="mx-1" value="Första sidan" @onclick="(e=>ChangePage(0))" />
-    </div>
-</div>
 }
 
 @code {
