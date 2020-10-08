@@ -1,5 +1,7 @@
 ﻿@inject NavigationManager NavManager
-@inject IRealEstateHttpsRepository context
+@inject IRealEstateHttpsRepository repo
+@using System.Security.Claims
+
 @*@foreach (var item in context.BackgroundDatas.Values)
         {
             <div @ref="UpploadsMenu" class="d-flex upploads">
@@ -8,7 +10,7 @@
                     <p>@item.Description</p>
                 </div>
             </div>
-            
+
         }
     </div>*@
 <div class="header">
@@ -25,11 +27,11 @@
                 <li class="nav-item">
                     <NavLink class="nav-link" href="realestate/add">Sälj bostad</NavLink>
                 </li>
-                @if (context.BackgroundDatas.Count > 0)
+                @if (repo.BackgroundDatas.Count > 0)
                 {
                     <li class="d-flex my-auto ml-4">
                         <div class="loader"></div>
-                        <span class="ml-2">@context.BackgroundDatas.Count väntande uppdateringar</span>
+                        <span class="ml-2">@repo.BackgroundDatas.Count väntande uppdateringar</span>
                     </li>
                 }
             </ul>
@@ -47,7 +49,7 @@
                 <li class="nav-item">
                     <AuthorizeView>
                         <Authorized>
-                            <NavLink href="account" class="nav-link">Mitt konto</NavLink>
+                            <NavLink href="/getuser" class="nav-link">Mitt konto</NavLink>
                         </Authorized>
                         <NotAuthorized>
                             <NavLink href="registration" class="nav-link">Skapa konto</NavLink>
@@ -72,7 +74,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        context.EventHandler += OnOfflineRequestsDone;
+        repo.EventHandler += OnOfflineRequestsDone;
     }
 
     public void OnOfflineRequestsDone(object sender, EventArgs arg)

@@ -1,6 +1,8 @@
 ﻿@page "/getuser"
 @page "/getuser/{Username}"
-@inject IRealEstateHttpsRepository context
+@inject IRealEstateHttpsRepository repo
+@using System.Security.Claims
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <p class="alert-danger">@message</p>
@@ -23,33 +25,33 @@ else
                 <img src="https://stroseschool.stroselions.net/wp-content/uploads/2018/04/profile-blank-reva.png" class="img-responsive img-rounded h-25 w-25 m-auto" alt="Profile Picture" />
             }
             <br />
-            
-                    <div class="stars">
-                        <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
 
-                            <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
-                            <label class="star star-5" for="star-5"></label>
-                            <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
-                            <label class="star star-4" for="star-4"></label>
-                            <input class="star star-3" value="3" id="star-3" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[2]" />
-                            <label class="star star-3" for="star-3"></label>
-                            <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[3]" />
-                            <label class="star star-2" for="star-2"></label>
-                            <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
-                            <label class="star star-1" for="star-1"></label>
+            <div class="stars">
+                <EditForm Model="Rating" OnValidSubmit="@HandleValidSubmit">
 
-                            <AuthorizeView>
-                                <Authorized Context="Auth">
-                                    <button type="submit" class="btn btn-success">Sätt Betyg</button>
-                                </Authorized>
-                                <NotAuthorized Context="Auth">
-                                    <small>Logga in för att sätta betyg.</small>
-                                </NotAuthorized>
-                            </AuthorizeView>
+                    <input class="star star-5" value="1" id="star-5" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[0]" />
+                    <label class="star star-5" for="star-5"></label>
+                    <input class="star star-4" value="2" id="star-4" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[1]" />
+                    <label class="star star-4" for="star-4"></label>
+                    <input class="star star-3" value="3" id="star-3" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[2]" />
+                    <label class="star star-3" for="star-3"></label>
+                    <input class="star star-2" value="4" id="star-2" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[3]" />
+                    <label class="star star-2" for="star-2"></label>
+                    <input class="star star-1" value="5" id="star-1" type="radio" name="star" @onchange="UpdateSelection" checked="@ratingChecked[4]" />
+                    <label class="star star-1" for="star-1"></label>
 
-                        </EditForm>
-                    </div>
-                
+                    <AuthorizeView>
+                        <Authorized Context="Auth">
+                            <button type="submit" class="btn btn-success">Sätt Betyg</button>
+                        </Authorized>
+                        <NotAuthorized Context="Auth">
+                            <small>Logga in för att sätta betyg.</small>
+                        </NotAuthorized>
+                    </AuthorizeView>
+
+                </EditForm>
+            </div>
+
         </div>
         <h5 class="mt-5">Statistik</h5>
         <div class="table-responsive-md">
@@ -65,6 +67,9 @@ else
 }
 
 @code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
     private string message;
     [Parameter]
     public string Username { get; set; }
@@ -78,12 +83,21 @@ else
         false,
         false,
         false
-                    };
+                        };
 
 
     protected override async Task OnInitializedAsync()
     {
-        user = await context.GetUserByUserName(Username);
+        if (Username == null)
+        {
+            var authState = await AuthState;
+            var user = authState.User;
+
+            Username = user.FindFirst(ClaimTypes.Name).Value.ToString();
+            Console.WriteLine(Username);
+        }
+
+        user = await repo.GetUserByUserName(Username);
         RestartRatingList();
         try
         {
@@ -107,11 +121,11 @@ else
     public async Task HandleValidSubmit()
     {
 
-        var response = await context.PostRating(5 - Rating, user.UserId);
+        var response = await repo.PostRating(5 - Rating, user.UserId);
         if (response)
         {
             message = "Rating uppdaterad";
-        }  
+        }
         else
         {
             message = "Kunde inte skicka in rating";
