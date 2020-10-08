@@ -2,7 +2,7 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 <div class="page-container">
-    <div class="hero-img">
+    <div class="hero-img mb-5">
         <div class="hero-img-overlay d-flex">
             <div class="m-auto">
                 <div class="search-container m-auto">
@@ -15,6 +15,12 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="container">
+        <CascadingValue Value="@searchData">
+            <RealEstateCards />
+        </CascadingValue>
     </div>
     <div class="w-75 m-auto">
         <div class="m-auto py-5 px-5">

@@ -238,8 +238,9 @@ h3, h4, h5, h6 {
 }
 
 /*--- HERO IMG END ---*/
-
-.page-container {
+.container {
+    width: 100%;
+    background-color: #f0eeec;
 }
 
 .inner-container {
@@ -306,6 +307,11 @@ h3, h4, h5, h6 {
     display: block;
     position: absolute;
     bottom: 0;
+}
+
+.shadow:hover {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.20) !important;
+    transition: 0.3s;
 }
 
 .filters {
