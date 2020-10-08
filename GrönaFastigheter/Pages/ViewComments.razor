@@ -42,13 +42,15 @@ else
                     <span class="text1">@comment.Content</span>
                     <div class="d-flex justify-content-between py-1 pt-2">
                         <div><img src="https://i.imgur.com/tPvlEdq.jpg" width="18"><span class="text2">@comment.UserName</span></div>
-                        <div><span class="text3">Upvote?</span><span class="thumbup"><i class="fa fa-thumbs-o-up"></i></span><span class="text4">3</span></div>
                     </div>
                 </div>
             </div>
         }
         <div class="btn" @onclick="@(e => ViewMoreComments())">
-            <p>Visa mer kommentarer...</p>
+            @if (UserComments.Count >= 5)
+            {
+                <p>@message</p>
+            }
         </div>
     </div>
 
@@ -66,6 +68,7 @@ else
     private Comment newComment { get; set; } = new Comment();
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
+    private string message = "Visa mer kommentarer...";
 
 
     /// <summary>
@@ -78,9 +81,10 @@ else
         try
         {
             Comment postedComment = await context.PostComment(newComment);
-            if(postedComment != null)
+            if (postedComment != null)
             {
-                UserComments.Add(postedComment);
+                var response = await context.GetCommentsByRealEstateId(CurrentRealEstateID, 0, 5);
+                UserComments = response.ToList();
             }
         }
         catch
@@ -98,7 +102,7 @@ else
         }
         catch
         {
-
+            message = "inga kommentarer att hämta.";
         }
     }
 }

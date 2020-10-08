@@ -12,15 +12,19 @@ else
 {
     foreach (var estate in CurrentRealEstateList)
     {
-        
+
         string typeOfSale = "";
         @if (estate.CanBeSold)
         {
             typeOfSale = "Säljes";
         }
-        else
+        if(estate.CanBeRented)
         {
             typeOfSale = "Uthyres";
+        }
+        @if(estate.CanBeSold && estate.CanBeRented)
+        {
+            typeOfSale = "Säljes/Uthyres";
         }
 
         <div class="card-container">
@@ -32,37 +36,29 @@ else
                     <div>
                         <h4>@estate.Title</h4>
                         <p>@typeOfSale</p>
-                        <p>@estate.Address</p>
                     </div>
                     <div class="card-data-row">
                         <div class="card-data-row-item">
-                            <p>@estate.Type</p>
+                            @if (estate.SellingPrice > 0)
+                            {
+                                <p>Säjpris: @(estate.SellingPrice)kr</p>
+                            }
+                            @if (estate.RentingPrice > 0)
+                            {
+                                <p>Hyra: @(estate.RentingPrice)kr / månad</p>
+                            }
                         </div>
-                        <div class="card-data-row-item">
-                            <p>Säjpris:@estate.SellingPrice Hyrpris:@estate.RentingPrice</p>
-                        </div>
-                        <div class="card-data-row-item">
-                            <p>@estate.ConstructionYear</p>
-                        </div>
-                    </div>
-                    <div class="card-data-row">
-                        <p>@estate.Description</p>
-                    </div>
-                    <div class="card-data-row estate-seller">
-                        <h5>Annonsör:</h5>
-                        <p>Kalle Karlsson</p>
                     </div>
                 </div>
             </div>
         </div>
     }
-<div>
-    <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
-    <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
-    <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
-    <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
-</div>
-    <div class="btn" @onclick="@(e => ViewMoreEstates())">Visa fler annonser...</div>
+    <div>
+        <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
+        <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
+        <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
+        <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
+    </div>
 }
 
 @code {
@@ -83,7 +79,7 @@ else
     private List<RealEstate> FilterList()
     {
         List<RealEstate> tempEstates = realEstates.Where(
-             i =>  i.Title.ToLower().Contains(searchData.Searchterm.ToLower())
+             i => i.Title.ToLower().Contains(searchData.Searchterm.ToLower())
         ).ToList();
         return tempEstates;
 
@@ -98,7 +94,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         var response = await context.GetRealEstates(); //TODO: Om det finns mer att hämta i databasen efter detta request ska vi hämta igen.
-        if(response != null)
+        if (response != null)
         {
             realEstates = response.ToList();
             foreach (var item in realEstates)
@@ -123,20 +119,18 @@ else
         // todo: Check if page updates when comment was posted!
     }
 
-    private async Task ViewMoreEstates() //TOdo: Den här ska bort
-    {
-        int estatesToSkip = realEstates.Count;
-        try
-        {
-            IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
-            realEstates.AddRange(moreEstates);
-        }
-        catch
-        {
-
-        }
-
-    }
+    //private async Task ViewMoreEstates() //TOdo: Den här ska bort
+    //{
+    //    int estatesToSkip = realEstates.Count;
+    //    try
+    //    {
+    //        IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
+    //        realEstates.AddRange(moreEstates);
+    //    }
+    //    catch
+    //    {
+    //    }
+    //}
     private void ChangePage(bool nextPage)
     {
         if (nextPage)
@@ -149,7 +143,7 @@ else
         }
         else
         {
-            if(searchData.CurrentPage -1 < 0)
+            if (searchData.CurrentPage - 1 < 0)
             {
                 searchData.CurrentPage = 0;
             }
@@ -177,11 +171,11 @@ else
     {
         decimal result = Math.Floor((decimal)FilteredEstates.Count / 10);
         int numberOfPages = (int)result;
-        if(numberOfPages < 1)
+        if (numberOfPages < 1)
         {
             return numberOfPages = 1;
         }
-        return numberOfPages+1;
+        return numberOfPages + 1;
 
     }
 }
