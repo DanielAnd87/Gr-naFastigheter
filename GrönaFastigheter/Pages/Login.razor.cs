@@ -17,23 +17,31 @@ namespace GrönaFastigheter.Pages
         public NavigationManager NavigationManager { get; set; }
         public bool ShowAuthError { get; set; }
         public string Error { get; set; }
-        
         public async Task ExecuteLogin()
         {
             ShowAuthError = false;
-            var result = await AuthenticationService.Login(_userForAuthentication);
-            Console.WriteLine(result.Status);
-
-            if (result.Status == 200)
+            try
             {
-                NavigationManager.NavigateTo("/");
+                var result = await AuthenticationService.Login(_userForAuthentication);
+                Console.WriteLine(result.Status);
+                if (result.Status == 200)
+                {
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    Error = result.Message;
+                    ShowAuthError = true;
+                }
             }
-            else
+            catch (Exception e)
             {
-                Error = result.Message;
+                Error = "Ledsen, men ditt internet är nere :(\nKom tillbaka när nätet är uppe.";
                 ShowAuthError = true;
-
+                Console.WriteLine(e.Message);
             }
+
+           
         }
     }
 }
