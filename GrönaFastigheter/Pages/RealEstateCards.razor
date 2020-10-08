@@ -61,16 +61,25 @@ else
         </a>
     }
 
-    <div class="container mb-5">
-        <div class="row justify-content-center">
-            <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser).</p>
-        </div>
-        <div class="row justify-content-center">
-            <input type="button" value="Föregående Sida" @onclick="(e=>ChangePage(false))" />
-            <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" />
-            <input type="button" value="Första Sidan" @onclick="(e=>ChangePage(0))" />
-        </div>
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser)</p>
     </div>
+    <div class="row justify-content-center mb-1">
+        <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" />
+        @if (searchData.CurrentPage >= GetAmountOfPages() - 1)
+        {
+            <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" disabled />
+        }
+        else
+        {
+            <input type="button" class="mx-1" value="Nästa sida" @onclick="(e=>ChangePage(true))" />
+        }
+    </div>
+    <div class="row justify-content-center">
+        <input type="button" class="mx-1" value="Första sidan" @onclick="(e=>ChangePage(0))" />
+    </div>
+</div>
 }
 
 @code {
