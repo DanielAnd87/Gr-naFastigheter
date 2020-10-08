@@ -279,7 +279,7 @@ namespace GrönaFastigheter
                 HttpResponseMessage response = await http.PostAsJsonAsync("/api/Comments", comment, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-
+                
                 if (response.IsSuccessStatusCode)
                 {
                     newComment = JsonSerializer.Deserialize<Comment>(responseContent);

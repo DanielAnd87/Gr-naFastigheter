@@ -25,13 +25,21 @@ namespace GrönaFastigheter.Pages
             ShowRegistrationErros = false;
 
             var result = await AuthenticationService.RegisterUser(_userForRegistration);
-            Console.WriteLine(result.IsSuccessStatusCode);
+            Console.WriteLine("The result was " + result.IsSuccessStatusCode + "ful.");
             if(!result.IsSuccessStatusCode)
             {
-                var response = await result.Content.ReadAsStringAsync();
-                RegistrationResponseDto registrationResponseDto = JsonSerializer.Deserialize<RegistrationResponseDto>(response, new JsonSerializerOptions {PropertyNameCaseInsensitive = true });
-                ErrorMessage = registrationResponseDto.Message;
-
+                try
+                {
+                    var response = await result.Content.ReadAsStringAsync();
+                    RegistrationResponseDto registrationResponseDto = JsonSerializer.Deserialize<RegistrationResponseDto>(response, new JsonSerializerOptions {PropertyNameCaseInsensitive = true });
+                    ErrorMessage = registrationResponseDto.Message;
+                }
+                catch (Exception e)
+                {
+                    ErrorMessage = "Ledsen, men ditt internet är nere :(\nKom tillbaka när nätet är uppe.";
+                    Console.WriteLine(e.Message);
+                }
+                Console.WriteLine("Now the error message will appear.");
                 ShowRegistrationErros = true;
             }
             else

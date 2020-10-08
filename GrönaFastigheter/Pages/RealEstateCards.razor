@@ -122,14 +122,8 @@ else
         }
 
 
-        context.EventHandler += PostSuccess; //todo: Varför är denna här?
     }
-    public void PostSuccess(object sender, EventArgs arg)
-    {
-        Console.WriteLine("The comment is upploaded!");
-        this.StateHasChanged();
-        // todo: Check if page updates when comment was posted!
-    }
+    
 
     //private async Task ViewMoreEstates() //TOdo: Den här ska bort
     //{
