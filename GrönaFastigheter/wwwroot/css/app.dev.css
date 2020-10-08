@@ -429,3 +429,7 @@ h3, h4, h5, h6 {
 .easteregg input, .easteregg p, .easteregg h1, .easteregg h2, .easteregg h3, .easteregg h4, .easteregg img {
     animation: spin 1.5s linear infinite;
 }
+
+hr {
+    margin: 0;
+}
