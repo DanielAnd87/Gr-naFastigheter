@@ -65,7 +65,15 @@ else
         <p>Sida: @(searchData.CurrentPage+1) av @GetAmountOfPages() (@FilteredEstates.Count annonser)</p>
     </div>
     <div class="row justify-content-center mb-1">
-        <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" />
+        @if (searchData.CurrentPage <= 0)
+        {
+            <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" disabled />
+        }
+        else
+        {
+            <input type="button" class="mx-1" value="Föregående sida" @onclick="(e=>ChangePage(false))" />
+        }
+
         @if (searchData.CurrentPage >= GetAmountOfPages() - 1)
         {
             <input type="button" value="Nästa Sida" @onclick="(e=>ChangePage(true))" disabled />
