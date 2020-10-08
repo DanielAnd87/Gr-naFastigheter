@@ -70,7 +70,10 @@ else
     public Task<AuthenticationState> AuthState { get; set; }
     private string message = "Visa mer kommentarer...";
 
-
+    protected override void OnInitialized()
+    {
+        context.EventHandler += PostSuccess;
+    }
     /// <summary>
     /// Todo: Vi kanske vill lägga till hantering om de inte går att lägga till.
     /// </summary>
@@ -91,6 +94,12 @@ else
         {
 
         }
+    }
+    public async void PostSuccess(object sender, EventArgs arg)
+    {
+        Console.WriteLine("The comment is upploaded!");
+        var response = await context.GetCommentsByRealEstateId(CurrentRealEstateID, 0, 5);
+        UserComments = response.ToList();
     }
     private async Task ViewMoreComments()
     {
