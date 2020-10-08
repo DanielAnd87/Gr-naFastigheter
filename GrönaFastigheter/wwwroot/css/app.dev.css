@@ -430,10 +430,42 @@ h3, h4, h5, h6 {
     }
 }
 
-.easteregg input, .easteregg p, .easteregg h1, .easteregg h2, .easteregg h3, .easteregg h4, .easteregg img {
+.easteregg input, .easteregg p, .easteregg h1, .easteregg h2, .easteregg h3, .easteregg h4, .easteregg img, .easteregg .nav-link, .easteregg svg{
     animation: spin 1.5s linear infinite;
+}
+
+.easteregg, .easteregg .card {
+animation-name: backgroundColorPalette;
+animation-duration: 1.5s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+animation-timing-function: linear;
+/* linear is enabled default, it’s not necessary to add it make it work but it can make your code more expressive */
+}
+
+@keyframes backgroundColorPalette {
+    0% {
+        background: #ee6055;
+    }
+
+    25% {
+        background: #60d394;
+    }
+
+    50% {
+        background: #aaf683;
+    }
+
+    75% {
+        background: #ffd97d;
+    }
+
+    100% {
+        background: #ff9b85;
+    }
 }
 
 hr {
     margin: 0;
 }
+
