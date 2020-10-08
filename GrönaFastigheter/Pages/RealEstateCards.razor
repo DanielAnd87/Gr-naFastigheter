@@ -127,8 +127,6 @@ else
             realEstates = response.ToList();
             foreach (var item in realEstates)
             {
-                Console.WriteLine(item.Title);
-                Console.WriteLine(item.Id);
                 if (item.ImageUrl == null)
                 {
                     item.ImageUrl = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&w=1000&q=80";
@@ -136,23 +134,7 @@ else
 
             }
         }
-
-
     }
-
-
-    //private async Task ViewMoreEstates() //TOdo: Den här ska bort
-    //{
-    //    int estatesToSkip = realEstates.Count;
-    //    try
-    //    {
-    //        IEnumerable<RealEstate> moreEstates = await context.GetRealEstates(estatesToSkip, 5);
-    //        realEstates.AddRange(moreEstates);
-    //    }
-    //    catch
-    //    {
-    //    }
-    //}
     private void ChangePage(bool nextPage)
     {
         if (nextPage)
@@ -178,11 +160,6 @@ else
     private void ChangePage(int firstpage)
     {
         searchData.CurrentPage = firstpage;
-    }
-
-    private void RedirectToEstate(int id)
-    {
-        NavManager.NavigateTo("/realestate/" + id);
     }
 
     List<RealEstate> GetPageOfEstates(List<RealEstate> list, int page = 0, int pageSize = 10)
