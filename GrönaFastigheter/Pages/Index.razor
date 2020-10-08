@@ -28,13 +28,10 @@
 
 @code {
     public SearchData searchData { get; set; } = new SearchData();
-    public List<string> OrderAlternatives { get; set; } = new List<string> {
-        // todo: make into an enum
-        "Hyra",
-        "Säljpris",
-        "Titel",
-        "Adress"
-       };
+    public List<string> OrderAlternatives { get; set; } = Enum.GetValues(typeof(EstateTypeEnum))
+    .Cast<EstateTypeEnum>()
+    .Select(v => v.ToString())
+    .ToList();
 
         private void ResetPage()
         {
