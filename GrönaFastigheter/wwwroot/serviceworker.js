@@ -46,7 +46,7 @@ var urlsToCachebck = [
 ];
 var urlsToCache = [
     '/',
-    'https://mockapi-gronafastigheter.herokuapp.com/api/RealEstates',
+    'https://blocketliteresourcegroup.azurewebsites.net/api/RealEstates',
     //Html and css files
     '/index.html',
     '/css/app.dev.css',
