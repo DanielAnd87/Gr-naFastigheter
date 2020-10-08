@@ -9,8 +9,10 @@
                     <div>
                         <h2>Sök bostäder</h2>
                     </div>
-                    <div class="form-group">
-                        <input @onchange="ResetCurrentPage" class="form-control form-control-lg text-center" type="search" name="name" placeholder="Adress, Bostadstyp, Säljes/Uthyres" @bind-value="searchData.Searchterm" @bind-value:event="oninput" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input @onchange="ResetCurrentPage" class="form-control form-control-lg text-center" type="search" name="name" placeholder="Sök på adress/titel" @bind-value="searchData.Searchterm" @bind-value:event="oninput" />
+                        </div>
                     </div>
                 </div>
             </div>
